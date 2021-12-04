@@ -60,7 +60,6 @@ crashlytics-build.properties
 
 Assets/Plugins/FMOD/Cache/Editor/FMODStudioCache.asset
 Assets/Plugins/FMOD/platforms/mac/lib/fmodstudioL.bundle/Contents/Info.plist
-Assets/Plugins/FMOD/Resources/FMODStudioSettings.asset
 fmod_editor.log
 ProjectSettings/Packages/com.unity.probuilder/Settings.json
 UserSettings/Layouts/default-2021.dwlt
