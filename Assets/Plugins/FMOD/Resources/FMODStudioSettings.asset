@@ -434,7 +434,13 @@ MonoBehaviour:
   MasterBanks:
   - Master
   Banks:
-  - Bank A
+  - MENU
+  - MX
+  - SX_amb
+  - SX_npc
+  - SX_plr
+  - SX_ui
+  - SX_wpn
   BanksToLoad: []
   LiveUpdatePort: 9264
   EnableMemoryTracking: 0
