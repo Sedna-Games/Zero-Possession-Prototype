@@ -41,9 +41,9 @@ public class WeaponManager : MonoBehaviour
         primaryWeapon.Attack();
     }
 
-    public void SecondaryWeapon(CallbackContext ctx)
+    public void OnSecondaryWeapon()
     {
-        if (secondaryWeapon.GetCooldown() > 0.0f || secondaryWeapon.IsAttacking() || !ctx.performed || !canAttack)
+        if (secondaryWeapon.GetCooldown() > 0.0f || secondaryWeapon.IsAttacking())
             return;
         _internalDowntime = 0.0f;
         OnBeginAttack.Invoke();

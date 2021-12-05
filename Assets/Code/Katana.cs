@@ -12,7 +12,7 @@ public class Katana : Weapon
     [SerializeField] float lerpSpeed = 1.0f;
 
     [Header("References")]
-    [SerializeField] Transform lerpPos = null;
+    [SerializeField] List<Transform> lerpPositions = null;
     [SerializeField] DamageDoer damageDoer = null;
     // Start is called before the first frame update
     void Start()
@@ -29,7 +29,7 @@ public class Katana : Weapon
         {
             _attacking = true;
             damageDoer.canDoDamage = true;
-            
+            var lerpPos = lerpPositions[Random.Range(0,lerpPositions.Count)];
             float x = 0.0f;
             while (x < 1.0f)
             {
