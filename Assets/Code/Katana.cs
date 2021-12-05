@@ -14,7 +14,6 @@ public class Katana : Weapon
     [Header("References")]
     [SerializeField] Transform lerpPos = null;
     [SerializeField] DamageDoer damageDoer = null;
-    [SerializeField] List<TrailRenderer> trailRenderers = new List<TrailRenderer>();
     // Start is called before the first frame update
     void Start()
     {
@@ -31,9 +30,6 @@ public class Katana : Weapon
             _attacking = true;
             damageDoer.canDoDamage = true;
             
-            foreach(var t in trailRenderers)
-                t.emitting = true;
-            
             float x = 0.0f;
             while (x < 1.0f)
             {
@@ -43,8 +39,6 @@ public class Katana : Weapon
                 transform.localRotation = Quaternion.Slerp(orignalRotation, lerpPos.localRotation, rotationCurve.Evaluate(x));
             }
 
-             foreach(var t in trailRenderers)
-                t.emitting = false;
             x = 1.0f;
             while (x > 0.0f)
             {

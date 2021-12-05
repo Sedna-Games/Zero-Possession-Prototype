@@ -14,9 +14,6 @@ public class Health : MonoBehaviour
 
     protected float _maxHP = 0.0f;
 
-    [Header("Reference")]
-    [SerializeField] new Rigidbody rigidbody = null;
-
     private void Start()
     {
         _maxHP = health;
@@ -26,10 +23,6 @@ public class Health : MonoBehaviour
     public float GetHealth()
     {
         return health;
-    }
-    public Rigidbody GetRigidbody()
-    {
-        return rigidbody;
     }
     public virtual void Die()
     {
