@@ -28,7 +28,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2805765710804678127}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -34.126797, y: 2.0028672, z: 11.697025}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -163,55 +163,55 @@ MonoBehaviour:
   - m_Vertices: 0b0000000e00000012000000
   m_SharedTextures: []
   m_Positions:
-  - {x: -1, y: 0, z: 6}
-  - {x: 0, y: 0, z: 6}
-  - {x: -1, y: 5, z: 6}
-  - {x: 0, y: 5, z: 6}
-  - {x: 0, y: 0, z: 6}
+  - {x: -1, y: 0, z: 13}
+  - {x: 0, y: 0, z: 13}
+  - {x: -1, y: 5, z: 13}
+  - {x: 0, y: 5, z: 13}
+  - {x: 0, y: 0, z: 13}
   - {x: 0, y: 0, z: -8}
-  - {x: 0, y: 5, z: 6}
+  - {x: 0, y: 5, z: 13}
   - {x: 0, y: 5, z: -8}
   - {x: 0, y: 0, z: -8}
   - {x: -1, y: 0, z: -8}
   - {x: 0, y: 5, z: -8}
   - {x: -1, y: 5, z: -8}
   - {x: -1, y: 0, z: -8}
-  - {x: -1, y: 0, z: 6}
+  - {x: -1, y: 0, z: 13}
   - {x: -1, y: 5, z: -8}
-  - {x: -1, y: 5, z: 6}
-  - {x: -1, y: 5, z: 6}
-  - {x: 0, y: 5, z: 6}
+  - {x: -1, y: 5, z: 13}
+  - {x: -1, y: 5, z: 13}
+  - {x: 0, y: 5, z: 13}
   - {x: -1, y: 5, z: -8}
   - {x: 0, y: 5, z: -8}
   - {x: -1, y: 0, z: -8}
   - {x: 0, y: 0, z: -8}
-  - {x: -1, y: 0, z: 6}
-  - {x: 0, y: 0, z: 6}
+  - {x: -1, y: 0, z: 13}
+  - {x: 0, y: 0, z: 13}
   m_Textures0:
   - {x: 1, y: 0}
   - {x: 0, y: 0}
   - {x: 1, y: 5}
   - {x: 0, y: 5}
-  - {x: 6, y: 0}
+  - {x: 13, y: 0}
   - {x: -8, y: 0}
-  - {x: 6, y: 5}
+  - {x: 13, y: 5}
   - {x: -8, y: 5}
   - {x: 0, y: 0}
   - {x: -1, y: 0}
   - {x: 0, y: 5}
   - {x: -1, y: 5}
   - {x: 8, y: 0}
-  - {x: -6, y: 0}
+  - {x: -13, y: 0}
   - {x: 8, y: 5}
-  - {x: -6, y: 5}
-  - {x: -1, y: 6}
-  - {x: 0, y: 6}
+  - {x: -13, y: 5}
+  - {x: -1, y: 13}
+  - {x: 0, y: 13}
   - {x: -1, y: -8}
   - {x: 0, y: -8}
   - {x: 1, y: -8}
   - {x: 0, y: -8}
-  - {x: 1, y: 6}
-  - {x: 0, y: 6}
+  - {x: 1, y: 13}
+  - {x: 0, y: 13}
   m_Textures2: []
   m_Textures3: []
   m_Tangents:
@@ -248,11 +248,19 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 8167
+  m_VersionIndex: 8605
   m_IsSelectable: 1
-  m_SelectedFaces: 
-  m_SelectedEdges: []
-  m_SelectedVertices: 
+  m_SelectedFaces: 00000000
+  m_SelectedEdges:
+  - a: 0
+    b: 1
+  - a: 2
+    b: 0
+  - a: 1
+    b: 3
+  - a: 3
+    b: 2
+  m_SelectedVertices: 00000000010000000200000003000000
 --- !u!114 &2805765710804678122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -266,7 +274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Shape:
-    rid: 4868567189317484560
+    rid: 8340433596366716939
   m_Size: {x: -1, y: 4, z: -8}
   m_Rotation: {x: 0, y: 0, z: 0, w: 1}
   m_PivotLocation: 1
@@ -278,7 +286,7 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 4868567189317484560
+    - rid: 8340433596366716939
       type: {class: Cube, ns: UnityEngine.ProBuilder.Shapes, asm: Unity.ProBuilder}
 --- !u!23 &2805765710804678123
 MeshRenderer:
