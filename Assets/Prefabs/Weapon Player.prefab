@@ -29877,6 +29877,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   canDoDamage: 1
+  ignoreTag: Player
 --- !u!65 &506824045
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -36024,7 +36025,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8762286023885395323, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
-      value: 1.7777778
+      value: 1.7779056
       objectReference: {fileID: 0}
     - target: {fileID: 8762286024517199034, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: Damping.x

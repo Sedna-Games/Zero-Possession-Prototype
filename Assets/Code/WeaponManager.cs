@@ -20,6 +20,7 @@ public class WeaponManager : MonoBehaviour
 
     float _internalDowntime = 0.0f;
 
+
     private void Awake()
     {
         primaryWeapon.weaponOwner = ownerEntity;
@@ -43,7 +44,7 @@ public class WeaponManager : MonoBehaviour
 
     public void OnSecondaryWeapon()
     {
-        if (secondaryWeapon.GetCooldown() > 0.0f || secondaryWeapon.IsAttacking())
+        if (!secondaryWeapon.gameObject.activeSelf || secondaryWeapon.GetCooldown() > 0.0f || secondaryWeapon.IsAttacking())
             return;
         _internalDowntime = 0.0f;
         OnBeginAttack.Invoke();
@@ -53,6 +54,10 @@ public class WeaponManager : MonoBehaviour
     public void SetSecondaryWeapon(Weapon weapon)
     {
         secondaryWeapon = weapon;
+    }
+
+    public void ActivateSecondaryWeapon(){
+        secondaryWeapon.gameObject.SetActive(true);
     }
 
 }

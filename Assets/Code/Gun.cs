@@ -62,6 +62,7 @@ public class Gun : Weapon
             }
             x = 0.0f;
             _attacking = false;
+            gameObject.SetActive(false);
         }
         StartCoroutine(Lerp());
         foreach (var bep in bulletEmitterPoints)
