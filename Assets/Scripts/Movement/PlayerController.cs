@@ -63,7 +63,6 @@ public class PlayerController : MonoBehaviour {
     WallStatus _wallStatus;
     private void Awake() {
         OnValidate();
-        QualitySettings.vSyncCount = 1;
     }
     void OnValidate() {
         minGroundDotProduct = Mathf.Cos(maxGroundAngle * Mathf.Deg2Rad);
@@ -99,7 +98,7 @@ public class PlayerController : MonoBehaviour {
             dashPhase = 0;
             jumpPhase = 0;
         }
-        _rb.useGravity = wallRunning ? false : true;
+        //_rb.useGravity = wallRunning ? false : true;
         checkWallRun();
         if(wallRunning) {
             _rb.AddForce(wallGravity * Time.fixedDeltaTime, ForceMode.Acceleration);
@@ -119,18 +118,28 @@ public class PlayerController : MonoBehaviour {
         }
     }
     void AdjustVelocity() {
-        float currentX = Vector3.Dot(velocity, transform.right);
-        float currentZ = Vector3.Dot(velocity, transform.forward);
+        float currentX = 0f, currentZ = 0f;
+        currentX = Vector3.Dot(velocity, transform.right);
+        currentZ = Vector3.Dot(velocity, transform.forward);
+
+        if(wallRunning) {
+            if(_wallStatus == WallStatus.front)
+                velocity = Vector3.up * _climbspeed;
+            else
+                velocity = transform.forward * _climbspeed;
+        }
 
         float acceleration = maxSpeed;
         float maxSpeedChange = acceleration * Time.fixedDeltaTime;
 
-        float newX = Mathf.MoveTowards(currentX, desiredVel.x, maxSpeedChange);
-        float newZ = Mathf.MoveTowards(currentZ, desiredVel.z, maxSpeedChange);
+        if(!wallRunning) {
+            float newX = Mathf.MoveTowards(currentX, desiredVel.x, maxSpeedChange);
+            float newZ = Mathf.MoveTowards(currentZ, desiredVel.z, maxSpeedChange);
+            velocity += transform.right * (newX - currentX) + transform.forward * (newZ - currentZ);
 
-        velocity += transform.right * (newX - currentX) + transform.forward * (newZ - currentZ);
-        Vector3 capSpeed = new Vector3(velocity.x, 0f, velocity.z);
-        velocity = capSpeed.normalized * Mathf.Min(capSpeed.magnitude, acceleration) + transform.up * velocity.y;
+            Vector3 capSpeed = new Vector3(velocity.x, 0f, velocity.z);
+            velocity = capSpeed.normalized * Mathf.Min(capSpeed.magnitude, acceleration) + transform.up * velocity.y;
+        }
     }
     void Jump() {
         Vector3 jumpDirection;
@@ -208,6 +217,11 @@ public class PlayerController : MonoBehaviour {
     void checkWallRun() {
         WallStatus wallStatus;
         //NOTE: Wallrun checking; special case for lateral runs as the tilt causes the initial forward raycast to miss, requiring a special down+forward raycast once attached
+        if(OnGround) {
+            wallStatus = WallStatus.none;
+            return;
+        }
+
         if(Physics.Raycast(transform.position, transform.right, probeDistance, climbMask))
             wallStatus = WallStatus.right;
         else if(Physics.Raycast(transform.position, -transform.right, probeDistance, climbMask))
@@ -221,7 +235,7 @@ public class PlayerController : MonoBehaviour {
         _wallStatus = wallStatus;
         Debug.Log(_wallStatus.ToString());
         Debug.DrawLine(transform.position, transform.position + transform.forward * probeDistance, Color.green);
-        Debug.DrawLine(transform.position, transform.position + (transform.forward + -transform.up).normalized * 2.5f* probeDistance, Color.red);
+        Debug.DrawLine(transform.position, transform.position + (transform.forward + -transform.up).normalized * 2.5f * probeDistance, Color.red);
     }
     void TiltPlayer(WallStatus status) {
         switch(status) {

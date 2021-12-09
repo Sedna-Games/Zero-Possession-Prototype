@@ -1,6 +1,7 @@
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
+using static UnityEngine.InputSystem.InputAction;
 #endif
 
 namespace InputManagerScript
@@ -9,7 +10,8 @@ namespace InputManagerScript
 	{
 		[Header("Character Input Values")]
 		public Vector2 move, look;
-		public bool jump, dash, slide;
+        public bool jump, dash;
+        public CallbackContext slide;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -43,10 +45,10 @@ namespace InputManagerScript
 		{
 			DashInput(value.isPressed);
 		}
-		public void OnSlide(InputValue value)
+		public void OnSlide(CallbackContext value)
 		{
-			SlideInput(value.isPressed);
-		}
+            slide = value;
+        }
 #else
 	// old input sys if we do decide to have it (most likely wont)...
 #endif
@@ -71,10 +73,10 @@ namespace InputManagerScript
 		{
 			dash = newDashState;
 		}
-		public void SlideInput(bool newSlideState)
-		{
-			slide = newSlideState;
-		}
+		// public void SlideInput(bool newSlideState)
+		// {
+		// 	slide = newSlideState;
+		// }
 
 #if !UNITY_IOS || !UNITY_ANDROID
 
