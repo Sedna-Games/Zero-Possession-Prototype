@@ -31,7 +31,7 @@ public class Health : MonoBehaviour
     {
         OnTakeDamage.Invoke();
         health -= damage;
-        if (health <= 0.0f)
+        if (health <= 0.5f)
             OnDie.Invoke();
     }
 

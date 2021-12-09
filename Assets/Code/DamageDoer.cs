@@ -8,10 +8,11 @@ public class DamageDoer : MonoBehaviour
     public float damage = 1.0f;
     public UnityEvent OnDidDamage;
     public bool canDoDamage = true;
+    public string ignoreTag = "";
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!canDoDamage)
+        if (!canDoDamage || ignoreTag != "" && other.CompareTag(ignoreTag))
             return;
         var hp = other.gameObject.GetComponent<Health>();
         if (hp == null)
