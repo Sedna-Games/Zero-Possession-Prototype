@@ -6030,11 +6030,11 @@ GameObject:
   - component: {fileID: 1978715465394007411}
   - component: {fileID: 1978715465394007410}
   - component: {fileID: 1978715465394007409}
-  - component: {fileID: 1978715465394007408}
   - component: {fileID: 1978715465394007415}
   - component: {fileID: 1978715465394007414}
   - component: {fileID: 634274127}
   - component: {fileID: 634274125}
+  - component: {fileID: 8064153798785424672}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
@@ -6051,7 +6051,7 @@ Transform:
   m_GameObject: {fileID: 1978715465394007413}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -5.73, y: 1.41, z: -11.5}
-  m_LocalScale: {x: 2.3734124, y: 2.3734124, z: 2.3734124}
+  m_LocalScale: {x: 1.4084066, y: 1.4084066, z: 1.4084066}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3936525213577807309}
@@ -6067,7 +6067,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1978715465394007413}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &1978715465394007409
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6088,7 +6088,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: cf8bdb445b322c242929fcef17ec9853, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6110,19 +6110,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &1978715465394007408
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1978715465394007413}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1978715465394007415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6221,3 +6208,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sightRadius: 30
   weaponManager: {fileID: 1855179530}
+--- !u!136 &8064153798785424672
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1978715465394007413}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.49999997
+  m_Height: 1.9999999
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
