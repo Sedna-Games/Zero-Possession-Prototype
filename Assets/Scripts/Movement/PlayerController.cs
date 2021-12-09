@@ -49,6 +49,8 @@ public class PlayerController : MonoBehaviour {
     [Header("Assets"), Space(10)]
     [SerializeField] Rigidbody _rb;
     [SerializeField] InputManager _input;
+    [SerializeField] Collider _normalCollider;
+    [SerializeField] Collider _slideCollider;
     Vector3 velocity, desiredVel;
     int jumpPhase, dashPhase;
     float dashCooldown = 0.0f;
