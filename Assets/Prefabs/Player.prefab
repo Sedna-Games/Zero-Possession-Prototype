@@ -30087,7 +30087,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3456738289079254812
 Transform:
   m_ObjectHideFlags: 0
@@ -35935,7 +35935,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4696871231515782170}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.6232028, y: 2.639, z: -21.302975}
+  m_LocalPosition: {x: -49.75, y: 8.375, z: 44.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -36223,7 +36223,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4922363695198934853}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.3732028, y: 2.639, z: -21.302975}
+  m_LocalPosition: {x: -50, y: 8.375, z: 44.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -36318,7 +36318,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5351056073792739140}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.3732028, y: 2.264, z: -21.302975}
+  m_LocalPosition: {x: -50, y: 8, z: 44.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -36345,14 +36345,14 @@ MonoBehaviour:
   _slideSpeed: 17.5
   _slowSlideSpeed: 0
   slideSlowRate: 5
-  _climbSpeed: 10
-  wallRunTiltAngle: 15
+  _climbSpeed: 14
+  wallRunTiltAngle: 25
   lateralWallRunTiltAngle: -50
   slideTiltAngle: -35
-  tiltSpeed: 2.5
+  tiltSpeed: 5
   maxAirJumps: 1
   maxDashes: 1
-  _jumpHeight: 2.5
+  _jumpHeight: 2.75
   _jumpMomentum: 0.3
   _dashCooldown: 0.5
   probeDistance: 1
