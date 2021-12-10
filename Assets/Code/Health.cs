@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using Unity;
+using UnityEngine;
 using UnityEngine.Events;
 
 public class Health : MonoBehaviour
@@ -23,6 +23,9 @@ public class Health : MonoBehaviour
     public float GetHealth()
     {
         return health;
+    }
+    public void SetToMaxHealth() {
+        health = _maxHP;
     }
     public virtual void Die()
     {
