@@ -206,7 +206,7 @@ public class PlayerController : MonoBehaviour {
             jumpPhase = 0;
             jumpDirection = climbNormal;
         }
-        else if(maxAirJumps > 0 && jumpPhase <= maxAirJumps) {
+        else if(maxAirJumps > 0 && jumpPhase < maxAirJumps) {
             if(jumpPhase == 0)
                 jumpPhase = 1;
             else

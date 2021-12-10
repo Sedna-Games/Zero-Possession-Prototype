@@ -107,7 +107,7 @@ Transform:
   - {fileID: 1765899462995789967}
   - {fileID: 4455848961819320515}
   - {fileID: 3456738289072278876}
-  m_Father: {fileID: 4686300567443377662}
+  m_Father: {fileID: 2832586417400488506}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &526457987450998533
@@ -35935,7 +35935,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4696871231515782170}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -49.75, y: 8.375, z: 44.94}
+  m_LocalPosition: {x: -157.75, y: 31.375, z: 70.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -36260,7 +36260,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.0797637, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -36322,7 +36322,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 339140033076866584}
+  - {fileID: 2832586417400488506}
   m_Father: {fileID: 4455848962192512928}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -36348,12 +36348,14 @@ MonoBehaviour:
   _climbSpeed: 14
   wallRunTiltAngle: 20
   lateralWallRunTiltAngle: -50
-  slideTiltAngle: -35
+  slideTiltAngle: -20
   tiltSpeed: 5
   maxAirJumps: 1
   maxDashes: 1
   _jumpHeight: 2.75
+  wallJumpMultiplier: 5
   _jumpMomentum: 0.3
+  jumpDelay: 0.2
   _dashCooldown: 0.5
   probeDistance: 1
   maxGroundAngle: 25
@@ -36365,8 +36367,7 @@ MonoBehaviour:
   climbMask:
     serializedVersion: 2
     m_Bits: 768
-  wallGravity: {x: 0, y: -22, z: 0}
-  wallForce: 5
+  wallForce: 20
   wallStickDelay: 0.1
   CinemachineCameraTarget: {fileID: 339140033076866591}
   TopClamp: 90
@@ -36374,6 +36375,7 @@ MonoBehaviour:
   RotationSpeed: 1
   _rb: {fileID: 4686300567443377658}
   _input: {fileID: 4686300567443377659}
+  _tiltRotater: {fileID: 2832586417400488506}
   _normalCollider: {fileID: 4686300567443377657}
   _slideCollider: {fileID: 4686300567443377637}
 --- !u!114 &1765899463263045888
@@ -36965,6 +36967,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 901182334643ba1438a25accc6bd0c79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &7667613855140261963
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2832586417400488506}
+  m_Layer: 0
+  m_Name: Tilt
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2832586417400488506
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7667613855140261963}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 339140033076866584}
+  m_Father: {fileID: 4686300567443377662}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8026836156249251466
 GameObject:
   m_ObjectHideFlags: 0
