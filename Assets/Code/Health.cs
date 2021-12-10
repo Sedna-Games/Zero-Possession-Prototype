@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using Unity;
+using UnityEngine;
 using UnityEngine.Events;
 
 public class Health : MonoBehaviour
@@ -24,6 +24,9 @@ public class Health : MonoBehaviour
     {
         return health;
     }
+    public void SetToMaxHealth() {
+        health = _maxHP;
+    }
     public virtual void Die()
     {
     }
@@ -31,7 +34,7 @@ public class Health : MonoBehaviour
     {
         OnTakeDamage.Invoke();
         health -= damage;
-        if (health <= 0.0f)
+        if (health <= 0.5f)
             OnDie.Invoke();
     }
 
