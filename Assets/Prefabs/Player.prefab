@@ -30519,8 +30519,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.2353723, y: 22.402355, z: 1.4722817}
-  m_Center: {x: 0.00038963553, y: 8.506981, z: -0.00020708876}
+  m_Size: {x: 2.82, y: 27.57, z: 3}
+  m_Center: {x: 0.00039093939, y: 10.84716, z: -0.00018688827}
 --- !u!54 &3456738289551519162
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -36339,14 +36339,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 11
-  _dashSpeed: 100
-  maxSpeed: 29
+  _dashSpeed: 25
+  maxSpeed: 35
   maxSpeedChange: 50
   _slideSpeed: 17.5
   _slowSlideSpeed: 0
   slideSlowRate: 5
   _climbSpeed: 14
-  wallRunTiltAngle: 25
+  wallRunTiltAngle: 20
   lateralWallRunTiltAngle: -50
   slideTiltAngle: -35
   tiltSpeed: 5
