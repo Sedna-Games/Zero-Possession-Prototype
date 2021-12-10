@@ -97,6 +97,12 @@ public class PlayerController : MonoBehaviour
     {
         OnValidate();
     }
+
+    private void OnEnable() {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
     void OnValidate()
     {
         minGroundDotProduct = Mathf.Cos(maxGroundAngle * Mathf.Deg2Rad);

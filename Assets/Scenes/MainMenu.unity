@@ -47693,7 +47693,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1277733210}
         m_TargetAssemblyTypeName: ButtonFunctions, Assembly-CSharp
-        m_MethodName: ToLevelOne
+        m_MethodName: QuitGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
