@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] float wallRunTiltAngle = 15.0f, lateralWallRunTiltAngle = -50.0f, slideTiltAngle = -35.0f, tiltSpeed = 2.5f;
     [SerializeField] int maxAirJumps = 1, maxDashes = 1;
     [SerializeField] float _jumpHeight = 2.0f;
+    [SerializeField, Tooltip("Extra jump multiplier from walls")]
+    float wallJumpMultiplier = 5f;
     [SerializeField, Range(0f, 1f), Tooltip("Bunny hop-like momentum on jumps")]
     float _jumpMomentum = 0.05f;
     [SerializeField] float jumpDelay = 0.2f;
@@ -26,6 +28,7 @@ public class PlayerController : MonoBehaviour {
     float currentSpeed;
     float currentClimbSpeed;
     float _jumpDelay = 0f;
+    bool desireJump = false, desireDash = false;
     Quaternion targetRotation;
 
     [Header("Terrain Settings"), Space(10)]
@@ -38,7 +41,6 @@ public class PlayerController : MonoBehaviour {
     float maxClimbAngle = 140.0f;
     [SerializeField] float maxLateralClimbDistance = 16f;
     [SerializeField] LayerMask groundMask = -1, climbMask = -1;
-    [SerializeField] Vector3 wallGravity = Physics.gravity;
     [SerializeField, Tooltip("How sticky the player is to the wall")]
     float wallForce = 5.0f;
     [SerializeField, Tooltip("How long before the player can stick to the wall after getting off it")]
@@ -66,6 +68,7 @@ public class PlayerController : MonoBehaviour {
     [Header("Assets"), Space(10)]
     [SerializeField] Rigidbody _rb;
     [SerializeField] InputManager _input;
+    [SerializeField] Transform _tiltRotater;
     [SerializeField] Collider _normalCollider;
     [SerializeField] Collider _slideCollider;
     Vector3 velocity, desiredVel;
@@ -77,8 +80,10 @@ public class PlayerController : MonoBehaviour {
     bool _sliding = false;
     float minGroundDotProduct, minClimbDotProduct;
     int groundContactCount, climbContactCount;
+    Vector3 groundNormal, climbNormal;
     bool OnGround => groundContactCount > 0;
-    bool wallRunning => climbContactCount > 0 && _wallStickTimer < 0f;
+    bool wallContact => climbContactCount > 0 && _wallStickTimer < 0f;
+    bool Climbing => wallContact && _wallStatus != WallStatus.none && !OnGround;
     WallStatus _wallStatus;
     private void Awake() {
         OnValidate();
@@ -94,17 +99,31 @@ public class PlayerController : MonoBehaviour {
         dashCooldown -= Time.deltaTime;
         _wallStickTimer -= Time.deltaTime;
         _jumpDelay -= Time.deltaTime;
-
+        //NOTE: The input manager updates in Update() instead of FixedUpdate() so this helps keep consistency for button presses
+        if(_input.jump) {
+            desireJump = true;
+            _input.jump = false;
+        }
+        if(_input.dash) {
+            desireDash = true;
+            _input.dash = false;
+        }
     }
     private void FixedUpdate() {
         UpdateState();
-        if(_input.jump)
-            Jump();
-        if(_input.dash)
-            Dash();
-        if(_input.slide)
-            Slide();
         AdjustVelocity();
+        if(desireJump) {
+            desireJump = false;
+            Jump();
+        }
+        if(desireDash) {
+            desireDash = false;
+            Dash();
+        }
+        //NOTE: The new input manager doesn't have built-in slide-like hold interaction and thus requires constant calling as a pass-through action
+        if(_input.slide) {
+            Slide();
+        }
         _rb.velocity = velocity;
         ClearState();
     }
@@ -113,27 +132,37 @@ public class PlayerController : MonoBehaviour {
     }
     void ClearState() {
         groundContactCount = climbContactCount = 0;
+        groundNormal = climbNormal = Vector3.zero;
     }
     void UpdateState() {
         velocity = _rb.velocity;
         stepsSinceJump++;
         stepsSinceGrounded++;
-        if(OnGround || (wallRunning && _wallStatus != WallStatus.none)) {
+        if(OnGround || (wallContact && _wallStatus != WallStatus.none)) {
             dashPhase = 0;
-            jumpPhase = 0;
+            if(stepsSinceJump > 1)
+                jumpPhase = 0;
             stepsSinceGrounded = 0;
+            if(groundContactCount > 1) {
+                groundNormal.Normalize();
+            }
+            if(climbContactCount > 1) {
+                climbNormal.Normalize();
+            }
+        }
+        else {
+            groundNormal = Vector3.up;
         }
         checkWallRun();
-        if(wallRunning && _input.move.y > 0f && stepsSinceJump > 1 && _wallStatus != WallStatus.none && climbable) {
-            _rb.AddForce(wallGravity * Time.fixedDeltaTime, ForceMode.Acceleration);
+        if(Climbing && _input.move.y > 0f && stepsSinceJump > 1 && climbable) {
             switch(_wallStatus) {
                 case (WallStatus.none):
                     break;
                 case (WallStatus.left):
-                    _rb.AddForce(wallForce * -Vector3.right, ForceMode.Force);
+                    velocity += (wallForce * -Vector3.right);
                     break;
                 case (WallStatus.right):
-                    _rb.AddForce(wallForce * Vector3.right, ForceMode.Force);
+                    velocity += (wallForce * Vector3.right);
                     break;
                 case (WallStatus.front):
                     break;
@@ -147,14 +176,15 @@ public class PlayerController : MonoBehaviour {
         currentX = Vector3.Dot(velocity, transform.right);
         currentZ = Vector3.Dot(velocity, transform.forward);
 
-        if(wallRunning && _input.move.y > 0f && stepsSinceJump > 1 && _wallStatus != WallStatus.none) {
+        if(Climbing && _input.move.y > 0f && stepsSinceJump > 1) {
             if(_wallStatus == WallStatus.front)
                 velocity = Vector3.up * currentClimbSpeed;
             else {
                 velocity = transform.forward * _climbSpeed;
             }
+            return;
         }
-        if(!wallRunning) {
+        if(!wallContact) {
             float acceleration = maxSpeedChange * Time.fixedDeltaTime;
             float newX = Mathf.MoveTowards(currentX, desiredVel.x, acceleration);
             float newZ = Mathf.MoveTowards(currentZ, desiredVel.z, acceleration);
@@ -166,19 +196,22 @@ public class PlayerController : MonoBehaviour {
     }
     void Jump() {
         Vector3 jumpDirection;
-        if (_jumpDelay > 0f)
+        if(_jumpDelay > 0f)
             return;
         if(OnGround) {
             jumpPhase = 0;
-            Debug.Log("Jump");
+            jumpDirection = groundNormal;
         }
-        else if(wallRunning && _wallStatus != WallStatus.none) {
+        else if(wallContact && _wallStatus != WallStatus.none) {
             jumpPhase = 0;
-            Debug.Log("Jump");
+            jumpDirection = climbNormal;
         }
-        else if(maxAirJumps > 0 && jumpPhase < maxAirJumps) {
-            jumpPhase++;
-            Debug.Log("Air Jump");
+        else if(maxAirJumps > 0 && jumpPhase <= maxAirJumps) {
+            if(jumpPhase == 0)
+                jumpPhase = 1;
+            else
+                jumpPhase++;
+            jumpDirection = groundNormal;
         }
         else {
             _input.jump = false;
@@ -186,8 +219,8 @@ public class PlayerController : MonoBehaviour {
         }
         _wallStickTimer = wallStickDelay;
         stepsSinceJump = 0;
-        jumpDirection = transform.up;
         float jumpSpeed = Mathf.Sqrt(-2f * Physics.gravity.y * _jumpHeight);
+        jumpDirection = (jumpDirection + _tiltRotater.up).normalized;
         float alignedSpeed = Vector3.Dot(velocity, jumpDirection);
         if(alignedSpeed > 0f & _wallStatus == WallStatus.none) {
             jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
@@ -195,9 +228,13 @@ public class PlayerController : MonoBehaviour {
         Vector3 momentumBoost = _rb.velocity;
         momentumBoost.y = 0f;
         velocity = momentumBoost;
+        Debug.Log(jumpSpeed);
+        Debug.Log(Climbing);
+        if(Climbing)
+            jumpSpeed *= wallJumpMultiplier;
+        Debug.Log("walljump: " + jumpSpeed);
         velocity += ((jumpDirection * jumpSpeed) + (momentumBoost * _jumpMomentum));
         _jumpDelay = jumpDelay;
-        _input.jump = false;
         _sliding = false;
         _input.slide = false;
     }
@@ -221,7 +258,6 @@ public class PlayerController : MonoBehaviour {
     }
     void Slide() {
         if(!_sliding && Sliding && OnGround) {
-            Debug.Log(Sliding);
             _sliding = true;
             currentSpeed = _slideSpeed;
             _slideCollider.enabled = true;
@@ -258,8 +294,8 @@ public class PlayerController : MonoBehaviour {
 
         // Rotates player on x/z axis based on targetRotation, which tilts the camera when wall running or sliding
         Quaternion newTarget = Quaternion.identity;
-        newTarget.eulerAngles = new Vector3(targetRotation.eulerAngles.x, transform.rotation.eulerAngles.y, targetRotation.eulerAngles.z);
-        transform.rotation = Quaternion.Lerp(transform.rotation, newTarget, Time.deltaTime * tiltSpeed);
+        newTarget.eulerAngles = new Vector3(targetRotation.eulerAngles.x, _tiltRotater.rotation.eulerAngles.y, targetRotation.eulerAngles.z);
+        _tiltRotater.rotation = Quaternion.Lerp(_tiltRotater.rotation, newTarget, Time.deltaTime * tiltSpeed);
     }
     private static float ClampAngle(float lfAngle, float lfMin, float lfMax) {
         if(lfAngle < -360f) lfAngle += 360f;
@@ -297,7 +333,7 @@ public class PlayerController : MonoBehaviour {
         else if(Physics.Raycast(transform.position, -transform.right, probeDistance, climbMask))
             wallStatus = WallStatus.left;
         else if(Physics.Raycast(transform.position, transform.forward, probeDistance, climbMask) ||
-            (wallRunning && Physics.Raycast(transform.position, (transform.forward + -transform.up).normalized, 2.5f * probeDistance, climbMask)))
+            (wallContact && Physics.Raycast(transform.position, (transform.forward + -transform.up).normalized, 2.5f * probeDistance, climbMask)))
             wallStatus = WallStatus.front;
         else
             wallStatus = WallStatus.none;
@@ -345,15 +381,16 @@ public class PlayerController : MonoBehaviour {
             Vector3 normal = collision.GetContact(i).normal;
             if(normal.y >= minGroundDotProduct) {
                 groundContactCount++;
+                groundNormal += normal;
             }
             else {
                 if(normal.y >= minClimbDotProduct && (climbMask & (1 << layer)) != 0) {
                     climbContactCount++;
+                    climbNormal += normal;
                 }
             }
         }
     }
-
     enum WallStatus {
         none = 0,
         left = 1,
