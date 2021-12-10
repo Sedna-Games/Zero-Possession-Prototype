@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] float moveSpeed = 10.0f;
     [SerializeField] float _dashSpeed = 25.0f, _slideSpeed = 17.5f, _climbspeed = 10.0f;
     [SerializeField] float maxSpeed = 40.0f;
+    [SerializeField] float maxSpeedChange = 10.0f;
     [SerializeField] float wallRunTiltAngle = 15.0f, lateralWallRunTiltAngle = -50.0f, slideTiltAngle = -35.0f, tiltSpeed = 2.5f;
     [SerializeField] int maxAirJumps = 1, maxDashes = 1;
     [SerializeField] float _jumpHeight = 2.0f;
@@ -53,9 +54,10 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] Collider _slideCollider;
     Vector3 velocity, desiredVel;
     int jumpPhase, dashPhase;
+    int stepsSinceJump = 0;
     float dashCooldown = 0.0f;
     bool DashCooldown => dashCooldown < 0f;
-    bool Sliding => _input.slide;
+    bool Sliding => _input.slide.performed;
     float minGroundDotProduct, minClimbDotProduct;
     int groundContactCount, climbContactCount;
     bool OnGround => groundContactCount > 0;
@@ -71,17 +73,17 @@ public class PlayerController : MonoBehaviour {
     private void Update() {
         desiredVel = new Vector3(_input.move.x, 0f, _input.move.y) * currentSpeed;
         dashCooldown -= Time.deltaTime;
-        Debug.Log(_input.slide);
+        Debug.Log(_input.slide.performed);
     }
     private void FixedUpdate() {
-        UpdateState();
-        AdjustVelocity();
         if(_input.jump)
             Jump();
         if(_input.dash)
             Dash();
-        if(_input.slide)
+        if(_input.slide.performed)
             Slide();
+        UpdateState();
+        AdjustVelocity();
         _rb.velocity = velocity;
         ClearState();
     }
@@ -93,6 +95,7 @@ public class PlayerController : MonoBehaviour {
     }
     void UpdateState() {
         velocity = _rb.velocity;
+        stepsSinceJump++;
         currentSpeed = Sliding ? _slideSpeed : moveSpeed;
         if(OnGround || wallRunning) {
             dashPhase = 0;
@@ -100,7 +103,7 @@ public class PlayerController : MonoBehaviour {
         }
         //_rb.useGravity = wallRunning ? false : true;
         checkWallRun();
-        if(wallRunning) {
+        if(wallRunning && _input.move.y > 0f && stepsSinceJump > 1 && _wallStatus != WallStatus.none) {
             _rb.AddForce(wallGravity * Time.fixedDeltaTime, ForceMode.Acceleration);
             switch(_wallStatus) {
                 case (WallStatus.none):
@@ -112,7 +115,6 @@ public class PlayerController : MonoBehaviour {
                     _rb.AddForce(wallForce * Vector3.right, ForceMode.Force);
                     break;
                 case (WallStatus.front):
-                    //_rb.AddForce(_climbspeed * -wallGravity, ForceMode.Force);
                     break;
             }
         }
@@ -122,23 +124,22 @@ public class PlayerController : MonoBehaviour {
         currentX = Vector3.Dot(velocity, transform.right);
         currentZ = Vector3.Dot(velocity, transform.forward);
 
-        if(wallRunning) {
+        if(wallRunning && _input.move.y > 0f && stepsSinceJump > 1 && _wallStatus != WallStatus.none) {
             if(_wallStatus == WallStatus.front)
                 velocity = Vector3.up * _climbspeed;
             else
                 velocity = transform.forward * _climbspeed;
         }
 
-        float acceleration = maxSpeed;
-        float maxSpeedChange = acceleration * Time.fixedDeltaTime;
+        float acceleration = maxSpeedChange * Time.fixedDeltaTime;
 
         if(!wallRunning) {
-            float newX = Mathf.MoveTowards(currentX, desiredVel.x, maxSpeedChange);
-            float newZ = Mathf.MoveTowards(currentZ, desiredVel.z, maxSpeedChange);
+            float newX = Mathf.MoveTowards(currentX, desiredVel.x, acceleration);
+            float newZ = Mathf.MoveTowards(currentZ, desiredVel.z, acceleration);
             velocity += transform.right * (newX - currentX) + transform.forward * (newZ - currentZ);
 
             Vector3 capSpeed = new Vector3(velocity.x, 0f, velocity.z);
-            velocity = capSpeed.normalized * Mathf.Min(capSpeed.magnitude, acceleration) + transform.up * velocity.y;
+            velocity = capSpeed.normalized * Mathf.Min(capSpeed.magnitude, maxSpeed) + transform.up * velocity.y;
         }
     }
     void Jump() {
@@ -146,13 +147,14 @@ public class PlayerController : MonoBehaviour {
         if(OnGround) {
             jumpPhase = 0;
         }
-        else if(maxAirJumps > 0 && jumpPhase <= maxAirJumps) {
+        else if(maxAirJumps > 0 && jumpPhase < maxAirJumps) {
             jumpPhase++;
         }
         else {
             _input.jump = false;
             return;
         }
+        stepsSinceJump = 0;
         jumpDirection = transform.up;
         float jumpSpeed = Mathf.Sqrt(-2f * Physics.gravity.y * _jumpHeight);
         jumpDirection = (jumpDirection + Vector3.up).normalized;
@@ -218,7 +220,8 @@ public class PlayerController : MonoBehaviour {
         WallStatus wallStatus;
         //NOTE: Wallrun checking; special case for lateral runs as the tilt causes the initial forward raycast to miss, requiring a special down+forward raycast once attached
         if(OnGround) {
-            wallStatus = WallStatus.none;
+            _wallStatus = WallStatus.none;
+            TiltPlayer(_wallStatus);
             return;
         }
 
@@ -233,9 +236,6 @@ public class PlayerController : MonoBehaviour {
             wallStatus = WallStatus.none;
         TiltPlayer(wallStatus);
         _wallStatus = wallStatus;
-        Debug.Log(_wallStatus.ToString());
-        Debug.DrawLine(transform.position, transform.position + transform.forward * probeDistance, Color.green);
-        Debug.DrawLine(transform.position, transform.position + (transform.forward + -transform.up).normalized * 2.5f * probeDistance, Color.red);
     }
     void TiltPlayer(WallStatus status) {
         switch(status) {
@@ -249,7 +249,7 @@ public class PlayerController : MonoBehaviour {
                 targetRotation = Quaternion.Euler(lateralWallRunTiltAngle, 0f, 0f);
                 break;
             case (WallStatus.none):
-                if(_input.slide)
+                if(_input.slide.performed)
                     targetRotation = Quaternion.Euler(slideTiltAngle, 0f, 0f);
                 else
                     targetRotation = Quaternion.identity;
