@@ -35935,7 +35935,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4696871231515782170}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -157.75, y: 31.375, z: 70.94}
+  m_LocalPosition: {x: -49.75, y: 8.375, z: 44.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -36346,7 +36346,7 @@ MonoBehaviour:
   _slowSlideSpeed: 0
   slideSlowRate: 5
   _climbSpeed: 14
-  wallRunTiltAngle: 20
+  wallRunTiltAngle: 15
   lateralWallRunTiltAngle: -50
   slideTiltAngle: -20
   tiltSpeed: 5
@@ -36358,7 +36358,8 @@ MonoBehaviour:
   jumpDelay: 0.2
   _dashCooldown: 0.5
   probeDistance: 1
-  maxGroundAngle: 25
+  maxGroundAngle: 10
+  maxSlopeAngle: 80
   maxClimbAngle: 140
   maxLateralClimbDistance: 16
   groundMask:
@@ -36367,6 +36368,9 @@ MonoBehaviour:
   climbMask:
     serializedVersion: 2
     m_Bits: 768
+  slopeMask:
+    serializedVersion: 2
+    m_Bits: 115
   wallForce: 20
   wallStickDelay: 0.1
   CinemachineCameraTarget: {fileID: 339140033076866591}
@@ -36390,7 +36394,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0867cb8a368c73b4eb4050798eb09844, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 10
+  health: 1
   OnTakeDamage:
     m_PersistentCalls:
       m_Calls: []

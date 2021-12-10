@@ -36,11 +36,11 @@ public class PlayerController : MonoBehaviour {
     [SerializeField, Tooltip("Distance for ground/wall raycasts"), Min(0f)]
     float probeDistance = 1f;
     [SerializeField, Range(0f, 90f)]
-    float maxGroundAngle = 25.0f;
+    float maxGroundAngle = 10.0f, maxSlopeAngle = 80.0f;
     [SerializeField, Range(90f, 180f)]
     float maxClimbAngle = 140.0f;
     [SerializeField] float maxLateralClimbDistance = 16f;
-    [SerializeField] LayerMask groundMask = -1, climbMask = -1;
+    [SerializeField] LayerMask groundMask = -1, climbMask = -1, slopeMask = -1;
     [SerializeField, Tooltip("How sticky the player is to the wall")]
     float wallForce = 5.0f;
     [SerializeField, Tooltip("How long before the player can stick to the wall after getting off it")]
@@ -78,11 +78,12 @@ public class PlayerController : MonoBehaviour {
     bool DashCooldown => dashCooldown < 0f;
     bool Sliding => _input.slide;
     bool _sliding = false;
-    float minGroundDotProduct, minClimbDotProduct;
-    int groundContactCount, climbContactCount;
-    Vector3 groundNormal, climbNormal;
+    float minGroundDotProduct, minClimbDotProduct, minSlopeDotProduct;
+    int groundContactCount, climbContactCount, slopeContactCount;
+    Vector3 groundNormal, climbNormal, slopeNormal;
     bool OnGround => groundContactCount > 0;
     bool wallContact => climbContactCount > 0 && _wallStickTimer < 0f;
+    bool OnSlope => slopeContactCount > 0;
     bool Climbing => wallContact && _wallStatus != WallStatus.none && !OnGround;
     WallStatus _wallStatus;
     private void Awake() {
@@ -91,6 +92,7 @@ public class PlayerController : MonoBehaviour {
     void OnValidate() {
         minGroundDotProduct = Mathf.Cos(maxGroundAngle * Mathf.Deg2Rad);
         minClimbDotProduct = Mathf.Cos(maxClimbAngle * Mathf.Deg2Rad);
+        minSlopeDotProduct = Mathf.Cos(maxSlopeAngle * Mathf.Deg2Rad);
         currentSpeed = moveSpeed;
         currentClimbSpeed = _climbSpeed;
     }
@@ -131,14 +133,14 @@ public class PlayerController : MonoBehaviour {
         CameraRotation();
     }
     void ClearState() {
-        groundContactCount = climbContactCount = 0;
-        groundNormal = climbNormal = Vector3.zero;
+        groundContactCount = climbContactCount = slopeContactCount = 0;
+        groundNormal = climbNormal = slopeNormal = Vector3.zero;
     }
     void UpdateState() {
         velocity = _rb.velocity;
         stepsSinceJump++;
         stepsSinceGrounded++;
-        if(OnGround || (wallContact && _wallStatus != WallStatus.none)) {
+        if(OnGround || (wallContact && _wallStatus != WallStatus.none) || OnSlope) {
             dashPhase = 0;
             if(stepsSinceJump > 1)
                 jumpPhase = 0;
@@ -148,6 +150,9 @@ public class PlayerController : MonoBehaviour {
             }
             if(climbContactCount > 1) {
                 climbNormal.Normalize();
+            }
+            if(slopeContactCount > 1) {
+                slopeNormal.Normalize();
             }
         }
         else {
@@ -169,12 +174,13 @@ public class PlayerController : MonoBehaviour {
             }
         }
     }
-
+    Vector3 ProjectDirectionOnPlane(Vector3 direction, Vector3 normal) {
+        return (direction - normal * Vector3.Dot(direction, normal)).normalized;
+    }
     void AdjustVelocity() {
         float currentX = 0f, currentZ = 0f;
+        Vector3 xAxis, zAxis;
 
-        currentX = Vector3.Dot(velocity, transform.right);
-        currentZ = Vector3.Dot(velocity, transform.forward);
 
         if(Climbing && _input.move.y > 0f && stepsSinceJump > 1) {
             if(_wallStatus == WallStatus.front)
@@ -185,12 +191,25 @@ public class PlayerController : MonoBehaviour {
             return;
         }
         if(!wallContact) {
+            if(OnSlope) {
+                xAxis = ProjectDirectionOnPlane(transform.right, slopeNormal);
+                zAxis = ProjectDirectionOnPlane(transform.forward, slopeNormal);
+            }
+            else {
+                xAxis = ProjectDirectionOnPlane(transform.right, groundNormal);
+                zAxis = ProjectDirectionOnPlane(transform.forward, groundNormal);
+            }
+
+            currentX = Vector3.Dot(velocity, xAxis);
+            currentZ = Vector3.Dot(velocity, zAxis);
             float acceleration = maxSpeedChange * Time.fixedDeltaTime;
             float newX = Mathf.MoveTowards(currentX, desiredVel.x, acceleration);
             float newZ = Mathf.MoveTowards(currentZ, desiredVel.z, acceleration);
             velocity += transform.right * (newX - currentX) + transform.forward * (newZ - currentZ);
 
             Vector3 capSpeed = new Vector3(velocity.x, 0f, velocity.z);
+            if (OnSlope)
+                capSpeed *= 1.1f;
             velocity = capSpeed.normalized * Mathf.Min(capSpeed.magnitude, maxSpeed) + transform.up * velocity.y;
         }
     }
@@ -228,11 +247,8 @@ public class PlayerController : MonoBehaviour {
         Vector3 momentumBoost = _rb.velocity;
         momentumBoost.y = 0f;
         velocity = momentumBoost;
-        Debug.Log(jumpSpeed);
-        Debug.Log(Climbing);
         if(Climbing)
             jumpSpeed *= wallJumpMultiplier;
-        Debug.Log("walljump: " + jumpSpeed);
         velocity += ((jumpDirection * jumpSpeed) + (momentumBoost * _jumpMomentum));
         _jumpDelay = jumpDelay;
         _sliding = false;
@@ -382,6 +398,10 @@ public class PlayerController : MonoBehaviour {
             if(normal.y >= minGroundDotProduct) {
                 groundContactCount++;
                 groundNormal += normal;
+            }
+            else if(normal.y >= minSlopeDotProduct) {
+                slopeContactCount++;
+                slopeNormal += normal;
             }
             else {
                 if(normal.y >= minClimbDotProduct && (climbMask & (1 << layer)) != 0) {
