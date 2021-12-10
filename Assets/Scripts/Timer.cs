@@ -13,6 +13,6 @@ public class Timer : MonoBehaviour {
     private void Update() {
         timer += Time.deltaTime;
         time = TimeSpan.FromSeconds(timer);
-        textMesh.text = String.Format("{0:00}:{1:00.00}", time.TotalMinutes, time.TotalSeconds);
+        textMesh.text = String.Format("{0:00}:{1:00.00}", time.TotalMinutes, time.TotalSeconds%60);
     }
 }

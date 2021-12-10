@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour {
     float _slowSlideSpeed = 17.5f;
     [SerializeField, Tooltip("The amount of seconds to go from fast slide speed to slow slide speed")]
     float slideSlowRate = 5f;
-    [SerializeField] float _climbspeed = 10.0f;
+    [SerializeField] float _climbSpeed = 10.0f;
     [SerializeField] float wallRunTiltAngle = 15.0f, lateralWallRunTiltAngle = -50.0f, slideTiltAngle = -35.0f, tiltSpeed = 2.5f;
     [SerializeField] int maxAirJumps = 1, maxDashes = 1;
     [SerializeField] float _jumpHeight = 2.0f;
@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour {
     float _jumpMomentum = 0.05f;
     [SerializeField] float _dashCooldown = 0.5f;
     float currentSpeed;
+    float currentClimbSpeed;
     Quaternion targetRotation;
 
     [Header("Terrain Settings"), Space(10)]
@@ -84,6 +85,7 @@ public class PlayerController : MonoBehaviour {
         minGroundDotProduct = Mathf.Cos(maxGroundAngle * Mathf.Deg2Rad);
         minClimbDotProduct = Mathf.Cos(maxClimbAngle * Mathf.Deg2Rad);
         currentSpeed = moveSpeed;
+        currentClimbSpeed = _climbSpeed;
     }
     private void Update() {
         desiredVel = new Vector3(_input.move.x, 0f, _input.move.y) * currentSpeed;
@@ -141,15 +143,15 @@ public class PlayerController : MonoBehaviour {
         currentX = Vector3.Dot(velocity, transform.right);
         currentZ = Vector3.Dot(velocity, transform.forward);
 
-        float acceleration = maxSpeedChange * Time.fixedDeltaTime;
         if(wallRunning && _input.move.y > 0f && stepsSinceJump > 1 && _wallStatus != WallStatus.none) {
             if(_wallStatus == WallStatus.front)
-                velocity = Vector3.up * _climbspeed * climbable.GetHashCode();
+                velocity = Vector3.up * currentClimbSpeed;
             else {
-                velocity = transform.forward * _climbspeed;
+                velocity = transform.forward * _climbSpeed;
             }
         }
-        else {
+        if(!wallRunning) {
+            float acceleration = maxSpeedChange * Time.fixedDeltaTime;
             float newX = Mathf.MoveTowards(currentX, desiredVel.x, acceleration);
             float newZ = Mathf.MoveTowards(currentZ, desiredVel.z, acceleration);
             velocity += transform.right * (newX - currentX) + transform.forward * (newZ - currentZ);
@@ -175,7 +177,10 @@ public class PlayerController : MonoBehaviour {
         }
         _wallStickTimer = wallStickDelay;
         stepsSinceJump = 0;
-        jumpDirection = (transform.up + Vector3.up).normalized;
+        if(_wallStatus == WallStatus.front)
+            jumpDirection = (transform.up + 3f * Vector3.up).normalized;
+        else
+            jumpDirection = (transform.up + Vector3.up).normalized;
         float jumpSpeed = Mathf.Sqrt(-2f * Physics.gravity.y * _jumpHeight);
         float alignedSpeed = Vector3.Dot(velocity, jumpDirection);
         if(alignedSpeed > 0f & _wallStatus == WallStatus.none) {
@@ -265,10 +270,12 @@ public class PlayerController : MonoBehaviour {
         //NOTE: Wallrun checking; special case for lateral runs as the tilt causes the initial forward raycast to miss, requiring a special down+forward raycast once attached
         if(!climbable) {
             _wallStatus = WallStatus.none;
+            currentClimbSpeed = Mathf.Lerp(currentClimbSpeed, -_climbSpeed, slideSlowRate * Time.fixedDeltaTime);
         }
         if(OnGround) {
             _wallStatus = WallStatus.none;
             firstCling = true;
+            currentClimbSpeed = _climbSpeed;
             _wallstickDistance = 0f;
             climbable = true;
             TiltPlayer(_wallStatus);
