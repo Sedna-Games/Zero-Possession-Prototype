@@ -21,9 +21,11 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] float _jumpHeight = 2.0f;
     [SerializeField, Range(0f, 1f), Tooltip("Bunny hop-like momentum on jumps")]
     float _jumpMomentum = 0.05f;
+    [SerializeField] float jumpDelay = 0.2f;
     [SerializeField] float _dashCooldown = 0.5f;
     float currentSpeed;
     float currentClimbSpeed;
+    float _jumpDelay = 0f;
     Quaternion targetRotation;
 
     [Header("Terrain Settings"), Space(10)]
@@ -91,15 +93,17 @@ public class PlayerController : MonoBehaviour {
         desiredVel = new Vector3(_input.move.x, 0f, _input.move.y) * currentSpeed;
         dashCooldown -= Time.deltaTime;
         _wallStickTimer -= Time.deltaTime;
+        _jumpDelay -= Time.deltaTime;
+
     }
     private void FixedUpdate() {
+        UpdateState();
         if(_input.jump)
             Jump();
         if(_input.dash)
             Dash();
         if(_input.slide)
             Slide();
-        UpdateState();
         AdjustVelocity();
         _rb.velocity = velocity;
         ClearState();
@@ -162,14 +166,19 @@ public class PlayerController : MonoBehaviour {
     }
     void Jump() {
         Vector3 jumpDirection;
+        if (_jumpDelay > 0f)
+            return;
         if(OnGround) {
             jumpPhase = 0;
+            Debug.Log("Jump");
         }
         else if(wallRunning && _wallStatus != WallStatus.none) {
             jumpPhase = 0;
+            Debug.Log("Jump");
         }
         else if(maxAirJumps > 0 && jumpPhase < maxAirJumps) {
             jumpPhase++;
+            Debug.Log("Air Jump");
         }
         else {
             _input.jump = false;
@@ -177,20 +186,20 @@ public class PlayerController : MonoBehaviour {
         }
         _wallStickTimer = wallStickDelay;
         stepsSinceJump = 0;
-        if(_wallStatus == WallStatus.front)
-            jumpDirection = (transform.up + 3f * Vector3.up).normalized;
-        else
-            jumpDirection = (transform.up + Vector3.up).normalized;
+        jumpDirection = transform.up;
         float jumpSpeed = Mathf.Sqrt(-2f * Physics.gravity.y * _jumpHeight);
         float alignedSpeed = Vector3.Dot(velocity, jumpDirection);
         if(alignedSpeed > 0f & _wallStatus == WallStatus.none) {
             jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
         }
-        Vector3 momentumBoost = velocity;
+        Vector3 momentumBoost = _rb.velocity;
         momentumBoost.y = 0f;
-        _rb.velocity = momentumBoost;
-        _rb.AddForce(jumpDirection * jumpSpeed + momentumBoost * _jumpMomentum, ForceMode.Impulse);
+        velocity = momentumBoost;
+        velocity += ((jumpDirection * jumpSpeed) + (momentumBoost * _jumpMomentum));
+        _jumpDelay = jumpDelay;
         _input.jump = false;
+        _sliding = false;
+        _input.slide = false;
     }
     void Dash() {
         Vector3 dashDirection;
@@ -212,6 +221,7 @@ public class PlayerController : MonoBehaviour {
     }
     void Slide() {
         if(!_sliding && Sliding && OnGround) {
+            Debug.Log(Sliding);
             _sliding = true;
             currentSpeed = _slideSpeed;
             _slideCollider.enabled = true;
@@ -220,7 +230,7 @@ public class PlayerController : MonoBehaviour {
         }
     }
     IEnumerator SlideDecelerate() {
-        while(_input.slide && OnGround) {
+        while(_input.slide) {
             currentSpeed = Mathf.Lerp(currentSpeed, _slowSlideSpeed, 1f / slideSlowRate * Time.fixedDeltaTime);
             yield return new WaitForFixedUpdate();
         }
