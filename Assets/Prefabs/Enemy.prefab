@@ -456,7 +456,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponOwner: {fileID: 0}
-  cooldown: 0
+  cooldown: 1.5
   OnAttack:
     m_PersistentCalls:
       m_Calls:
@@ -6034,7 +6034,7 @@ GameObject:
   - component: {fileID: 1978715465394007414}
   - component: {fileID: 634274127}
   - component: {fileID: 634274125}
-  - component: {fileID: 8064153798785424672}
+  - component: {fileID: 1517922979}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
@@ -6208,8 +6208,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sightRadius: 30
   weaponManager: {fileID: 1855179530}
---- !u!136 &8064153798785424672
-CapsuleCollider:
+--- !u!65 &1517922979
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -6218,7 +6218,6 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.49999997
-  m_Height: 1.9999999
-  m_Direction: 1
+  serializedVersion: 2
+  m_Size: {x: 1.3, y: 2, z: 1.3}
   m_Center: {x: 0, y: 0, z: 0}
