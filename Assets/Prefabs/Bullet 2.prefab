@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 1261734789116479396}
   - component: {fileID: 1540742191211457243}
   - component: {fileID: 6773215815386681560}
-  m_Layer: 0
-  m_Name: Bullet 1
+  m_Layer: 8
+  m_Name: Bullet 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,7 +74,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7879906058657086478}
   - component: {fileID: 5296339066085395470}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -227,7 +227,7 @@ GameObject:
   - component: {fileID: 7441924542529153527}
   - component: {fileID: 8360990265771441781}
   - component: {fileID: 4274834551519361833}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -329,7 +329,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   canDoDamage: 1
-  ignoreTag: Player
+  ignoreTag: Enemy
 --- !u!114 &4274834551519361833
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -9,6 +9,7 @@ public class Gun : Weapon
     [SerializeField] float lerpSpeed = 1.0f;
     [SerializeField] int poolSize = 2;
     [SerializeField] float bulletSpeed = 5.0f;
+    [SerializeField] bool setInactiveOnFire = true;
 
     [Header("References")]
     [SerializeField] GameObject bulletPrefab = null;
@@ -62,7 +63,7 @@ public class Gun : Weapon
             }
             x = 0.0f;
             _attacking = false;
-            gameObject.SetActive(false);
+            gameObject.SetActive(!setInactiveOnFire);
         }
         StartCoroutine(Lerp());
         foreach (var bep in bulletEmitterPoints)
