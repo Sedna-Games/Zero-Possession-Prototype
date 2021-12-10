@@ -11,7 +11,7 @@ namespace InputManagerScript
 		[Header("Character Input Values")]
 		public Vector2 move, look;
         public bool jump, dash;
-        public CallbackContext slide;
+        public bool slide;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -45,9 +45,9 @@ namespace InputManagerScript
 		{
 			DashInput(value.isPressed);
 		}
-		public void OnSlide(CallbackContext value)
+		public void OnSlide(InputValue value)
 		{
-            slide = value;
+            SlideInput(value.isPressed);
         }
 #else
 	// old input sys if we do decide to have it (most likely wont)...
@@ -73,10 +73,10 @@ namespace InputManagerScript
 		{
 			dash = newDashState;
 		}
-		// public void SlideInput(bool newSlideState)
-		// {
-		// 	slide = newSlideState;
-		// }
+		public void SlideInput(bool newSlideState)
+		{
+			slide = newSlideState;
+		}
 
 #if !UNITY_IOS || !UNITY_ANDROID
 

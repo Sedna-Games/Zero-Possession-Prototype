@@ -1,14 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using InputManagerScript;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
     [Header("Movement Settings"), Space(10)]
     [SerializeField] float moveSpeed = 10.0f;
-    [SerializeField] float _dashSpeed = 25.0f, _slideSpeed = 17.5f, _climbspeed = 10.0f;
+    [SerializeField] float _dashSpeed = 25.0f;
     [SerializeField] float maxSpeed = 40.0f;
     [SerializeField] float maxSpeedChange = 10.0f;
+    [SerializeField] float _slideSpeed = 17.5f;
+    [SerializeField, Tooltip("The speed while sliding lerps from slideSpeed to slowSlideSpeed")]
+    float _slowSlideSpeed = 17.5f;
+    [SerializeField, Tooltip("The amount of seconds to go from fast slide speed to slow slide speed")]
+    float slideSlowRate = 5f;
+    [SerializeField] float _climbspeed = 10.0f;
     [SerializeField] float wallRunTiltAngle = 15.0f, lateralWallRunTiltAngle = -50.0f, slideTiltAngle = -35.0f, tiltSpeed = 2.5f;
     [SerializeField] int maxAirJumps = 1, maxDashes = 1;
     [SerializeField] float _jumpHeight = 2.0f;
@@ -26,11 +33,17 @@ public class PlayerController : MonoBehaviour {
     float maxGroundAngle = 25.0f;
     [SerializeField, Range(90f, 180f)]
     float maxClimbAngle = 140.0f;
+    [SerializeField] float maxLateralClimbDistance = 16f;
     [SerializeField] LayerMask groundMask = -1, climbMask = -1;
     [SerializeField] Vector3 wallGravity = Physics.gravity;
     [SerializeField, Tooltip("How sticky the player is to the wall")]
     float wallForce = 5.0f;
-
+    [SerializeField, Tooltip("How long before the player can stick to the wall after getting off it")]
+    float wallStickDelay = 0.1f;
+    float _wallStickTimer = 0f;
+    float _wallstickDistance;
+    float _wallstickY;
+    bool firstCling = true, climbable = false;
 
     [Header("Cinemachine")]
     [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
@@ -54,14 +67,15 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] Collider _slideCollider;
     Vector3 velocity, desiredVel;
     int jumpPhase, dashPhase;
-    int stepsSinceJump = 0;
+    int stepsSinceGrounded = 0, stepsSinceJump = 0;
     float dashCooldown = 0.0f;
     bool DashCooldown => dashCooldown < 0f;
-    bool Sliding => _input.slide.performed;
+    bool Sliding => _input.slide;
+    bool _sliding = false;
     float minGroundDotProduct, minClimbDotProduct;
     int groundContactCount, climbContactCount;
     bool OnGround => groundContactCount > 0;
-    bool wallRunning => climbContactCount > 0;
+    bool wallRunning => climbContactCount > 0 && _wallStickTimer < 0f;
     WallStatus _wallStatus;
     private void Awake() {
         OnValidate();
@@ -69,18 +83,19 @@ public class PlayerController : MonoBehaviour {
     void OnValidate() {
         minGroundDotProduct = Mathf.Cos(maxGroundAngle * Mathf.Deg2Rad);
         minClimbDotProduct = Mathf.Cos(maxClimbAngle * Mathf.Deg2Rad);
+        currentSpeed = moveSpeed;
     }
     private void Update() {
         desiredVel = new Vector3(_input.move.x, 0f, _input.move.y) * currentSpeed;
         dashCooldown -= Time.deltaTime;
-        Debug.Log(_input.slide.performed);
+        _wallStickTimer -= Time.deltaTime;
     }
     private void FixedUpdate() {
         if(_input.jump)
             Jump();
         if(_input.dash)
             Dash();
-        if(_input.slide.performed)
+        if(_input.slide)
             Slide();
         UpdateState();
         AdjustVelocity();
@@ -96,14 +111,14 @@ public class PlayerController : MonoBehaviour {
     void UpdateState() {
         velocity = _rb.velocity;
         stepsSinceJump++;
-        currentSpeed = Sliding ? _slideSpeed : moveSpeed;
-        if(OnGround || wallRunning) {
+        stepsSinceGrounded++;
+        if(OnGround || (wallRunning && _wallStatus != WallStatus.none)) {
             dashPhase = 0;
             jumpPhase = 0;
+            stepsSinceGrounded = 0;
         }
-        //_rb.useGravity = wallRunning ? false : true;
         checkWallRun();
-        if(wallRunning && _input.move.y > 0f && stepsSinceJump > 1 && _wallStatus != WallStatus.none) {
+        if(wallRunning && _input.move.y > 0f && stepsSinceJump > 1 && _wallStatus != WallStatus.none && climbable) {
             _rb.AddForce(wallGravity * Time.fixedDeltaTime, ForceMode.Acceleration);
             switch(_wallStatus) {
                 case (WallStatus.none):
@@ -119,21 +134,22 @@ public class PlayerController : MonoBehaviour {
             }
         }
     }
+
     void AdjustVelocity() {
         float currentX = 0f, currentZ = 0f;
+
         currentX = Vector3.Dot(velocity, transform.right);
         currentZ = Vector3.Dot(velocity, transform.forward);
 
+        float acceleration = maxSpeedChange * Time.fixedDeltaTime;
         if(wallRunning && _input.move.y > 0f && stepsSinceJump > 1 && _wallStatus != WallStatus.none) {
             if(_wallStatus == WallStatus.front)
-                velocity = Vector3.up * _climbspeed;
-            else
+                velocity = Vector3.up * _climbspeed * climbable.GetHashCode();
+            else {
                 velocity = transform.forward * _climbspeed;
+            }
         }
-
-        float acceleration = maxSpeedChange * Time.fixedDeltaTime;
-
-        if(!wallRunning) {
+        else {
             float newX = Mathf.MoveTowards(currentX, desiredVel.x, acceleration);
             float newZ = Mathf.MoveTowards(currentZ, desiredVel.z, acceleration);
             velocity += transform.right * (newX - currentX) + transform.forward * (newZ - currentZ);
@@ -147,6 +163,9 @@ public class PlayerController : MonoBehaviour {
         if(OnGround) {
             jumpPhase = 0;
         }
+        else if(wallRunning && _wallStatus != WallStatus.none) {
+            jumpPhase = 0;
+        }
         else if(maxAirJumps > 0 && jumpPhase < maxAirJumps) {
             jumpPhase++;
         }
@@ -154,12 +173,12 @@ public class PlayerController : MonoBehaviour {
             _input.jump = false;
             return;
         }
+        _wallStickTimer = wallStickDelay;
         stepsSinceJump = 0;
-        jumpDirection = transform.up;
+        jumpDirection = (transform.up + Vector3.up).normalized;
         float jumpSpeed = Mathf.Sqrt(-2f * Physics.gravity.y * _jumpHeight);
-        jumpDirection = (jumpDirection + Vector3.up).normalized;
         float alignedSpeed = Vector3.Dot(velocity, jumpDirection);
-        if(alignedSpeed > 0f) {
+        if(alignedSpeed > 0f & _wallStatus == WallStatus.none) {
             jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
         }
         Vector3 momentumBoost = velocity;
@@ -187,6 +206,23 @@ public class PlayerController : MonoBehaviour {
         _input.dash = false;
     }
     void Slide() {
+        if(!_sliding && Sliding && OnGround) {
+            _sliding = true;
+            currentSpeed = _slideSpeed;
+            _slideCollider.enabled = true;
+            _normalCollider.enabled = false;
+            StartCoroutine(SlideDecelerate());
+        }
+    }
+    IEnumerator SlideDecelerate() {
+        while(_input.slide && OnGround) {
+            currentSpeed = Mathf.Lerp(currentSpeed, _slowSlideSpeed, 1f / slideSlowRate * Time.fixedDeltaTime);
+            yield return new WaitForFixedUpdate();
+        }
+        _normalCollider.enabled = true;
+        _slideCollider.enabled = false;
+        currentSpeed = moveSpeed;
+        _sliding = false;
     }
     private void CameraRotation() {
         // if there is an input
@@ -216,11 +252,25 @@ public class PlayerController : MonoBehaviour {
         return Mathf.Clamp(lfAngle, lfMin, lfMax);
     }
 
+    void wallRunDistanceCheck(float posY) {
+        if(posY - _wallstickY > 0.1f) {
+            _wallstickDistance += posY - _wallstickY;
+            _wallstickY = posY;
+        }
+        if(_wallstickDistance >= maxLateralClimbDistance)
+            climbable = false;
+    }
     void checkWallRun() {
         WallStatus wallStatus;
         //NOTE: Wallrun checking; special case for lateral runs as the tilt causes the initial forward raycast to miss, requiring a special down+forward raycast once attached
+        if(!climbable) {
+            _wallStatus = WallStatus.none;
+        }
         if(OnGround) {
             _wallStatus = WallStatus.none;
+            firstCling = true;
+            _wallstickDistance = 0f;
+            climbable = true;
             TiltPlayer(_wallStatus);
             return;
         }
@@ -234,10 +284,19 @@ public class PlayerController : MonoBehaviour {
             wallStatus = WallStatus.front;
         else
             wallStatus = WallStatus.none;
-        TiltPlayer(wallStatus);
         _wallStatus = wallStatus;
+        TiltPlayer(_wallStatus);
     }
     void TiltPlayer(WallStatus status) {
+        if(status == WallStatus.front)
+            if(firstCling) {
+                firstCling = false;
+                _wallstickY = transform.position.y;
+                wallRunDistanceCheck(_wallstickY);
+            }
+            else
+                wallRunDistanceCheck(transform.position.y);
+
         switch(status) {
             case (WallStatus.left):
                 targetRotation = Quaternion.Euler(0f, 0f, -wallRunTiltAngle);
@@ -249,7 +308,7 @@ public class PlayerController : MonoBehaviour {
                 targetRotation = Quaternion.Euler(lateralWallRunTiltAngle, 0f, 0f);
                 break;
             case (WallStatus.none):
-                if(_input.slide.performed)
+                if(_sliding)
                     targetRotation = Quaternion.Euler(slideTiltAngle, 0f, 0f);
                 else
                     targetRotation = Quaternion.identity;
@@ -267,8 +326,9 @@ public class PlayerController : MonoBehaviour {
         int layer = collision.gameObject.layer;
         for(int i = 0; i < collision.contactCount; i++) {
             Vector3 normal = collision.GetContact(i).normal;
-            if(normal.y >= minGroundDotProduct)
+            if(normal.y >= minGroundDotProduct) {
                 groundContactCount++;
+            }
             else {
                 if(normal.y >= minClimbDotProduct && (climbMask & (1 << layer)) != 0) {
                     climbContactCount++;

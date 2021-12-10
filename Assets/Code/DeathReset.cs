@@ -11,7 +11,11 @@ public class DeathReset : MonoBehaviour
 
     public void Die()
     {
-        transform.localPosition = resetPoint.localPosition;
+        transform.position = resetPoint.position;
         OnPostDeath.Invoke();
+    }
+
+    public void setResetPoint(Transform point) {
+        resetPoint = point;
     }
 }
