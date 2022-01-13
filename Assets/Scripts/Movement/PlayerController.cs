@@ -31,10 +31,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField, Range(0f, 1f), Tooltip("Bunny hop-like momentum on jumps")]
     float _jumpMomentum = 0.05f;
     [SerializeField] float jumpDelay = 0.2f;
+    [SerializeField] float coyoteTime = 0.3f;
     [SerializeField] float _dashCooldown = 0.5f;
     float currentSpeed;
     float currentClimbSpeed;
     float _jumpDelay = 0f;
+    float _coyoteTimer = 0f;
     bool desireJump = false, desireDash = false;
     Quaternion targetRotation;
 
@@ -179,6 +181,7 @@ public class PlayerController : MonoBehaviour
         if (OnGround || (wallContact && _wallStatus != WallStatus.none) || OnSlope)
         {
             dashPhase = 0;
+            _coyoteTimer = 0f;
             if (stepsSinceJump > 1)
                 jumpPhase = 0;
             stepsSinceGrounded = 0;
@@ -197,6 +200,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            _coyoteTimer += Time.fixedDeltaTime;
             groundNormal = Vector3.up;
         }
         checkWallRun();
@@ -258,7 +262,7 @@ public class PlayerController : MonoBehaviour
             velocity += transform.right * (newX - currentX) + transform.forward * (newZ - currentZ);
 
             Vector3 capSpeed = new Vector3(velocity.x, 0f, velocity.z);
-            if (OnSlope)
+            if (OnSlope && _sliding)
                 capSpeed *= 1.1f;
             velocity = capSpeed.normalized * Mathf.Min(capSpeed.magnitude, maxSpeed) + transform.up * velocity.y;
         }
@@ -268,12 +272,12 @@ public class PlayerController : MonoBehaviour
         Vector3 jumpDirection;
         if (_jumpDelay > 0f)
             return;
-        if (OnGround)
+        if (OnGround || _coyoteTimer <= coyoteTime)
         {
             jumpPhase = 0;
             jumpDirection = groundNormal;
         }
-        else if (wallContact && _wallStatus != WallStatus.none)
+        else if (wallContact && _wallStatus != WallStatus.none || _coyoteTimer <= coyoteTime)
         {
             jumpPhase = 0;
             jumpDirection = climbNormal;
@@ -292,6 +296,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
         _wallStickTimer = wallStickDelay;
+        _coyoteTimer = coyoteTime + 1f;
         stepsSinceJump = 0;
         float jumpSpeed = Mathf.Sqrt(-2f * Physics.gravity.y * _jumpHeight);
         jumpDirection = (jumpDirection + _tiltRotater.up).normalized;
@@ -334,7 +339,7 @@ public class PlayerController : MonoBehaviour
     }
     void Slide()
     {
-        if (!_sliding && Sliding && OnGround)
+        if (!_sliding && Sliding && stepsSinceGrounded < 2)
         {
             slideSound.Play();
             _sliding = true;
