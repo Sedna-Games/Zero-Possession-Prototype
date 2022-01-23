@@ -38,18 +38,25 @@ public class Weapon : MonoBehaviour
         OnDisableWeapon.Invoke();
     }
 
-    public float GetCooldown()
+    protected float GetCooldown()
     {
         return _cooldown;
     }
 
-    public bool IsAttacking()
+    protected bool IsAttacking()
     {
         return _attacking;
     }
 
+    public bool CanAttack()
+    {
+        return (!_attacking && _cooldown < 0.0f);
+    }
+
     public virtual void Attack()
     {
+        if (!CanAttack())
+            return;
         _cooldown = cooldown;
         OnAttack.Invoke();
     }

@@ -40,6 +40,7 @@ public class Gun : Weapon
     }
     public override void Attack()
     {
+        base.Attack();
         IEnumerator Lerp()
         {
             _attacking = true;
@@ -85,6 +86,5 @@ public class Gun : Weapon
             dir = dir.normalized;
             bullet.GetComponent<Rigidbody>().AddForce(dir * bulletSpeed, ForceMode.Impulse);
         }
-        base.Attack();
     }
 }
