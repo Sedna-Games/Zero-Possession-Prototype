@@ -441,7 +441,7 @@ MonoBehaviour:
       Data2: 1098030046
       Data3: -1281555052
       Data4: -650146862
-    Path: event:/SX/wpn/wpn_gun_pickup
+    Path: event:/SX/wpn/wpn_gun_ammo
   Event: 
   PlayEvent: 0
   StopEvent: 0

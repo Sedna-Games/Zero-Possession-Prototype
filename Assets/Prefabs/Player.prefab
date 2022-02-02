@@ -31410,7 +31410,7 @@ MonoBehaviour:
       Data2: 1081235523
       Data3: -1200734048
       Data4: 550606661
-    Path: event:/SX/wpn/wpn_gun_shot
+    Path: event:/SX/wpn/wpn_shotgun_shoot
   Event: 
   PlayEvent: 0
   StopEvent: 0

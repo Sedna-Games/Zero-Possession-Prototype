@@ -109,67 +109,10 @@ MonoBehaviour:
   OnDisableWeapon:
     m_PersistentCalls:
       m_Calls: []
-  movementCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  rotationCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0.0020751953
-      value: -0.009433746
-      inSlope: 1.94367
-      outSlope: 1.94367
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.4765223
-      value: 0.91273487
-      inSlope: 0.41344893
-      outSlope: 0.41344893
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.09584819
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0.16670269
-      outSlope: 0.16670269
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  lerpSpeed: 6
-  lerpPositions:
-  - {fileID: 40656135871230453}
+  numPossibleSwings: 3
+  animator: {fileID: 0}
   damageDoer: {fileID: 40656136770344566}
+  particleSystems: []
 --- !u!1 &40656135362932082
 GameObject:
   m_ObjectHideFlags: 0
@@ -20673,7 +20616,7 @@ MonoBehaviour:
       Data2: 1081235523
       Data3: -1200734048
       Data4: 550606661
-    Path: event:/SX/wpn/wpn_gun_shot
+    Path: event:/SX/wpn/wpn_shotgun_shoot
   Event: 
   PlayEvent: 0
   StopEvent: 0
@@ -31970,12 +31913,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6648d679ab4bead4683b413be9a4d93d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  footSteps: {fileID: 0}
+  dashSound: {fileID: 0}
+  slideSound: {fileID: 0}
+  landSound: {fileID: 0}
   moveSpeed: 11
   _dashSpeed: 100
-  _slideSpeed: 17.5
-  _climbspeed: 13
   maxSpeed: 29
   maxSpeedChange: 50
+  _slideSpeed: 17.5
+  _slowSlideSpeed: 17.5
+  slideSlowRate: 5
+  _climbSpeed: 10
   wallRunTiltAngle: 15
   lateralWallRunTiltAngle: -50
   slideTiltAngle: -35
@@ -31983,25 +31932,33 @@ MonoBehaviour:
   maxAirJumps: 1
   maxDashes: 1
   _jumpHeight: 2.5
+  wallJumpMultiplier: 5
   _jumpMomentum: 0.3
+  jumpDelay: 0.2
   _dashCooldown: 0.5
   probeDistance: 1
   maxGroundAngle: 25
+  maxSlopeAngle: 80
   maxClimbAngle: 140
+  maxLateralClimbDistance: 16
   groundMask:
     serializedVersion: 2
     m_Bits: 627
   climbMask:
     serializedVersion: 2
     m_Bits: 768
-  wallGravity: {x: 0, y: -22, z: 0}
+  slopeMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
   wallForce: 5
+  wallStickDelay: 0.1
   CinemachineCameraTarget: {fileID: 4175669870217263466}
   TopClamp: 90
   BottomClamp: -90
   RotationSpeed: 1
   _rb: {fileID: 8957446382979668623}
   _input: {fileID: 8957446382979668622}
+  _tiltRotater: {fileID: 0}
   _normalCollider: {fileID: 8957446382979668620}
   _slideCollider: {fileID: 8957446382979668624}
 --- !u!114 &2722311329349639797
@@ -32153,6 +32110,7 @@ MonoBehaviour:
   look: {x: 0, y: 0}
   jump: 0
   dash: 0
+  slide: 0
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1

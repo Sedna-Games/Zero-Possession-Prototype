@@ -408,7 +408,7 @@ MonoBehaviour:
   SwitchSettingsMigration: 1
   HasSourceProject: 1
   HasPlatforms: 1
-  sourceProjectPath: FMOD Project/Zero-Possession-Prototype-FMOD.fspro
+  sourceProjectPath: FMOD Project/ZP-FMOD.fspro
   sourceBankPath: FMOD Project/Build
   SourceBankPathUnformatted: 
   BankRefreshCooldown: 5
@@ -435,12 +435,16 @@ MonoBehaviour:
   - Master
   Banks:
   - MENU
-  - MX
+  - MX_level_01
   - SX_amb
   - SX_npc
+  - SX_npc_boss
+  - SX_npc_emitter
+  - SX_npc_enemy
   - SX_plr
   - SX_ui
-  - SX_wpn
+  - SX_wpn_gun
+  - SX_wpn_sword
   BanksToLoad: []
   LiveUpdatePort: 9264
   EnableMemoryTracking: 0
@@ -453,7 +457,7 @@ MonoBehaviour:
   SharedLibraryTimeSinceStart: 0
   CurrentVersion: 131588
   HideSetupWizard: 1
-  LastEventReferenceScanVersion: 0
+  LastEventReferenceScanVersion: 131588
   Platforms:
   - {fileID: -9050640254280211182}
   - {fileID: -5906969052866825103}
