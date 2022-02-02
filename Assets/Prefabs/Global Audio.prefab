@@ -51,7 +51,7 @@ MonoBehaviour:
       Data2: 1075542772
       Data3: 444612028
       Data4: -1148658807
-    Path: event:/MX/mx_gameplay
+    Path: event:/MX/mx_level_01
   Event: 
   PlayEvent: 1
   StopEvent: 2
