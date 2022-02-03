@@ -35,7 +35,7 @@ public class WeaponManager : MonoBehaviour
 
     public void OnPrimaryWeapon()
     {
-        if (primaryWeapon.GetCooldown() > 0.0f || primaryWeapon.IsAttacking())
+        if (!primaryWeapon.CanAttack())
             return;
         _internalDowntime = 0.0f;
         OnBeginAttack.Invoke();
@@ -44,7 +44,7 @@ public class WeaponManager : MonoBehaviour
 
     public void OnSecondaryWeapon()
     {
-        if (!secondaryWeapon.gameObject.activeSelf || secondaryWeapon.GetCooldown() > 0.0f || secondaryWeapon.IsAttacking())
+        if (!secondaryWeapon.gameObject.activeSelf || !secondaryWeapon.CanAttack())
             return;
         _internalDowntime = 0.0f;
         OnBeginAttack.Invoke();
@@ -56,8 +56,18 @@ public class WeaponManager : MonoBehaviour
         secondaryWeapon = weapon;
     }
 
-    public void ActivateSecondaryWeapon(){
+    public void ActivateSecondaryWeapon()
+    {
         secondaryWeapon.gameObject.SetActive(true);
+    }
+
+    public bool CanPrimaryAttack()
+    {
+        return primaryWeapon.CanAttack();
+    }
+    public bool CanSecondaryAttack()
+    {
+        return secondaryWeapon.CanAttack();
     }
 
 }

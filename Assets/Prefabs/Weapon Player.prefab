@@ -184,7 +184,7 @@ MonoBehaviour:
       Data2: 1081235523
       Data3: -1200734048
       Data4: 550606661
-    Path: event:/SX/wpn/wpn_gun_shot
+    Path: event:/SX/wpn/wpn_shotgun_shoot
   Event: 
   PlayEvent: 0
   StopEvent: 0
@@ -40762,7 +40762,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8762286023885395323, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
-      value: 1.7789935
+      value: 1.7777778
       objectReference: {fileID: 0}
     - target: {fileID: 8762286024517199034, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: Damping.x

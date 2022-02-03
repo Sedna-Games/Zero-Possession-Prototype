@@ -16,7 +16,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float moveSpeed = 10.0f;
     [SerializeField] float _dashSpeed = 25.0f;
     [SerializeField] float maxSpeed = 40.0f;
-    [SerializeField] float maxSpeedChange = 10.0f;
+    [SerializeField] float maxGroundSpeedChange = 50.0f;
+    [SerializeField] float maxAirSpeedChange = 25.0f;
     [SerializeField] float _slideSpeed = 17.5f;
     [SerializeField, Tooltip("The speed while sliding lerps from slideSpeed to slowSlideSpeed")]
     float _slowSlideSpeed = 17.5f;
@@ -31,10 +32,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField, Range(0f, 1f), Tooltip("Bunny hop-like momentum on jumps")]
     float _jumpMomentum = 0.05f;
     [SerializeField] float jumpDelay = 0.2f;
+    [SerializeField] float coyoteTime = 0.3f;
     [SerializeField] float _dashCooldown = 0.5f;
     float currentSpeed;
     float currentClimbSpeed;
+    float maxSpeedChange;
     float _jumpDelay = 0f;
+    float _coyoteTimer = 0f;
     bool desireJump = false, desireDash = false;
     Quaternion targetRotation;
 
@@ -110,6 +114,7 @@ public class PlayerController : MonoBehaviour
         minSlopeDotProduct = Mathf.Cos(maxSlopeAngle * Mathf.Deg2Rad);
         currentSpeed = moveSpeed;
         currentClimbSpeed = _climbSpeed;
+        maxSpeedChange = maxGroundSpeedChange;
     }
     private void Update()
     {
@@ -170,6 +175,7 @@ public class PlayerController : MonoBehaviour
         //landSound.Play();
         groundContactCount = climbContactCount = slopeContactCount = 0;
         groundNormal = climbNormal = slopeNormal = Vector3.zero;
+        maxSpeedChange = stepsSinceGrounded < 2 ? maxGroundSpeedChange : maxAirSpeedChange;
     }
     void UpdateState()
     {
@@ -179,8 +185,12 @@ public class PlayerController : MonoBehaviour
         if (OnGround || (wallContact && _wallStatus != WallStatus.none) || OnSlope)
         {
             dashPhase = 0;
+            _coyoteTimer = 0f;
             if (stepsSinceJump > 1)
+            {
                 jumpPhase = 0;
+                _coyoteTimer = 0f;
+            }
             stepsSinceGrounded = 0;
             if (groundContactCount > 1)
             {
@@ -197,6 +207,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            _coyoteTimer += Time.fixedDeltaTime;
             groundNormal = Vector3.up;
         }
         checkWallRun();
@@ -239,6 +250,7 @@ public class PlayerController : MonoBehaviour
         }
         if (!wallContact)
         {
+            //NOTE: Based on contact normal, returns the parallel direction for x/z axis
             if (OnSlope)
             {
                 xAxis = ProjectDirectionOnPlane(transform.right, slopeNormal);
@@ -250,16 +262,28 @@ public class PlayerController : MonoBehaviour
                 zAxis = ProjectDirectionOnPlane(transform.forward, groundNormal);
             }
 
+            //NOTE: Applies current velocity to appropriate x/z axis
             currentX = Vector3.Dot(velocity, xAxis);
             currentZ = Vector3.Dot(velocity, zAxis);
             float acceleration = maxSpeedChange * Time.fixedDeltaTime;
+
+            // if (velocity.magnitude > currentSpeed)
+            // {
+            //     acceleration /= 5f;
+            // }
+
             float newX = Mathf.MoveTowards(currentX, desiredVel.x, acceleration);
             float newZ = Mathf.MoveTowards(currentZ, desiredVel.z, acceleration);
             velocity += transform.right * (newX - currentX) + transform.forward * (newZ - currentZ);
 
+            // float friction = 0.08f;
+
             Vector3 capSpeed = new Vector3(velocity.x, 0f, velocity.z);
-            if (OnSlope)
+            if (OnSlope && _sliding)
                 capSpeed *= 1.1f;
+            // else if (stepsSinceGrounded < 1)
+            //     capSpeed -= capSpeed * friction;
+            // Debug.Log(capSpeed.magnitude);
             velocity = capSpeed.normalized * Mathf.Min(capSpeed.magnitude, maxSpeed) + transform.up * velocity.y;
         }
     }
@@ -268,12 +292,12 @@ public class PlayerController : MonoBehaviour
         Vector3 jumpDirection;
         if (_jumpDelay > 0f)
             return;
-        if (OnGround)
+        if (OnGround || _coyoteTimer <= coyoteTime)
         {
             jumpPhase = 0;
             jumpDirection = groundNormal;
         }
-        else if (wallContact && _wallStatus != WallStatus.none)
+        else if (wallContact && _wallStatus != WallStatus.none || _coyoteTimer <= coyoteTime)
         {
             jumpPhase = 0;
             jumpDirection = climbNormal;
@@ -292,6 +316,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
         _wallStickTimer = wallStickDelay;
+        _coyoteTimer = coyoteTime + 1f;
         stepsSinceJump = 0;
         float jumpSpeed = Mathf.Sqrt(-2f * Physics.gravity.y * _jumpHeight);
         jumpDirection = (jumpDirection + _tiltRotater.up).normalized;
@@ -334,7 +359,7 @@ public class PlayerController : MonoBehaviour
     }
     void Slide()
     {
-        if (!_sliding && Sliding && OnGround)
+        if (!_sliding && Sliding && stepsSinceGrounded < 2)
         {
             slideSound.Play();
             _sliding = true;
