@@ -26,8 +26,8 @@ TextureImporter:
   vTOnly: 0
   ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
-  generateCubemap: 1
-  cubemapConvolution: 2
+  generateCubemap: 6
+  cubemapConvolution: 0
   seamlessCubemap: 0
   textureFormat: 1
   maxTextureSize: 2048
