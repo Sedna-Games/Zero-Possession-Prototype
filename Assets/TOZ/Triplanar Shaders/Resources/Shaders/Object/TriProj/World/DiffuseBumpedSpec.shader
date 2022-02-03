@@ -3,6 +3,7 @@
 		_Color("Main Color", Color) = (1, 1, 1, 1)
 		_MainTex("Base (RGB)", 2D) = "white" {}
 		_BumpMap("Normalmap", 2D) = "bump" {}
+		_RoughMap("Roughness Map", 2D) = "rough" {}
 		_SpecColor("Specular Color", Color) = (0.5, 0.5, 0.5, 1)
 		_Shininess("Shininess", Range(0.01, 1)) = 0.078125
 		_Blend("Blending", Range (0.01, 0.4)) = 0.2
@@ -10,7 +11,7 @@
 
 	CGINCLUDE
 	fixed4 _Color;
-	sampler2D _MainTex, _BumpMap;
+	sampler2D _MainTex, _BumpMap, _RoughMap;
 	float4 _MainTex_ST;
 	half _Shininess;
 	fixed _Blend;
