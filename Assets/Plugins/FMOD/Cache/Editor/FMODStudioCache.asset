@@ -69,7 +69,7 @@ MonoBehaviour:
   Path: FMOD Project/Build/Desktop/SX_wpn_gun.bank
   Name: SX_wpn_gun
   StudioPath: bank:/SX/SX_wpn_gun
-  lastModified: 637794140690885289
+  lastModified: 637798306917860919
   FileSizes:
   - Name: Desktop
     Value: 142528
@@ -89,7 +89,7 @@ MonoBehaviour:
   Path: FMOD Project/Build/Desktop/MX_level_01.bank
   Name: MX_level_01
   StudioPath: bank:/MX_level_01
-  lastModified: 637794140682888415
+  lastModified: 637798306917770898
   FileSizes:
   - Name: Desktop
     Value: 4571168
@@ -238,7 +238,7 @@ MonoBehaviour:
   Path: FMOD Project/Build/Desktop/SX_wpn_sword.bank
   Name: SX_wpn_sword
   StudioPath: bank:/SX/SX_wpn_sword
-  lastModified: 637794140691585892
+  lastModified: 637798306917870924
   FileSizes:
   - Name: Desktop
     Value: 41344
@@ -438,7 +438,7 @@ MonoBehaviour:
   Path: FMOD Project/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 637794140585533074
+  lastModified: 637798306917790904
   FileSizes:
   - Name: Desktop
     Value: 8424
@@ -615,7 +615,7 @@ MonoBehaviour:
   Path: FMOD Project/Build/Desktop/SX_amb.bank
   Name: SX_amb
   StudioPath: bank:/SX/SX_amb
-  lastModified: 637794140683038546
+  lastModified: 637777611211624099
   FileSizes:
   - Name: Desktop
     Value: 1488
@@ -662,7 +662,7 @@ MonoBehaviour:
   Path: FMOD Project/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 637794140585553089
+  lastModified: 637798306917790904
   FileSizes:
   - Name: Desktop
     Value: 4176
@@ -710,7 +710,7 @@ MonoBehaviour:
   Path: FMOD Project/Build/Desktop/SX_ui.bank
   Name: SX_ui
   StudioPath: bank:/SX/SX_ui
-  lastModified: 637794140688468221
+  lastModified: 637798306917840916
   FileSizes:
   - Name: Desktop
     Value: 24128
@@ -957,7 +957,7 @@ MonoBehaviour:
   - {fileID: -4320884559322374463}
   StringsBanks:
   - {fileID: -1559254613359687293}
-  cacheTime: 637794140691585892
+  cacheTime: 637798306917870924
   cacheVersion: 10
 --- !u!114 &40261960200041378
 MonoBehaviour:
@@ -1057,7 +1057,7 @@ MonoBehaviour:
   Path: FMOD Project/Build/Desktop/MENU.bank
   Name: MENU
   StudioPath: bank:/MENU
-  lastModified: 637794140622104527
+  lastModified: 637777611211284020
   FileSizes:
   - Name: Desktop
     Value: 4751936
@@ -1131,7 +1131,7 @@ MonoBehaviour:
   Path: FMOD Project/Build/Desktop/SX_plr.bank
   Name: SX_plr
   StudioPath: bank:/SX/SX_plr
-  lastModified: 637794140687172096
+  lastModified: 637798306917840916
   FileSizes:
   - Name: Desktop
     Value: 217440
@@ -1178,7 +1178,7 @@ MonoBehaviour:
   Path: FMOD Project/Build/Desktop/SX_npc_emitter.bank
   Name: SX_npc_emitter
   StudioPath: bank:/SX/SX_npc_emitter
-  lastModified: 637794140683644060
+  lastModified: 637798306917820910
   FileSizes:
   - Name: Desktop
     Value: 3328
@@ -1357,7 +1357,7 @@ MonoBehaviour:
   Path: FMOD Project/Build/Desktop/SX_npc_boss.bank
   Name: SX_npc_boss
   StudioPath: bank:/SX/SX_npc_boss
-  lastModified: 637794140683413860
+  lastModified: 637798306917810909
   FileSizes:
   - Name: Desktop
     Value: 4248
@@ -1569,7 +1569,7 @@ MonoBehaviour:
   Path: FMOD Project/Build/Desktop/SX_npc.bank
   Name: SX_npc
   StudioPath: bank:/SX/SX_npc
-  lastModified: 637794140683183661
+  lastModified: 637798306917800907
   FileSizes:
   - Name: Desktop
     Value: 1488
@@ -1779,7 +1779,7 @@ MonoBehaviour:
   Path: FMOD Project/Build/Desktop/SX_npc_enemy.bank
   Name: SX_npc_enemy
   StudioPath: bank:/SX/SX_npc_enemy
-  lastModified: 637794140683884272
+  lastModified: 637798306917820910
   FileSizes:
   - Name: Desktop
     Value: 3328
