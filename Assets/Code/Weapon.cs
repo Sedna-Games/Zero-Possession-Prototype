@@ -53,11 +53,21 @@ public class Weapon : MonoBehaviour
         return (!_attacking && _cooldown < 0.0f);
     }
 
+    public void SetAttacking(bool b)
+    {
+        _attacking = b;
+    }
+
+    protected void ResetCooldown()
+    {
+        _cooldown = cooldown;
+    }
+
     public virtual void Attack()
     {
         if (!CanAttack())
             return;
-        _cooldown = cooldown;
+        ResetCooldown();
         OnAttack.Invoke();
     }
 

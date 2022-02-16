@@ -4,33 +4,19 @@ using UnityEngine;
 
 public class Gun : Weapon
 {
-    [SerializeField] AnimationCurve gunTopLerpCurve;
-    [SerializeField] AnimationCurve gunLerpCurve;
-    [SerializeField] float lerpSpeed = 1.0f;
     [SerializeField] int poolSize = 2;
     [SerializeField] float bulletSpeed = 5.0f;
     [SerializeField] bool setInactiveOnFire = true;
 
     [Header("References")]
     [SerializeField] GameObject bulletPrefab = null;
-    [SerializeField] Transform gunTop;
-    [SerializeField] Transform gun;
-    [SerializeField] Transform gunTopLerpPoint;
-    [SerializeField] Transform gunLerpPoint;
     [SerializeField] List<Transform> bulletEmitterPoints = new List<Transform>();
-
-    private Vector3 _orignalPositionGunTop;
-
-    private Vector3 _orignalPositionGun;
-    private Quaternion _orignalPositionRotationGun;
-
+    [SerializeField] Animator animator = null;
 
     List<GameObject> _bulletPool = new List<GameObject>();
+    int _bulletKey = 0;
     private void Start()
     {
-        _orignalPositionGunTop = gunTop.transform.localPosition;
-        _orignalPositionGun = gun.transform.localPosition;
-        _orignalPositionRotationGun = gun.transform.localRotation;
 
         for (int i = 0; i < poolSize; i++)
         {
@@ -40,41 +26,14 @@ public class Gun : Weapon
     }
     public override void Attack()
     {
-        base.Attack();
-        IEnumerator Lerp()
-        {
-            _attacking = true;
-            float x = 0.0f;
-            while (x < 1.0f)
-            {
-                yield return new WaitForEndOfFrame();
-                x += Time.deltaTime * lerpSpeed;
-                gunTop.transform.localPosition = Vector3.Lerp(_orignalPositionGunTop, gunTopLerpPoint.localPosition, gunTopLerpCurve.Evaluate(x));
-                gun.transform.localPosition = Vector3.Slerp(_orignalPositionGun, gunLerpPoint.localPosition, gunLerpCurve.Evaluate(x));
-                gun.transform.localRotation = Quaternion.Slerp(_orignalPositionRotationGun, gunLerpPoint.localRotation, gunLerpCurve.Evaluate(x));
-            }
-            x = 1.0f;
-            while (x > 0.0f)
-            {
-                yield return new WaitForEndOfFrame();
-                x -= Time.deltaTime * lerpSpeed;
-                gunTop.transform.localPosition = Vector3.Lerp(_orignalPositionGunTop, gunTopLerpPoint.localPosition, gunTopLerpCurve.Evaluate(x));
-                gun.transform.localPosition = Vector3.Slerp(_orignalPositionGun, gunLerpPoint.localPosition, gunLerpCurve.Evaluate(x));
-                gun.transform.localRotation = Quaternion.Slerp(_orignalPositionRotationGun, gunLerpPoint.localRotation, gunLerpCurve.Evaluate(x));
-            }
-            x = 0.0f;
-            _attacking = false;
-            gameObject.SetActive(!setInactiveOnFire);
-        }
-        StartCoroutine(Lerp());
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+            return;
+        ResetCooldown();
+        OnAttack.Invoke();
+        animator.SetTrigger("Shoot");
         foreach (var bep in bulletEmitterPoints)
         {
-            GameObject bullet = null;
-            foreach (var b in _bulletPool)
-                if (!b.activeSelf)
-                    bullet = b;
-            if (bullet == null)
-                bullet = _bulletPool[_bulletPool.Count - 1];
+            GameObject bullet = _bulletPool[_bulletKey];
 
             bullet.SetActive(true);
             bullet.GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -85,6 +44,7 @@ public class Gun : Weapon
             var dir = bullet.transform.position - bep.transform.position;
             dir = dir.normalized;
             bullet.GetComponent<Rigidbody>().AddForce(dir * bulletSpeed, ForceMode.Impulse);
+            _bulletKey = (_bulletKey + 1) % _bulletPool.Count;
         }
     }
 }
