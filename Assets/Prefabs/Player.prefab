@@ -37480,24 +37480,30 @@ MonoBehaviour:
   slideSound: {fileID: 783087651}
   landSound: {fileID: 0}
   moveSpeed: 11
-  _dashSpeed: 25
-  maxSpeed: 35
-  maxSpeedChange: 50
-  _slideSpeed: 17.5
-  _slowSlideSpeed: 0
-  slideSlowRate: 5
-  _climbSpeed: 14
+  dashSpeed: 25
+  maxSpeed: 30
+  maxGroundSpeedChange: 50
+  maxAirSpeedChange: 50
+  slideSpeed: 17.5
+  slowSlideSpeed: 0
+  slideSlowRate: 2
+  climbSpeed: 10
   wallRunTiltAngle: 15
   lateralWallRunTiltAngle: -50
   slideTiltAngle: -20
   tiltSpeed: 5
   maxAirJumps: 1
   maxDashes: 1
-  _jumpHeight: 2.75
+  jumpHeight: 3
   wallJumpMultiplier: 5
-  _jumpMomentum: 0.3
-  jumpDelay: 0.2
-  _dashCooldown: 0.5
+  jumpMomentum: 0.05
+  slideSlopeMomentum: 1.5
+  dashMomentum: 0.05
+  dashGroundMomentumStacks: 3
+  dashDuration: 0.5
+  dashCooldown: 1
+  momentumStackDecay: 10
+  coyoteTime: 0.3
   probeDistance: 1.5
   maxGroundAngle: 10
   maxSlopeAngle: 80
@@ -37518,11 +37524,11 @@ MonoBehaviour:
   TopClamp: 90
   BottomClamp: -90
   RotationSpeed: 1
-  _rb: {fileID: 4686300567443377658}
-  _input: {fileID: 4686300567443377659}
-  _tiltRotater: {fileID: 2832586417400488506}
-  _normalCollider: {fileID: 4686300567443377657}
-  _slideCollider: {fileID: 4686300567443377637}
+  rb: {fileID: 4686300567443377658}
+  input: {fileID: 4686300567443377659}
+  tiltRotater: {fileID: 2832586417400488506}
+  normalCollider: {fileID: 4686300567443377657}
+  slideCollider: {fileID: 4686300567443377637}
 --- !u!114 &1765899463263045888
 MonoBehaviour:
   m_ObjectHideFlags: 0
