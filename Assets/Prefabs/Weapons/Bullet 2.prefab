@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1261734789116479396}
   - component: {fileID: 1540742191211457243}
   - component: {fileID: 6773215815386681560}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Bullet 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 1930150569880198430}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0.069, z: 0}
-  m_LocalScale: {x: 2.043, y: 2.043, z: 2.043}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1869733995538249468}
@@ -74,7 +74,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7879906058657086478}
   - component: {fileID: 5296339066085395470}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -226,10 +226,9 @@ GameObject:
   - component: {fileID: 57539291409186}
   - component: {fileID: 7441924542529153527}
   - component: {fileID: 8360990265771441781}
-  - component: {fileID: 4274834551519361833}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: default
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -310,7 +309,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.08, y: 0.08, z: 0.14}
+  m_Size: {x: 0.16, y: 0.16, z: 0.28}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8360990265771441781
 MonoBehaviour:
@@ -327,23 +326,6 @@ MonoBehaviour:
   damage: 1
   OnDidDamage:
     m_PersistentCalls:
-      m_Calls: []
-  canDoDamage: 1
-  ignoreTag: Enemy
---- !u!114 &4274834551519361833
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7441228991880062407}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f073c35e25f2b6e47be1cc7f1b4e305c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnTriggerEvent:
-    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1930150569880198430}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
@@ -357,3 +339,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  canDoDamage: 1
+  ignoreTags:
+  - Enemy
+  - Terrain
