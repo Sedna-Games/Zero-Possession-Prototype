@@ -36992,7 +36992,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4696871231515782170}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -46.8, y: 10.375, z: 45.47}
+  m_LocalPosition: {x: -46.75, y: 9.375, z: 43.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -37357,7 +37357,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4922363695198934853}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -47.05, y: 10.375, z: 45.47}
+  m_LocalPosition: {x: -47, y: 9.375, z: 43.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -37394,7 +37394,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 2.165725, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -37452,7 +37452,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5351056073792739140}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -47.05, y: 10, z: 45.47}
+  m_LocalPosition: {x: -47, y: 9, z: 43.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -37482,7 +37482,7 @@ MonoBehaviour:
   moveSpeed: 11
   dashSpeed: 25
   maxSpeed: 30
-  maxAirSpeedChange: 50
+  maxAirSpeedChange: 10
   slideSpeed: 20
   slowSlideSpeed: 0
   slideSlowRate: 3
@@ -37508,7 +37508,7 @@ MonoBehaviour:
   maxGroundAngle: 10
   maxSlopeAngle: 50
   maxClimbAngle: 140
-  maxLateralClimbDistance: 16
+  maxClimbDistance: 16
   groundMask:
     serializedVersion: 2
     m_Bits: 115
