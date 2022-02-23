@@ -437,6 +437,7 @@ MonoBehaviour:
   - MENU
   - MX_level_01
   - SX_amb
+  - SX_env_tram
   - SX_npc
   - SX_npc_boss
   - SX_npc_emitter
