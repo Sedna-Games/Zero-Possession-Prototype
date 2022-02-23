@@ -37482,12 +37482,12 @@ MonoBehaviour:
   moveSpeed: 11
   dashSpeed: 25
   maxSpeed: 30
-  maxGroundSpeedChange: 50
   maxAirSpeedChange: 50
-  slideSpeed: 17.5
+  slideSpeed: 20
   slowSlideSpeed: 0
-  slideSlowRate: 2
-  climbSpeed: 10
+  slideSlowRate: 3
+  runSpeed: 15
+  climbSpeed: 8
   wallRunTiltAngle: 15
   lateralWallRunTiltAngle: -50
   slideTiltAngle: -20
@@ -37498,23 +37498,26 @@ MonoBehaviour:
   wallJumpMultiplier: 5
   jumpMomentum: 0.05
   slideSlopeMomentum: 1.5
-  dashMomentum: 0.05
-  dashGroundMomentumStacks: 3
-  dashDuration: 0.5
+  dashMomentum: 0.1
+  dashGroundMomentumStacks: 10
+  dashDuration: 0.4
   dashCooldown: 1
-  momentumStackDecay: 10
-  coyoteTime: 0.3
+  momentumStackDecay: 20
+  coyoteTime: 0.2
   probeDistance: 1.5
   maxGroundAngle: 10
-  maxSlopeAngle: 80
+  maxSlopeAngle: 50
   maxClimbAngle: 140
   maxLateralClimbDistance: 16
   groundMask:
     serializedVersion: 2
-    m_Bits: 627
+    m_Bits: 115
   climbMask:
     serializedVersion: 2
-    m_Bits: 768
+    m_Bits: 512
+  runMask:
+    serializedVersion: 2
+    m_Bits: 256
   slopeMask:
     serializedVersion: 2
     m_Bits: 115
