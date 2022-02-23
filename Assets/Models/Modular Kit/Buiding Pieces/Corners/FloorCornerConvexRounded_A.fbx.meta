@@ -3,7 +3,17 @@ guid: eff4adbd29d8cd349b80c8b2b687c27c
 ModelImporter:
   serializedVersion: 21202
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Building
+    second: {fileID: 2100000, guid: 53eb272ca7883bb4abc41435e3e224c3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Railing
+    second: {fileID: 2100000, guid: e12cd0c3348a48e40956623ea336a8f5, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
