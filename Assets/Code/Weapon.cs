@@ -12,6 +12,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] protected float cooldown = 0.0f;
 
     public UnityEvent OnAttack;
+    public UnityEvent OnFinishAttack;
     public UnityEvent OnEnableWeapon;
     public UnityEvent OnDisableWeapon;
 
@@ -53,11 +54,23 @@ public class Weapon : MonoBehaviour
         return (!_attacking && _cooldown < 0.0f);
     }
 
+    public void SetAttacking(bool b)
+    {
+        _attacking = b;
+        if (!_attacking)
+            OnFinishAttack.Invoke();
+    }
+
+    protected void ResetCooldown()
+    {
+        _cooldown = cooldown;
+    }
+
     public virtual void Attack()
     {
         if (!CanAttack())
             return;
-        _cooldown = cooldown;
+        ResetCooldown();
         OnAttack.Invoke();
     }
 
