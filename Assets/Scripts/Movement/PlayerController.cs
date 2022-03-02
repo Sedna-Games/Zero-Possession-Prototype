@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] float maxAirSpeedChange = 25.0f;
     [SerializeField] float slideSpeed = 17.5f;
     [SerializeField, Tooltip("The speed while sliding lerps from slideSpeed to slowSlideSpeed")]
-    float slowSlideSpeed = 17.5f;
+    float slowSlideSpeed = 0f;
     [SerializeField, Tooltip("The amount of seconds to go from fast slide speed to slow slide speed")]
     float slideSlowRate = 5f;
     [SerializeField] float runSpeed = 10f, climbSpeed = 8f;
@@ -40,6 +40,8 @@ public class PlayerController : MonoBehaviour {
     float dashDuration = 0.5f;
     [SerializeField, Tooltip("Add dashDuration to the value you want to assign this")]
     float dashCooldown = 0.5f;
+    [SerializeField, Tooltip("Amount of fixedUpdate cycles to go from dashSpeed to moveSpeed")]
+    float dashDecelerateRate = 50f;
     [SerializeField, Tooltip("Number of FixedUpdate cycles to lose 1 stack of jump/dash momentum while not in the air (50 cycles/second")]
     int momentumStackDecay = 10;
     [SerializeField, Tooltip("The amount of time after going off an edge that you can still be considered grounded when jumping (doesn't eat air jump)")]
@@ -222,7 +224,6 @@ public class PlayerController : MonoBehaviour {
     void AdjustVelocity() {
         float currentX = 0f, currentZ = 0f;
         Vector3 xAxis, zAxis;
-
         if(Dashing) {
             _stepsSinceDash = 0;
             return;
@@ -237,7 +238,7 @@ public class PlayerController : MonoBehaviour {
             zAxis = ProjectDirectionOnPlane(transform.forward, _groundNormal);
         }
 
-        if(InAir) {
+        if(InAir || OnSlope) {
             //NOTE: Applies current velocity to appropriate x/z axis
             currentX = Vector3.Dot(_velocity, xAxis);
             currentZ = Vector3.Dot(_velocity, zAxis);
@@ -246,6 +247,12 @@ public class PlayerController : MonoBehaviour {
             float newX = Mathf.MoveTowards(currentX, _desiredVel.x, acceleration);
             float newZ = Mathf.MoveTowards(currentZ, _desiredVel.z, acceleration);
             _velocity += transform.right * (newX - currentX) + transform.forward * (newZ - currentZ);
+            if(_sliding) {
+                if(zAxis.z < 0f)
+                    _velocity *= slideSlopeMomentum;
+                else
+                    _velocity /= slideSlopeMomentum;
+            }
         }
         else {
             //NOTE: Slopes still not working properly
@@ -260,9 +267,6 @@ public class PlayerController : MonoBehaviour {
         }
 
         Vector3 capSpeed = new Vector3(_velocity.x, 0f, _velocity.z);
-        if(OnSlope && _sliding) {
-            capSpeed *= slideSlopeMomentum;
-        }
         _velocity = capSpeed.normalized * Mathf.Min(capSpeed.magnitude, maxSpeed) + transform.up * _velocity.y;
     }
     void Jump() {
@@ -297,19 +301,32 @@ public class PlayerController : MonoBehaviour {
         _coyoteTimer = coyoteTime + 1f;
         _stepsSinceJump = 0;
         float jumpSpeed = Mathf.Sqrt(-2f * Physics.gravity.y * jumpHeight);
+        if(OnSlope || Climbing) {
+            jumpDirection = (jumpDirection + tiltRotater.up).normalized;
+            float alignedSpeed = Vector3.Dot(_velocity, jumpDirection);
+            if(alignedSpeed > 0f & _wallStatus == WallStatus.none) {
+                jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
+            }
+        }
+        else if(LeftRight || _wallStatus == WallStatus.front) {
+            jumpDirection = (jumpDirection + tiltRotater.up).normalized;
+        }
         Vector3 momentumBoost = rb.velocity;
         momentumBoost.y = 0f;
         _velocity = momentumBoost;
-        if(!OnSlope)
-            jumpDirection = (jumpDirection + transform.up).normalized;
-        //NOTE: Not working properly
-        // if(LeftRight || _wallStatus == WallStatus.front) {
-        //     jumpDirection = (jumpDirection * wallJumpMultiplier + transform.up).normalized;
-        //     jumpSpeed *= wallJumpMultiplier;
-        // }
         _velocity += ((jumpDirection * jumpSpeed) + (momentumBoost * jumpMomentum));
         _sliding = false;
         input.slide = false;
+    }
+    IEnumerator DashDecelerate() {
+        _currentSpeed = dashSpeed;
+        float speedDiff = (dashSpeed - moveSpeed) / dashDecelerateRate;
+        yield return new WaitForSeconds(dashDuration);
+        while(_currentSpeed > moveSpeed) {
+            _currentSpeed -= speedDiff;
+            yield return new WaitForFixedUpdate();
+        }
+        _currentSpeed = moveSpeed;
     }
     void Dash() {
         Vector3 dashDirection;
@@ -330,10 +347,12 @@ public class PlayerController : MonoBehaviour {
         else
             _dashMomentumStacks += dashGroundMomentumStacks;
         rb.AddForce(dashDirection * dashSpeed, ForceMode.Impulse);
+        Debug.Log(rb.velocity);
         dashSound.Play();
         _dashCooldown = dashCooldown;
         _dashDuration = dashDuration;
         input.dash = false;
+        StartCoroutine(DashDecelerate());
     }
     void Slide() {
         if(!_sliding && Sliding && _stepsSinceGrounded < 2) {
@@ -347,7 +366,8 @@ public class PlayerController : MonoBehaviour {
     }
     IEnumerator SlideDecelerate() {
         while(input.slide) {
-            _currentSpeed = Mathf.Lerp(_currentSpeed, slowSlideSpeed, Time.fixedDeltaTime / slideSlowRate);
+            if(!OnSlope)
+                _currentSpeed = Mathf.Lerp(_currentSpeed, slowSlideSpeed, Time.fixedDeltaTime / slideSlowRate);
             yield return new WaitForFixedUpdate();
         }
         normalCollider.enabled = true;
@@ -399,10 +419,11 @@ public class PlayerController : MonoBehaviour {
         if(OnGround) {
             _wallStatus = WallStatus.none;
             _firstCling = true;
-            _currentSpeed = moveSpeed;
             _wallstickDistance = 0f;
             _climbable = true;
             TiltPlayer(_wallStatus);
+            if(!Sliding)
+                _currentSpeed = moveSpeed;
             return;
         }
 
@@ -421,7 +442,8 @@ public class PlayerController : MonoBehaviour {
             wallStatus = WallStatus.front;
         }
         else {
-            _currentSpeed = moveSpeed;
+            if(!Sliding)
+                _currentSpeed = moveSpeed;
             wallStatus = WallStatus.none;
         }
         _wallStatus = wallStatus;

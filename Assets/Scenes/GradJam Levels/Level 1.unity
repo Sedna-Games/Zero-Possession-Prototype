@@ -692,7 +692,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: f47b49185b9447844ad5ced862eadc90, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: f47b49185b9447844ad5ced862eadc90, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -40143,6 +40143,10 @@ PrefabInstance:
       value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 4686300567443377636, guid: a6ec7dc1e63c8e64cb1cd6ecee32b305, type: 3}
+      propertyPath: dashDecelerateRate
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 4686300567443377636, guid: a6ec7dc1e63c8e64cb1cd6ecee32b305, type: 3}
       propertyPath: maxGroundSpeedChange
       value: 50
       objectReference: {fileID: 0}
@@ -43657,7 +43661,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: f47b49185b9447844ad5ced862eadc90, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: f47b49185b9447844ad5ced862eadc90, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -61885,7 +61889,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh89732
+  m_Name: pb_Mesh55424
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -64215,7 +64219,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh89822
+  m_Name: pb_Mesh55518
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -71182,7 +71186,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: f47b49185b9447844ad5ced862eadc90, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: f47b49185b9447844ad5ced862eadc90, type: 3}
       propertyPath: m_StaticEditorFlags
