@@ -31662,15 +31662,16 @@ MonoBehaviour:
   dashSound: {fileID: 1336560015}
   slideSound: {fileID: 783087651}
   landSound: {fileID: 0}
+  gravity: -32
   moveSpeed: 11
   dashSpeed: 25
   maxSpeed: 30
-  maxAirSpeedChange: 10
   slideSpeed: 20
   slowSlideSpeed: 0
   slideSlowRate: 3
   runSpeed: 15
   climbSpeed: 8
+  AirManeuverabilityRate: 1
   wallRunTiltAngle: 15
   lateralWallRunTiltAngle: -50
   slideTiltAngle: -20
@@ -31680,11 +31681,12 @@ MonoBehaviour:
   jumpHeight: 3
   wallJumpMultiplier: 5
   jumpMomentum: 0.05
-  slideSlopeMomentum: 1.5
+  slideSlopeMomentum: 1.1
   dashMomentum: 0.1
   dashGroundMomentumStacks: 10
   dashDuration: 0.4
   dashCooldown: 1
+  dashDecelerateRate: 150
   momentumStackDecay: 20
   coyoteTime: 0.2
   probeDistance: 1.5
@@ -31757,7 +31759,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
@@ -31976,6 +31978,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1765899463263045888}
         m_TargetAssemblyTypeName: Health, Assembly-CSharp
         m_MethodName: SetToMaxHealth
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 4686300567443377636}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: resetMomentumStacks
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -40127,24 +40127,8 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4686300567443377636, guid: a6ec7dc1e63c8e64cb1cd6ecee32b305, type: 3}
-      propertyPath: probeDistance
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4686300567443377636, guid: a6ec7dc1e63c8e64cb1cd6ecee32b305, type: 3}
-      propertyPath: slideTiltAngle
-      value: -20
-      objectReference: {fileID: 0}
-    - target: {fileID: 4686300567443377636, guid: a6ec7dc1e63c8e64cb1cd6ecee32b305, type: 3}
-      propertyPath: wallRunTiltAngle
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 4686300567443377636, guid: a6ec7dc1e63c8e64cb1cd6ecee32b305, type: 3}
       propertyPath: maxAirSpeedChange
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 4686300567443377636, guid: a6ec7dc1e63c8e64cb1cd6ecee32b305, type: 3}
-      propertyPath: dashDecelerateRate
-      value: 150
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4686300567443377636, guid: a6ec7dc1e63c8e64cb1cd6ecee32b305, type: 3}
       propertyPath: maxGroundSpeedChange
