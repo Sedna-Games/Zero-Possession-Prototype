@@ -31671,7 +31671,9 @@ MonoBehaviour:
   slideSlowRate: 3
   runSpeed: 15
   climbSpeed: 8
-  AirManeuverabilityRate: 1
+  ManeuverabilityRate: 0.15
+  AirManeuverabilityRate: 0.2
+  GroundManeuverabilityRate: 0.25
   wallRunTiltAngle: 15
   lateralWallRunTiltAngle: -50
   slideTiltAngle: -20
@@ -31679,7 +31681,8 @@ MonoBehaviour:
   maxAirJumps: 1
   maxDashes: 1
   jumpHeight: 3
-  wallJumpMultiplier: 5
+  JumpMovementDelay: 0.5
+  wallJumpMultiplier: 3
   jumpMomentum: 0.05
   slideSlopeMomentum: 1.1
   dashMomentum: 0.1
