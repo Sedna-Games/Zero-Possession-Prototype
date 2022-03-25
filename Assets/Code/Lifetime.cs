@@ -24,4 +24,8 @@ public class Lifetime : MonoBehaviour
         }
         StartCoroutine(Life());
     }
+    public void ResetLife()
+    {
+        lifetime = maxLifetime;
+    }
 }
