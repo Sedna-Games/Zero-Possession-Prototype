@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: a08b1aedb1b09bf429bd464a15dff331
+guid: c6ee830e93e875a4f88ce0e894a1dbc3
 ModelImporter:
   serializedVersion: 21202
   internalIDToNameTable: []
   externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Building
+    second: {fileID: 2100000, guid: 53eb272ca7883bb4abc41435e3e224c3, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -52,7 +57,7 @@ ModelImporter:
     nodeNameCollisionStrategy: 1
     fileIdsGeneration: 2
     swapUVChannels: 0
-    generateSecondaryUV: 1
+    generateSecondaryUV: 0
     useFileUnits: 1
     keepQuads: 0
     weldVertices: 1
