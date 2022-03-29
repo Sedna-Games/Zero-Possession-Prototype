@@ -37,23 +37,32 @@ public class PlayerController : MonoBehaviour {
     float jumpMomentum = 0.05f;
     [SerializeField, Min(1f), Tooltip("Acceleration when sliding down slopes")]
     float slideSlopeMomentum = 1.1f;
-    [Tooltip("How many slide stacks you lose per fixed updated cycle")]
+    [SerializeField, Tooltip("Extra speed converted from sliding -> running that decays (Slide stacks = speedDiff / slideCarryOverMomentum)"), Range(0.01f, 1f)]
+    float slideCarryOverMomentum = 0.02f;
+    [SerializeField, Tooltip("How many slide stacks you lose per fixed updated cycle (Combine with above to control how quickly you lose it)")]
     float slideMomentumStackDecay = 3f;
     [SerializeField, Range(0f, 1f), Tooltip("Percentage speed increase from dashing")]
     float dashMomentum = 0.05f;
     [SerializeField, Tooltip("Multiplier on dash momentum stacks (base: 1 => airDash = 1, groundDash = 1 * dashGroundMomentumStacks")]
-    int dashGroundMomentumStacks = 3;
+    float dashGroundMomentumStacks = 3;
     [SerializeField, Tooltip("How long you continue to move at dashSpeed (locks normal xz movement)")]
     float dashDuration = 0.5f;
     [SerializeField, Tooltip("Add dashDuration to the value you want to assign this")]
     float dashCooldown = 0.5f;
     [SerializeField, Tooltip("Amount of fixedUpdate cycles to go from dashSpeed to moveSpeed")]
     float dashDecelerateRate = 50f;
-    [SerializeField, Tooltip("Number of FixedUpdate cycles to lose 1 stack of jump/dash momentum while not in the air (50 cycles/second")]
+    [SerializeField, Tooltip("Number of FixedUpdate cycles to lose jump/dashMomentumDecay stacks of jump/dash momentum while not in the air (50 cycles/second")]
     int momentumStackDecay = 10;
+    [SerializeField, Tooltip("Amount of stacks to remove once the above happens")]
+    float jumpMomentumDecay=1f, dashMomentumDecay = 1f;
+    [SerializeField, Tooltip("The difficulty of stacking momentum (each action gives you 1f / (actionMomentumStacks * momentumStackingDifficulty) stacks). To disable, set to 0f"), Range(0f, 1f)]
+    float momentumStackingDifficulty = 1f;
     [SerializeField, Tooltip("The amount of time after going off an edge that you can still be considered grounded when jumping (doesn't eat air jump)")]
     float coyoteTime = 0.3f;
-    float _currentSpeed, _totalSpeed, _currentClimbSpeed;
+    float _currentSpeed, _currentClimbSpeed;
+    float _totalSpeed => calculateMomentumStacks(_currentSpeed);
+
+    float _climbDistance => calculateMomentumStacks(maxClimbDistance);
     float _slideMomentumStacks;
     float _dashCooldown = 0.0f;
     float _dashDuration = 0f;
@@ -76,7 +85,7 @@ public class PlayerController : MonoBehaviour {
     [SerializeField, Tooltip("How long before the player can stick to the wall after getting off it")]
     float wallStickDelay = 0.1f;
     float _wallStickTimer = 0f;
-    float _wallstickDistance, _wallstickY, _climbDistance;
+    float _wallstickDistance, _wallstickY;
     bool _firstCling = true, _climbable = false;
 
     [Header("Cinemachine")]
@@ -102,7 +111,7 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] Collider slideCollider;
     Vector3 _velocity, _desiredVel;
     int _jumpPhase, _dashPhase;
-    int _jumpMomentumStacks = 0, _dashMomentumStacks = 0;
+    float _jumpMomentumStacks = 0, _dashMomentumStacks = 0;
     int _stepsSinceGrounded = 0, _stepsSinceJump = 0, _stepsSinceDash = 0;
     bool _sliding = false;
     float _minGroundDotProduct, _minClimbDotProduct, _minSlopeDotProduct;
@@ -135,16 +144,29 @@ public class PlayerController : MonoBehaviour {
     }
     //NOTE: Calculates actual speed after applying all momentum stacks. Sliding uses a different setup and is based on the const Time.fixedDeltaTime instead
     float calculateMomentumStacks(float speed) {
-        return speed + (speed * jumpMomentum * _jumpMomentumStacks) + (speed * dashMomentum * _dashMomentumStacks) + (_slideMomentumStacks * Time.fixedDeltaTime);
+        float newSpeed = speed + (speed * jumpMomentum * _jumpMomentumStacks) + (speed * dashMomentum * _dashMomentumStacks) + (_slideMomentumStacks * slideCarryOverMomentum);
+        return newSpeed;
     }
     public void resetMomentumStacks() {
-        _jumpMomentumStacks = 0;
-        _dashMomentumStacks = 0;
+        _jumpMomentumStacks = 0f;
+        _dashMomentumStacks = 0f;
         _slideMomentumStacks = 0f;
     }
+    void addJumpMomentumStacks() {
+        if(momentumStackingDifficulty == 0f || _jumpMomentumStacks == 0f)
+            _jumpMomentumStacks += 1f;
+        else
+            _jumpMomentumStacks += 1f / Mathf.Ceil(_jumpMomentumStacks * momentumStackingDifficulty);
+    }
+    void addDashMomentumStacks(bool groundDash = false) {
+        if(momentumStackingDifficulty == 0f || _dashMomentumStacks == 0f)
+            _dashMomentumStacks += 1f;
+        else if(groundDash)
+            _dashMomentumStacks += dashGroundMomentumStacks / Mathf.Ceil(_dashMomentumStacks * momentumStackingDifficulty);
+        else
+            _dashMomentumStacks += 1.0f / Mathf.Ceil(_dashMomentumStacks * momentumStackingDifficulty);
+    }
     private void Update() {
-        _totalSpeed = calculateMomentumStacks(_currentSpeed);
-        _climbDistance = calculateMomentumStacks(maxClimbDistance);
         _desiredVel = new Vector3(input.move.x, 0f, input.move.y).normalized * _totalSpeed;
         _dashCooldown -= Time.deltaTime;
         _dashDuration -= Time.deltaTime;
@@ -218,10 +240,10 @@ public class PlayerController : MonoBehaviour {
             //NOTE: Momentum decay. Doesn't decay for wall running but decays for ground, slope, and climbing
             if(_wallStatus != WallStatus.left && _wallStatus != WallStatus.right) {
                 if(_stepsSinceJump % momentumStackDecay == 0) {
-                    _jumpMomentumStacks = Math.Max(0, _jumpMomentumStacks - 1);
+                    _jumpMomentumStacks = Mathf.Max(0f, _jumpMomentumStacks - jumpMomentumDecay);
                 }
                 if(_stepsSinceDash % momentumStackDecay == 0) {
-                    _dashMomentumStacks = Math.Max(0, _dashMomentumStacks - 1);
+                    _dashMomentumStacks = Mathf.Max(0f, _dashMomentumStacks - dashMomentumDecay);
                 }
             }
             _stepsSinceGrounded = 0;
@@ -263,6 +285,9 @@ public class PlayerController : MonoBehaviour {
             zAxis = ProjectDirectionOnPlane(transform.forward, _groundNormal);
         }
 
+        //NOTE: Resets momentum stacks if player isn't moving
+        if(_velocity.x + _velocity.z < 0.5f && _desiredVel.magnitude == 0f)
+            resetMomentumStacks();
 
         //NOTE: Makes movement less instantaneous while mid-air
         currentX = Vector3.Dot(_velocity, xAxis);
@@ -290,22 +315,22 @@ public class PlayerController : MonoBehaviour {
         if(OnGround) {
             _jumpPhase = 0;
             jumpDirection = _groundNormal;
-            _jumpMomentumStacks++;
+            addJumpMomentumStacks();
         }
         else if(OnSlope) {
             _jumpPhase = 0;
             jumpDirection = _slopeNormal;
-            _jumpMomentumStacks++;
+            addJumpMomentumStacks();
         }
         else if(Climbing) {
             _jumpPhase = 0;
             jumpDirection = _climbNormal;
-            _jumpMomentumStacks++;
+            addJumpMomentumStacks();
         }
         else if(_coyoteTimer <= coyoteTime) {
             _jumpPhase = 0;
             jumpDirection = _groundNormal;
-            _jumpMomentumStacks++;
+            addJumpMomentumStacks();
         }
         else if(maxAirJumps > 0 && _jumpPhase < maxAirJumps) {
             if(_jumpPhase == 0)
@@ -336,7 +361,7 @@ public class PlayerController : MonoBehaviour {
         momentumBoost.y = 0f;
         _velocity = momentumBoost;
         //NOTE: Disables momentum boost when jumping off walls so the player doesn't go too far from the wall when jumping
-        _velocity += (jumpDirection * jumpSpeed) + (!(LeftRight || _wallStatus==WallStatus.front)).GetHashCode() * (momentumBoost * jumpMomentum);
+        _velocity += (jumpDirection * jumpSpeed) + (!(LeftRight || _wallStatus == WallStatus.front)).GetHashCode() * (momentumBoost * jumpMomentum);
         _sliding = false;
         input.slide = false;
     }
@@ -369,10 +394,10 @@ public class PlayerController : MonoBehaviour {
         }
         if(!OnGround) {
             _dashPhase++;
-            _dashMomentumStacks++;
+            addDashMomentumStacks();
         }
         else
-            _dashMomentumStacks += dashGroundMomentumStacks;
+            addDashMomentumStacks(true);
         rb.AddForce(dashDirection * dashSpeed, ForceMode.Impulse);
 
         dashSound.Play();
@@ -424,9 +449,9 @@ public class PlayerController : MonoBehaviour {
         _currentSpeed = moveSpeed;
         _sliding = false;
         slideSound.Stop();
-        _slideMomentumStacks = speedDiff / Time.fixedDeltaTime;
+        _slideMomentumStacks = speedDiff / slideCarryOverMomentum;
         while(_slideMomentumStacks > 0f) {
-            _slideMomentumStacks -= slideMomentumStackDecay;
+            _slideMomentumStacks = Mathf.Max(0f, _slideMomentumStacks - slideMomentumStackDecay);
             yield return new WaitForFixedUpdate();
         }
         _slideMomentumStacks = 0f;
