@@ -13,25 +13,32 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] FMODUnity.StudioEventEmitter landSound = null;
 
     [Header("Movement Settings"), Space(10)]
+    [SerializeField] float gravity = -32f;
     [SerializeField] float moveSpeed = 10.0f;
     [SerializeField] float dashSpeed = 25.0f;
     [SerializeField] float maxSpeed = 40.0f;
-    [SerializeField] float maxAirSpeedChange = 25.0f;
     [SerializeField] float slideSpeed = 17.5f;
     [SerializeField, Tooltip("The speed while sliding lerps from slideSpeed to slowSlideSpeed")]
-    float slowSlideSpeed = 17.5f;
-    [SerializeField, Tooltip("The amount of seconds to go from fast slide speed to slow slide speed")]
+    float slowSlideSpeed = 0f;
+    [SerializeField, Tooltip("How quickly it goes from fast slide speed to slow slide speed")]
     float slideSlowRate = 5f;
     [SerializeField] float runSpeed = 10f, climbSpeed = 8f;
+    [SerializeField, Tooltip("The percentage of control while in the air"), Range(0f, 1f)]
+    float ManeuverabilityRate = 1f, AirManeuverabilityRate = 1.0f, GroundManeuverabilityRate = 1.0f;
     [SerializeField] float wallRunTiltAngle = 15.0f, lateralWallRunTiltAngle = -50.0f, slideTiltAngle = -35.0f, tiltSpeed = 2.5f;
     [SerializeField] int maxAirJumps = 1, maxDashes = 1;
     [SerializeField] float jumpHeight = 2.0f;
+
+    [SerializeField, Tooltip("Delay before you can move immediately after jumping off a wall")]
+    float JumpMovementDelay = 0.5f;
     [SerializeField, Tooltip("Extra jump multiplier from walls")]
     float wallJumpMultiplier = 5f;
     [SerializeField, Range(0f, 1f), Tooltip("Percentage speed increase from jumping")]
     float jumpMomentum = 0.05f;
     [SerializeField, Min(1f), Tooltip("Acceleration when sliding down slopes")]
-    float slideSlopeMomentum = 1.5f;
+    float slideSlopeMomentum = 1.1f;
+    [Tooltip("How many slide stacks you lose per fixed updated cycle")]
+    float slideMomentumStackDecay = 3f;
     [SerializeField, Range(0f, 1f), Tooltip("Percentage speed increase from dashing")]
     float dashMomentum = 0.05f;
     [SerializeField, Tooltip("Multiplier on dash momentum stacks (base: 1 => airDash = 1, groundDash = 1 * dashGroundMomentumStacks")]
@@ -40,15 +47,18 @@ public class PlayerController : MonoBehaviour {
     float dashDuration = 0.5f;
     [SerializeField, Tooltip("Add dashDuration to the value you want to assign this")]
     float dashCooldown = 0.5f;
+    [SerializeField, Tooltip("Amount of fixedUpdate cycles to go from dashSpeed to moveSpeed")]
+    float dashDecelerateRate = 50f;
     [SerializeField, Tooltip("Number of FixedUpdate cycles to lose 1 stack of jump/dash momentum while not in the air (50 cycles/second")]
     int momentumStackDecay = 10;
     [SerializeField, Tooltip("The amount of time after going off an edge that you can still be considered grounded when jumping (doesn't eat air jump)")]
     float coyoteTime = 0.3f;
-    float _currentSpeed, _totalSpeed;
+    float _currentSpeed, _totalSpeed, _currentClimbSpeed;
+    float _slideMomentumStacks;
     float _dashCooldown = 0.0f;
     float _dashDuration = 0f;
     float _coyoteTimer = 0f;
-    bool _desireJump = false, _desireDash = false;
+    bool _desireJump = false, _desireDash = false, _movementDelay = false, reverseSlide = false;
     Quaternion targetRotation;
 
     [Header("Terrain Settings"), Space(10)]
@@ -123,13 +133,19 @@ public class PlayerController : MonoBehaviour {
         _minSlopeDotProduct = Mathf.Cos(maxSlopeAngle * Mathf.Deg2Rad);
         _currentSpeed = moveSpeed;
     }
+    //NOTE: Calculates actual speed after applying all momentum stacks. Sliding uses a different setup and is based on the const Time.fixedDeltaTime instead
     float calculateMomentumStacks(float speed) {
-        return speed + (speed * jumpMomentum * _jumpMomentumStacks) + (speed * dashMomentum * _dashMomentumStacks);
+        return speed + (speed * jumpMomentum * _jumpMomentumStacks) + (speed * dashMomentum * _dashMomentumStacks) + (_slideMomentumStacks * Time.fixedDeltaTime);
+    }
+    public void resetMomentumStacks() {
+        _jumpMomentumStacks = 0;
+        _dashMomentumStacks = 0;
+        _slideMomentumStacks = 0f;
     }
     private void Update() {
         _totalSpeed = calculateMomentumStacks(_currentSpeed);
         _climbDistance = calculateMomentumStacks(maxClimbDistance);
-        _desiredVel = new Vector3(input.move.x, 0f, input.move.y) * _totalSpeed;
+        _desiredVel = new Vector3(input.move.x, 0f, input.move.y).normalized * _totalSpeed;
         _dashCooldown -= Time.deltaTime;
         _dashDuration -= Time.deltaTime;
         _wallStickTimer -= Time.deltaTime;
@@ -143,6 +159,7 @@ public class PlayerController : MonoBehaviour {
             input.dash = false;
         }
 
+        CameraRotation();
         ChangeFMODParameter();
     }
 
@@ -166,11 +183,19 @@ public class PlayerController : MonoBehaviour {
         if(input.slide) {
             Slide();
         }
+        ApplyGravity();
         rb.velocity = _velocity;
         ClearState();
     }
     private void LateUpdate() {
-        CameraRotation();
+    }
+
+    //NOTE: More control over gravity and removes sliding downwards on slopes
+    void ApplyGravity() {
+        if(OnSlope)
+            _velocity += gravity * _slopeNormal * Time.fixedDeltaTime;
+        else if(!OnGround)
+            _velocity += gravity * _groundNormal * Time.fixedDeltaTime;
     }
     void ClearState() {
         //??
@@ -222,11 +247,12 @@ public class PlayerController : MonoBehaviour {
     void AdjustVelocity() {
         float currentX = 0f, currentZ = 0f;
         Vector3 xAxis, zAxis;
-
         if(Dashing) {
             _stepsSinceDash = 0;
             return;
         }
+        else if(_movementDelay)
+            return;
         //NOTE: Based on contact normal, returns the parallel direction for x/z axis
         if(OnSlope) {
             xAxis = ProjectDirectionOnPlane(transform.right, _slopeNormal);
@@ -237,39 +263,38 @@ public class PlayerController : MonoBehaviour {
             zAxis = ProjectDirectionOnPlane(transform.forward, _groundNormal);
         }
 
-        if(InAir) {
-            //NOTE: Applies current velocity to appropriate x/z axis
-            currentX = Vector3.Dot(_velocity, xAxis);
-            currentZ = Vector3.Dot(_velocity, zAxis);
-            float acceleration = _currentSpeed * maxAirSpeedChange;
 
-            float newX = Mathf.MoveTowards(currentX, _desiredVel.x, acceleration);
-            float newZ = Mathf.MoveTowards(currentZ, _desiredVel.z, acceleration);
-            _velocity += transform.right * (newX - currentX) + transform.forward * (newZ - currentZ);
+        //NOTE: Makes movement less instantaneous while mid-air
+        currentX = Vector3.Dot(_velocity, xAxis);
+        currentZ = Vector3.Dot(_velocity, zAxis);
+        float acceleration = _totalSpeed * GroundManeuverabilityRate * (ManeuverabilityRate / Time.fixedDeltaTime);
+        if(InAir)
+            acceleration = _totalSpeed * AirManeuverabilityRate * (ManeuverabilityRate / Time.fixedDeltaTime);
+        if(reverseSlide)
+            _desiredVel = new Vector3(_desiredVel.x, 0f, _desiredVel.z * -1f);
+        float newX = Mathf.MoveTowards(currentX, _desiredVel.x, acceleration * Time.fixedDeltaTime);
+        float newZ = Mathf.MoveTowards(currentZ, _desiredVel.z, acceleration * Time.fixedDeltaTime);
+        _velocity += transform.right * (newX - currentX) + transform.forward * (newZ - currentZ);
+        if(Climbing && LeftRight) {
+            _velocity += (wallForce * -_climbNormal);
+            _velocity = new Vector3(_velocity.x, 0f, _velocity.z);
         }
-        else {
-            //NOTE: Slopes still not working properly
-            // if(OnSlope)
-            //     _velocity = xAxis * _desiredVel.x + zAxis * _desiredVel.z;
-            if(Climbing && LeftRight)
-                _velocity = transform.right * _desiredVel.x + transform.forward * _desiredVel.z + (wallForce * -_climbNormal);
-            else if(Climbing && (_wallStatus == WallStatus.front) && input.move.y > 0f && _climbable)
-                _velocity = transform.right * _desiredVel.x + transform.up * _desiredVel.z;
-            else
-                _velocity = transform.right * _desiredVel.x + transform.forward * _desiredVel.z + transform.up * _velocity.y;
-        }
+        else if(Climbing && (_wallStatus == WallStatus.front) && input.move.y > 0f && _climbable)
+            _velocity = new Vector3(_velocity.x, _desiredVel.z, 0f);
 
         Vector3 capSpeed = new Vector3(_velocity.x, 0f, _velocity.z);
-        if(OnSlope && _sliding) {
-            capSpeed *= slideSlopeMomentum;
-        }
-        _velocity = capSpeed.normalized * Mathf.Min(capSpeed.magnitude, maxSpeed) + transform.up * _velocity.y;
+        _velocity = capSpeed.normalized * Mathf.Min(capSpeed.magnitude, maxSpeed) + transform.up * Mathf.Min(_velocity.y, maxSpeed);
     }
     void Jump() {
         Vector3 jumpDirection;
         if(OnGround) {
             _jumpPhase = 0;
             jumpDirection = _groundNormal;
+            _jumpMomentumStacks++;
+        }
+        else if(OnSlope) {
+            _jumpPhase = 0;
+            jumpDirection = _slopeNormal;
             _jumpMomentumStacks++;
         }
         else if(Climbing) {
@@ -297,19 +322,38 @@ public class PlayerController : MonoBehaviour {
         _coyoteTimer = coyoteTime + 1f;
         _stepsSinceJump = 0;
         float jumpSpeed = Mathf.Sqrt(-2f * Physics.gravity.y * jumpHeight);
-        Vector3 momentumBoost = rb.velocity;
+        if(LeftRight) {
+            jumpDirection = (jumpDirection + tiltRotater.up).normalized;
+            jumpDirection = new Vector3(jumpDirection.x * wallJumpMultiplier, jumpDirection.y * wallJumpMultiplier / 2f, jumpDirection.z * wallJumpMultiplier);
+            StartCoroutine(DisableMovement());
+        }
+        else if(_wallStatus == WallStatus.front) {
+            jumpDirection = (jumpDirection + tiltRotater.up).normalized;
+            jumpDirection = new Vector3(jumpDirection.x * wallJumpMultiplier / 2f, jumpDirection.y * wallJumpMultiplier / 2f, jumpDirection.z * wallJumpMultiplier / 2f);
+            StartCoroutine(DisableMovement());
+        }
+        Vector3 momentumBoost = _velocity;
         momentumBoost.y = 0f;
         _velocity = momentumBoost;
-        if(!OnSlope)
-            jumpDirection = (jumpDirection + transform.up).normalized;
-        //NOTE: Not working properly
-        // if(LeftRight || _wallStatus == WallStatus.front) {
-        //     jumpDirection = (jumpDirection * wallJumpMultiplier + transform.up).normalized;
-        //     jumpSpeed *= wallJumpMultiplier;
-        // }
-        _velocity += ((jumpDirection * jumpSpeed) + (momentumBoost * jumpMomentum));
+        //NOTE: Disables momentum boost when jumping off walls so the player doesn't go too far from the wall when jumping
+        _velocity += (jumpDirection * jumpSpeed) + (!(LeftRight || _wallStatus==WallStatus.front)).GetHashCode() * (momentumBoost * jumpMomentum);
         _sliding = false;
         input.slide = false;
+    }
+    IEnumerator DisableMovement() {
+        _movementDelay = true;
+        yield return new WaitForSeconds(JumpMovementDelay);
+        _movementDelay = false;
+    }
+    IEnumerator DashDecelerate() {
+        _currentSpeed = dashSpeed;
+        float speedDiff = (dashSpeed - moveSpeed) / dashDecelerateRate;
+        yield return new WaitForSeconds(dashDuration);
+        while(_currentSpeed > moveSpeed) {
+            _currentSpeed -= speedDiff;
+            yield return new WaitForFixedUpdate();
+        }
+        _currentSpeed = moveSpeed;
     }
     void Dash() {
         Vector3 dashDirection;
@@ -330,15 +374,18 @@ public class PlayerController : MonoBehaviour {
         else
             _dashMomentumStacks += dashGroundMomentumStacks;
         rb.AddForce(dashDirection * dashSpeed, ForceMode.Impulse);
+
         dashSound.Play();
         _dashCooldown = dashCooldown;
         _dashDuration = dashDuration;
         input.dash = false;
+        StartCoroutine(DashDecelerate());
     }
     void Slide() {
         if(!_sliding && Sliding && _stepsSinceGrounded < 2) {
             slideSound.Play();
             _sliding = true;
+            reverseSlide = false;
             _currentSpeed = slideSpeed;
             slideCollider.enabled = true;
             normalCollider.enabled = false;
@@ -347,14 +394,42 @@ public class PlayerController : MonoBehaviour {
     }
     IEnumerator SlideDecelerate() {
         while(input.slide) {
-            _currentSpeed = Mathf.Lerp(_currentSpeed, slowSlideSpeed, Time.fixedDeltaTime / slideSlowRate);
+            if(!OnSlope)
+                _currentSpeed = Mathf.MoveTowards(_currentSpeed, slowSlideSpeed, Time.fixedDeltaTime * slideSlowRate);
+            else {
+                float delta = _currentSpeed * (slideSlopeMomentum - 1f);
+                Vector3 zAxis = ProjectDirectionOnPlane(transform.forward, _slopeNormal);
+                if(zAxis.y > 0f) {
+                    if(_currentSpeed < 0.5f)
+                        reverseSlide = true;
+
+                    if(reverseSlide)
+                        _currentSpeed += delta;
+                    else
+                        _currentSpeed -= delta;
+                }
+                else {
+                    _currentSpeed += delta;
+                    reverseSlide = false;
+                }
+            }
             yield return new WaitForFixedUpdate();
         }
+        reverseSlide = false;
+        float speedDiff = 0f;
+        if(_currentSpeed > slideSpeed)
+            speedDiff = _currentSpeed - moveSpeed;
         normalCollider.enabled = true;
         slideCollider.enabled = false;
         _currentSpeed = moveSpeed;
         _sliding = false;
         slideSound.Stop();
+        _slideMomentumStacks = speedDiff / Time.fixedDeltaTime;
+        while(_slideMomentumStacks > 0f) {
+            _slideMomentumStacks -= slideMomentumStackDecay;
+            yield return new WaitForFixedUpdate();
+        }
+        _slideMomentumStacks = 0f;
     }
     private void CameraRotation() {
         // if there is an input
@@ -388,6 +463,7 @@ public class PlayerController : MonoBehaviour {
         if(posY - _wallstickY > 0.1f) {
             _wallstickDistance += posY - _wallstickY;
             _wallstickY = posY;
+            _currentClimbSpeed = climbSpeed * (1f - _wallstickDistance / _climbDistance);
         }
         if(_wallstickDistance >= _climbDistance)
             _climbable = false;
@@ -399,10 +475,11 @@ public class PlayerController : MonoBehaviour {
         if(OnGround) {
             _wallStatus = WallStatus.none;
             _firstCling = true;
-            _currentSpeed = moveSpeed;
             _wallstickDistance = 0f;
             _climbable = true;
             TiltPlayer(_wallStatus);
+            if(!Sliding)
+                _currentSpeed = moveSpeed;
             return;
         }
 
@@ -417,11 +494,12 @@ public class PlayerController : MonoBehaviour {
         }
         else if(Physics.Raycast(transform.position, transform.forward, probeDistance, climbMask) ||
             (wallContact && Physics.Raycast(transform.position, (transform.forward + -transform.up).normalized, 2.5f * probeDistance, climbMask))) {
-            _currentSpeed = climbSpeed;
+            _currentSpeed = _currentClimbSpeed;
             wallStatus = WallStatus.front;
         }
         else {
-            _currentSpeed = moveSpeed;
+            if(!Sliding)
+                _currentSpeed = moveSpeed;
             wallStatus = WallStatus.none;
         }
         _wallStatus = wallStatus;
