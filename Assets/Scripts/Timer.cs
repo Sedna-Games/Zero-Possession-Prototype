@@ -14,7 +14,5 @@ public class Timer : MonoBehaviour {
         timer += Time.deltaTime;
         time = TimeSpan.FromSeconds(timer);
         textMesh.text = String.Format("{0:00}:{1:00.00}", Math.Floor(time.TotalMinutes), time.TotalSeconds%60);
-        Debug.Log("Minutes: " + time.TotalMinutes);
-        Debug.Log("Seconds: " + time.TotalSeconds%60);
     }
 }
