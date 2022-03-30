@@ -3,7 +3,22 @@ guid: 958b719b1595ec54887aa89cf982dba7
 ModelImporter:
   serializedVersion: 21202
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Building
+    second: {fileID: 2100000, guid: 53eb272ca7883bb4abc41435e3e224c3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Railing
+    second: {fileID: 2100000, guid: e12cd0c3348a48e40956623ea336a8f5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wall
+    second: {fileID: 2100000, guid: 49d7ec29b0df9b24ba94472352c7cb2b, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
