@@ -9,6 +9,7 @@ using UnityEngine;
 public class AIBlackboard : MonoBehaviour
 {
     [SerializeField] Vector2 timeBetweenDecisions = Vector2.zero;
+    [SerializeField] int chanceToSkipAction = 10;
 
     [Header("References")]
     [SerializeField] AISensor_Alert alertSensor = null;
@@ -36,6 +37,8 @@ public class AIBlackboard : MonoBehaviour
         {
             foreach (var decision in deciders)
             {
+                if(Random.Range(0,101) < chanceToSkipAction)
+                    continue;
                 if (decision.TryPerformActions())
                 {
                     _decisionTimer = RandomFloatHelper(timeBetweenDecisions);
