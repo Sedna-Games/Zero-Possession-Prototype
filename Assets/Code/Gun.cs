@@ -36,12 +36,12 @@ public class Gun : Weapon
     }
     public override void Attack()
     {
-        if (_attacking)
+        animator.SetBool("Shoot",CanAttack());
+        if (!CanAttack())
             return;
 
         ResetCooldown();
         OnAttack.Invoke();
-        animator.SetTrigger("Shoot");
 
         foreach (var bep in _bulletEmitterPoints)
         {
@@ -79,15 +79,16 @@ public class Gun : Weapon
         }
 
 
-            Handles.color = Color.red;
-        foreach (var bep in _bulletEmitterPoints){
-           var dir = bep.position - tipOfGun.position;
-           dir = dir.normalized;
+        Handles.color = Color.red;
+        foreach (var bep in _bulletEmitterPoints)
+        {
+            var dir = bep.position - tipOfGun.position;
+            dir = dir.normalized;
             Handles.DrawLine(tipOfGun.position, bep.position);
-            Handles.DrawDottedLine(tipOfGun.position,bep.position + dir*25.0f,10.0f);
+            Handles.DrawDottedLine(tipOfGun.position, bep.position + dir * 25.0f, 10.0f);
         }
         Handles.color = Color.blue;
-        Handles.DrawDottedLine(transform.parent.position, transform.parent.position + transform.parent.forward*25.0f,10.0f);
+        Handles.DrawDottedLine(transform.parent.position, transform.parent.position + transform.parent.forward * 25.0f, 10.0f);
     }
 #endif
 
