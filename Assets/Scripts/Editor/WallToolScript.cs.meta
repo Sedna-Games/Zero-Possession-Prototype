@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 504fd05ae37d4c24fa95b554cc0fd618
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - m_ViewDataDictionary: {instanceID: 0}
+  - wallPrefab: {instanceID: 0}
+  - straightWallA: {fileID: 7110603553462722246, guid: a58dea161a11580418ec9333814a3c15, type: 3}
+  - straightWallB: {fileID: 8886124859513264532, guid: 33e63689e31d2b44bb5278a173de3833, type: 3}
+  - convexWallA: {fileID: 2689235695979050934, guid: 2ba81cd18f99bf14cb33e73a75037fbc, type: 3}
+  - convexWallB: {fileID: 2524148229998526484, guid: 7d84d806cc335b24a862ba8482e334f2, type: 3}
+  - concaveWallA: {fileID: 6670695128304207330, guid: 828b7d4b38992ec4982345943e4d641a, type: 3}
+  - concaveWallB: {fileID: 3082167387962081750, guid: 24a1d64499093d945b95fd354eeb9330, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
