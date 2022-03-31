@@ -5,10 +5,18 @@ public class WallToolScript : EditorWindow
 {
     [SerializeField] private GameObject wallPrefab;
 
-    //make this an enum to control the offset and then make the tileSize a dropdown menu
-    public enum TileSize { small = 5, big = 10 };
-    public TileSize ts;
-    [SerializeField] private float height = 5.0f;
+
+    public GameObject straightWallA;
+    public GameObject straightWallB;
+    public GameObject convexWallA;
+    public GameObject convexWallB;
+    public GameObject concaveWallA;
+    public GameObject concaveWallB;
+
+    //make this an enum to control the offset and then make the TileVersion a dropdown menu
+    public enum TileVersion { VariationA, VariationB };
+    public TileVersion tv;
+    private float height = 5.0f;
     [SerializeField] private float groundHeight = 0.0f;
 
 
@@ -22,21 +30,28 @@ public class WallToolScript : EditorWindow
     {
 
         //GUI options
-        ts = (TileSize)EditorGUILayout.EnumPopup("Tile Size:", ts);
+        tv = (TileVersion)EditorGUILayout.EnumPopup("Tile Variation", tv);
         groundHeight = EditorGUILayout.FloatField("Ground Height", groundHeight);
         wallPrefab = (GameObject)EditorGUILayout.ObjectField("Wall Prefab", wallPrefab, typeof(GameObject), false);
 
         var selection = Selection.gameObjects;
 
+        GameObject wallToSpawn = null;
+
         if (GUILayout.Button("Spawn"))
         {
 
-            switch (ts)
+            if (wallPrefab != null)
             {
-                case TileSize.small:
+                wallToSpawn = wallPrefab;
+            }
+
+            switch (tv)
+            {
+                case TileVersion.VariationA:
                     height = 5.0f;
                     break;
-                case TileSize.big:
+                case TileVersion.VariationB:
                     height = 10.0f;
                     break;
             }
@@ -44,17 +59,73 @@ public class WallToolScript : EditorWindow
 
             for (int i = 0; i < selection.Length; i++)
             {
+                if (wallToSpawn == null)
+                {
+                    //this is here to stop it from throwing an undeclared exception
+                    wallPrefab = null;
+
+                    //get the name of the mesh to figure out what kind of piece to spawn
+                    string meshName = selection[i].GetComponent<MeshFilter>().sharedMesh.name;
+
+
+                    //ignore the floor tiles
+                    if(meshName.Contains("floortile", System.StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    else if (meshName.Contains("convex", System.StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        if (tv == TileVersion.VariationA)
+                        {
+                            wallToSpawn = convexWallA;
+                        }
+                        else if (tv == TileVersion.VariationB)
+                        {
+                            wallToSpawn = convexWallB;
+                        }
+                    }
+
+                    else if (meshName.Contains("concave", System.StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        if (tv == TileVersion.VariationA)
+                        {
+                            wallToSpawn = concaveWallA;
+                        }
+                        else if (tv == TileVersion.VariationB)
+                        {
+                            wallToSpawn = concaveWallB;
+                        }
+
+                    }
+
+                    else if (meshName.Contains("straight", System.StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        if (tv == TileVersion.VariationA)
+                        {
+                            wallToSpawn = straightWallA;
+                        }
+                        else if (tv == TileVersion.VariationB)
+                        {
+                            wallToSpawn = straightWallB;
+                        }
+
+                    }
+
+                }
 
                 Transform currentSpawnTransform = selection[i].transform;
 
                 Vector3 originalPosition = selection[i].transform.position;
                 Quaternion originalRotation = selection[i].transform.rotation;
 
+
+
                 while (currentSpawnTransform.position.y > groundHeight)
                 {
 
                     //Spawn in new wall
-                    if (currentSpawnTransform == selection[i].transform)
+                    if (currentSpawnTransform.position == originalPosition)
                     {
                         currentSpawnTransform.position = new Vector3(currentSpawnTransform.position.x, currentSpawnTransform.position.y - 5, currentSpawnTransform.position.z);
                     }
@@ -63,10 +134,10 @@ public class WallToolScript : EditorWindow
                         currentSpawnTransform.position = new Vector3(currentSpawnTransform.position.x, currentSpawnTransform.position.y - height, currentSpawnTransform.position.z);
                     }
 
-                    GameObject newObject = Instantiate(wallPrefab);
+                    GameObject newObject = Instantiate(wallToSpawn);
 
                     //Move new wall to proper position
-                    newObject.name = wallPrefab.name;
+                    newObject.name = selection[i].name;
 
                     //Position and Rotation
                     newObject.transform.SetPositionAndRotation(currentSpawnTransform.position, currentSpawnTransform.rotation);
@@ -81,6 +152,7 @@ public class WallToolScript : EditorWindow
                 }
 
                 selection[i].transform.SetPositionAndRotation(originalPosition, originalRotation);
+                wallToSpawn = null;
 
             }
 
