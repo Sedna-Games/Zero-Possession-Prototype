@@ -5238,11 +5238,11 @@ MonoBehaviour:
   CollisionTag: 
   EventReference:
     Guid:
-      Data1: -1662084158
-      Data2: 1081235523
-      Data3: -1200734048
-      Data4: 550606661
-    Path: event:/SX/wpn/wpn_shotgun_shoot
+      Data1: 1229605792
+      Data2: 1215782693
+      Data3: 1125193890
+      Data4: -1654003908
+    Path: event:/SX/wpn/guns/wpn_pistol_shoot
   Event: 
   PlayEvent: 0
   StopEvent: 0
@@ -5250,9 +5250,9 @@ MonoBehaviour:
   TriggerOnce: 0
   Preload: 0
   Params: []
-  OverrideAttenuation: 1
+  OverrideAttenuation: 0
   OverrideMinDistance: 1
-  OverrideMaxDistance: 378.9
+  OverrideMaxDistance: 20
 --- !u!1 &8205000318413587496
 GameObject:
   m_ObjectHideFlags: 0
@@ -5412,6 +5412,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+  OnFinishAttack:
+    m_PersistentCalls:
+      m_Calls: []
   OnEnableWeapon:
     m_PersistentCalls:
       m_Calls: []
