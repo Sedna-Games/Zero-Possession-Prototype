@@ -435,12 +435,10 @@ MonoBehaviour:
   - Master
   Banks:
   - MENU
-  - MX_level_01
+  - MX_level
   - SX_amb
+  - SX_env_objs
   - SX_env_tram
-  - SX_npc
-  - SX_npc_boss
-  - SX_npc_emitter
   - SX_npc_enemy
   - SX_plr
   - SX_ui
