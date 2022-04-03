@@ -24,11 +24,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 612aa45d38dd94a479185b83f080aa22, type: 3}
-  m_Name: New Environment
+  m_Name: SceneEnvironment
   m_EditorClassIdentifier: 
-  m_CubemapGUID: 
+  m_CubemapGUID: aa2ccb14fe02db544bd776db3ea8c0e1
   rotation: 0
-  exposure: 0
+  exposure: 1
   m_Latitude: 60
   m_Longitude: 299
   shadowColor: {r: 0.7, g: 0.7, b: 0.7, a: 1}
