@@ -315,7 +315,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 953beb541740ddc499d005ee80c9ff29, type: 3}
   m_Name: Fog
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   quality:
     m_OverrideState: 1
     m_Value: 0
@@ -324,10 +324,10 @@ MonoBehaviour:
     m_Value: 1
   colorMode:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   color:
     m_OverrideState: 1
-    m_Value: {r: 0.7264151, g: 0.5516643, b: 0.5516643, a: 1}
+    m_Value: {r: 0.047058824, g: 0.047058824, b: 0.047058824, a: 1}
   tint:
     m_OverrideState: 0
     m_Value: {r: 1, g: 1, b: 1, a: 1}
@@ -345,19 +345,19 @@ MonoBehaviour:
     m_Value: 1000
   baseHeight:
     m_OverrideState: 1
-    m_Value: 35.14
+    m_Value: 23
   maximumHeight:
     m_OverrideState: 1
-    m_Value: 151.8
+    m_Value: 168.8
   meanFreePath:
     m_OverrideState: 1
-    m_Value: 400
+    m_Value: 20
   enableVolumetricFog:
-    m_OverrideState: 1
-    m_Value: 1
+    m_OverrideState: 0
+    m_Value: 0
   albedo:
     m_OverrideState: 1
-    m_Value: {r: 0.6509434, g: 0.5066305, b: 0.5066305, a: 1}
+    m_Value: {r: 0.6132076, g: 0.6132076, b: 0.6132076, a: 1}
   globalLightProbeDimmer:
     m_OverrideState: 0
     m_Value: 1
