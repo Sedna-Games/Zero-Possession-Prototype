@@ -1003,9 +1003,12 @@ MonoBehaviour:
   OnActionDeselected:
     m_PersistentCalls:
       m_Calls: []
+  timeBetweenShotBursts: 0.5
+  shotAmount: {x: 2, y: 5}
   aimLeading: {x: 0, y: 0}
   turnSpeedWhileStandingStill: 5
   distanceTolerance: 4
+  angleTolerance: 0.1
   shitSelfDistance: 5
   weaponManager: {fileID: 1855179530}
   gun: {fileID: 9002189181457524399}
@@ -1035,6 +1038,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 490062099911193115}
     m_Modifications:
+    - target: {fileID: 2726909998408553052, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924464, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: m_Name
       value: Gun
@@ -1093,7 +1100,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924470, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: cooldown
-      value: 0.7
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924470, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: bulletPrefab

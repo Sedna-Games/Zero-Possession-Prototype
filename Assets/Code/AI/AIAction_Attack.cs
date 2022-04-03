@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class AIAction_Attack : AIAction
 {
+    [SerializeField] float timeBetweenShotBursts = 0.5f;
+    [SerializeField] Vector2 shotAmount = new Vector2(1.0f, 3.0f);
     [SerializeField] Vector2 aimLeading = Vector2.zero;//0.15
     [SerializeField] float turnSpeedWhileStandingStill = 2.5f;
     [SerializeField] float distanceTolerance = 5.0f;
@@ -17,6 +19,9 @@ public class AIAction_Attack : AIAction
     [SerializeField] Gun gun = null;
 
     GameObject player = null;
+    int _shotAmount = 0;
+    int _shotCount = 0;
+    Coroutine _resetShotCoroutine = null;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,13 +35,35 @@ public class AIAction_Attack : AIAction
             var gunDir = AISensor.DirectionToPlayer(gun.transform.parent);
             var newGunRotation = Quaternion.LookRotation(gunDir.normalized);
             AIBlackboard.RotationHelper(gun.transform.parent.rotation, newGunRotation, gun.transform.parent, turnSpeedWhileStandingStill);
-            if (AISensor.DistanceToPlayer(transform) <= shitSelfDistance || Vector3.Angle(transform.forward,gun.transform.parent.forward) < angleTolerance)
-                weaponManager.OnPrimaryWeapon();
+            if (AISensor.DistanceToPlayer(transform) <= shitSelfDistance || Vector3.Angle(transform.forward, gun.transform.parent.forward) < angleTolerance)
+                Fire();
         }
         else
-            weaponManager.OnPrimaryWeapon();
+            Fire();
 
         base.SelectAction();
+    }
+
+    void Fire()
+    {
+        //reset shot count
+        if (_shotCount >= _shotAmount)
+        {
+            IEnumerator ResetShotCount()
+            {
+                yield return new WaitForSeconds(timeBetweenShotBursts);
+
+                _shotCount = 0;
+                _shotAmount = Mathf.CeilToInt(AIBlackboard.RandomFloatHelper(shotAmount));
+                _resetShotCoroutine = null;
+            }
+            if (_resetShotCoroutine == null)
+                _resetShotCoroutine = StartCoroutine(ResetShotCount());
+            return;
+        }
+        if (weaponManager.CanPrimaryAttack())
+            _shotCount++;
+        weaponManager.OnPrimaryWeapon();
     }
 
     public bool InsideIntersectionPoint(int index, Vector3 point)

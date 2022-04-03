@@ -99,13 +99,17 @@ public class Gun : Weapon
             Handles.DrawLine(tipOfGun.position, bep.position);
             Handles.DrawDottedLine(tipOfGun.position, p2, 20.0f);
 
-            var intersection = LineIntersection(tipOfGun.position, p2, weaponManagerTransform.position, weaponManagerTransform.position + weaponManagerTransform.forward * _lineDistance);
-            if (intersection.magnitude != 0.0f)
-                Gizmos.DrawWireSphere(intersection, 1.0f);
+            if (weaponManagerTransform != null)
+            {
+                var intersection = LineIntersection(tipOfGun.position, p2, weaponManagerTransform.position, weaponManagerTransform.position + weaponManagerTransform.forward * _lineDistance);
+                if (intersection.magnitude != 0.0f)
+                    Gizmos.DrawWireSphere(intersection, 1.0f);
+            }
             j++;
         }
         Handles.color = Color.blue;
-        Handles.DrawDottedLine(weaponManagerTransform.position, weaponManagerTransform.position + weaponManagerTransform.forward * _lineDistance, 20.0f);
+        if (weaponManagerTransform != null)
+            Handles.DrawDottedLine(weaponManagerTransform.position, weaponManagerTransform.position + weaponManagerTransform.forward * _lineDistance, 20.0f);
     }
 #endif
 
