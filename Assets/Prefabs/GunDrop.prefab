@@ -441,7 +441,7 @@ MonoBehaviour:
       Data2: 1098030046
       Data3: -1281555052
       Data4: -650146862
-    Path: event:/SX/wpn/wpn_gun_ammo
+    Path: event:/SX/wpn/guns/wpn_gun_ammo
   Event: 
   PlayEvent: 0
   StopEvent: 0
@@ -756,7 +756,7 @@ MonoBehaviour:
       Data2: 1262745746
       Data3: -330490490
       Data4: 1945398906
-    Path: event:/SX/wpn/wpn_gun_drop
+    Path: event:/SX/wpn/guns/wpn_gun_drop
   Event: 
   PlayEvent: 1
   StopEvent: 0
