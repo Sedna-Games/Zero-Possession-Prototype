@@ -79,8 +79,15 @@ public class Gun : Weapon
         }
 
 
-        foreach (var bep in _bulletEmitterPoints)
+            Handles.color = Color.red;
+        foreach (var bep in _bulletEmitterPoints){
+           var dir = bep.position - tipOfGun.position;
+           dir = dir.normalized;
             Handles.DrawLine(tipOfGun.position, bep.position);
+            Handles.DrawDottedLine(tipOfGun.position,bep.position + dir*25.0f,10.0f);
+        }
+        Handles.color = Color.blue;
+        Handles.DrawDottedLine(transform.parent.position, transform.parent.position + transform.parent.forward*25.0f,10.0f);
     }
 #endif
 
