@@ -8,6 +8,8 @@ public class OptionsMenuSettings : MonoBehaviour
     [Header("Audio Settings Sliders")]
     [Tooltip("Value boxes")]
     [SerializeField] GameObject[] _audioSliderValues;
+    [Tooltip("Sliders")]
+    [SerializeField] GameObject[] _audioSliders;
 
     [Header("Graphics Settings")]
     [Tooltip("Value boxes")]
@@ -22,18 +24,35 @@ public class OptionsMenuSettings : MonoBehaviour
     {
         //Sets the initial values of the settings
         //Audio Settings
-        SetSpeakerOptions(GetParameterValue("speaker_options"));
-        SetMasterVolume(GetParameterValue("master_vol"));
-        SetMusicVolume(GetParameterValue("music_vol"));
-        SetAmbienceVolume(GetParameterValue("amb_vol"));
-        SetSFXVolume(GetParameterValue("sfx_vol"));
-        SetUIVolume(GetParameterValue("ui_vol"));
+        InitAudio();
 
         //Graphics Settings
 
 
         //Controls Settings
 
+    }
+    void InitAudio() {
+        //This runs on Start. Purpose is to set the sliders and values to the proper places
+        float[] audioParams = new float[6];
+        audioParams[0] = GetParameterValue("speaker_options");
+        audioParams[1] = GetParameterValue("master_vol");
+        audioParams[2] = GetParameterValue("music_vol");
+        audioParams[3] = GetParameterValue("amb_vol");
+        audioParams[4] = GetParameterValue("sfx_vol");
+        audioParams[5] = GetParameterValue("ui_vol");
+
+        SetSpeakerOptions(audioParams[0]);
+        SetMasterVolume(audioParams[1]);
+        SetMusicVolume(audioParams[2]);
+        SetAmbienceVolume(audioParams[3]);
+        SetSFXVolume(audioParams[4]);
+        SetUIVolume(audioParams[5]);
+
+        for (int i = 0; i < 6; i++)
+        {
+            _audioSliders[i].GetComponent<Slider>().value = audioParams[i];
+        }
     }
 
     void Update()
@@ -45,27 +64,22 @@ public class OptionsMenuSettings : MonoBehaviour
         SetParameterValue("speaker_options", _speakerOption);
         //Debug.Log("Speaker Options: " + GetParameterValue("speaker_options"));
     }
-
     public void SetMasterVolume(float _masterVol) {
         SetParameterValue("master_vol", _masterVol);
         //Debug.Log("New Master Volume: " + GetParameterValue("master_vol"));
     }
-
     public void SetMusicVolume(float _musicVol) {
         SetParameterValue("music_vol", _musicVol);
         //Debug.Log("New Music Volume: " + GetParameterValue("music_vol"));
     }
-
     public void SetAmbienceVolume(float _ambVol) {
         SetParameterValue("amb_vol", _ambVol);
         //Debug.Log("New Ambience Volume: " + GetParameterValue("amb_vol"));
     }
-
     public void SetSFXVolume(float _sfxVol) {
         SetParameterValue("sfx_vol", _sfxVol);
         //Debug.Log("New SFX Volume: " + GetParameterValue("sfx_vol"));
     }
-
     public void SetUIVolume(float _uiVol) {
         SetParameterValue("ui_vol", _uiVol);
         //Debug.Log("New UI Volume: " + GetParameterValue("ui_vol"));
