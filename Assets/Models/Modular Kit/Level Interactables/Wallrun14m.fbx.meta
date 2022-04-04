@@ -7,13 +7,18 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: BillboardBackground
-    second: {fileID: 2100000, guid: b2fcea6c7d9dbab4ca781825705d50be, type: 2}
+      name: BillboardFrame
+    second: {fileID: 2100000, guid: cf8bdb445b322c242929fcef17ec9853, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: BillboardFrame
-    second: {fileID: 2100000, guid: cf8bdb445b322c242929fcef17ec9853, type: 2}
+      name: Building
+    second: {fileID: -876546973899608171, guid: 875d5e3faaffecc479eecb2c58521f99, type: 3}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Railing
+    second: {fileID: 2100000, guid: e12cd0c3348a48e40956623ea336a8f5, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -57,7 +62,7 @@ ModelImporter:
     nodeNameCollisionStrategy: 1
     fileIdsGeneration: 2
     swapUVChannels: 0
-    generateSecondaryUV: 0
+    generateSecondaryUV: 1
     useFileUnits: 1
     keepQuads: 0
     weldVertices: 1
