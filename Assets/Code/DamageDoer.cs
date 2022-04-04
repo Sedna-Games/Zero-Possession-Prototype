@@ -10,7 +10,7 @@ public class DamageDoer : MonoBehaviour
     public bool canDoDamage = true;
     public List<string> ignoreTags = new List<string>();
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         DoDamage(other.gameObject);
     }

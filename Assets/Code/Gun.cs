@@ -62,6 +62,7 @@ public class Gun : Weapon
             bullet.GetComponent<Rigidbody>().velocity = Vector3.zero;
             bullet.transform.rotation = bep.transform.rotation;
             bullet.transform.position = bep.transform.position;
+            bullet.GetComponentInChildren<TrailRenderer>().Clear();
             //bullet.transform.position = bullet.transform.position + bep.transform.TransformVector(Vector3.forward);
 
             var dir = bep.transform.position - tipOfGun.position;
@@ -179,5 +180,11 @@ public class Gun : Weapon
     public Vector3 GetBulletEndPoint(int index)
     {
         return _bulletEndPoints[index];
+    }
+
+    public void DisableAllBullets()
+    {
+        foreach (var b in _bulletPool)
+            b.gameObject.SetActive(false);
     }
 }
