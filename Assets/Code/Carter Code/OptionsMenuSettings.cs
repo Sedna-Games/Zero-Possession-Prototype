@@ -5,24 +5,40 @@ using UnityEngine.UI;
 
 public class OptionsMenuSettings : MonoBehaviour
 {
-    [Header("Sliders")]
+    [Header("Audio Settings Sliders")]
     [Tooltip("Value boxes")]
-    [SerializeField] GameObject[] _sliderValues;
+    [SerializeField] GameObject[] _audioSliderValues;
+
+    [Header("Graphics Settings")]
+    [Tooltip("Value boxes")]
+    [SerializeField] GameObject[] _graphicsSliderValues;
+
+    [Header("Controls Settings")]
+    [Tooltip("Value boxes")]
+    [SerializeField] GameObject[] _controlsSliderValues;
+    float _sens;
     
     void Start()
     {
         //Sets the initial values of the settings
+        //Audio Settings
         SetSpeakerOptions(GetParameterValue("speaker_options"));
         SetMasterVolume(GetParameterValue("master_vol"));
         SetMusicVolume(GetParameterValue("music_vol"));
         SetAmbienceVolume(GetParameterValue("amb_vol"));
         SetSFXVolume(GetParameterValue("sfx_vol"));
         SetUIVolume(GetParameterValue("ui_vol"));
+
+        //Graphics Settings
+
+
+        //Controls Settings
+
     }
 
     void Update()
     {
-        SetValues();
+        SetAudioValues();
     }
 
     public void SetSpeakerOptions(float _speakerOption) {
@@ -55,7 +71,7 @@ public class OptionsMenuSettings : MonoBehaviour
         //Debug.Log("New UI Volume: " + GetParameterValue("ui_vol"));
     }
 
-    void SetValues() {
+    void SetAudioValues() {
         //set the values of the text fields as the values of the parameters
         
         float _speakerOption = GetParameterValue("speaker_options");
@@ -71,13 +87,24 @@ public class OptionsMenuSettings : MonoBehaviour
                 _speakerVal = "5.1 Surround";
                 break;
         }
-        _sliderValues[0].GetComponent<TMPro.TMP_Text>().text = _speakerVal;
+        _audioSliderValues[0].GetComponent<TMPro.TMP_Text>().text = _speakerVal;
 
-        _sliderValues[1].GetComponent<TMPro.TMP_Text>().text = GetParameterValue("master_vol").ToString("0.##");
-        _sliderValues[2].GetComponent<TMPro.TMP_Text>().text = GetParameterValue("music_vol").ToString("0.##");
-        _sliderValues[3].GetComponent<TMPro.TMP_Text>().text = GetParameterValue("amb_vol").ToString("0.##");
-        _sliderValues[4].GetComponent<TMPro.TMP_Text>().text = GetParameterValue("sfx_vol").ToString("0.##");
-        _sliderValues[5].GetComponent<TMPro.TMP_Text>().text = GetParameterValue("ui_vol").ToString("0.##");
+        _audioSliderValues[1].GetComponent<TMPro.TMP_Text>().text = GetParameterValue("master_vol").ToString("0.##");
+        _audioSliderValues[2].GetComponent<TMPro.TMP_Text>().text = GetParameterValue("music_vol").ToString("0.##");
+        _audioSliderValues[3].GetComponent<TMPro.TMP_Text>().text = GetParameterValue("amb_vol").ToString("0.##");
+        _audioSliderValues[4].GetComponent<TMPro.TMP_Text>().text = GetParameterValue("sfx_vol").ToString("0.##");
+        _audioSliderValues[5].GetComponent<TMPro.TMP_Text>().text = GetParameterValue("ui_vol").ToString("0.##");
+    }
+
+    void SetGraphicsValues() {
+
+    }
+
+    public void SetLookSensValue(float _sens) {
+        this._sens = _sens;
+    }
+    void SetControlsValues() {
+        _controlsSliderValues[0].GetComponent<TMPro.TMP_Text>().text = _sens.ToString("0.##");
     }
 
     void SetParameterValue(string paramName, float paramValue) {
