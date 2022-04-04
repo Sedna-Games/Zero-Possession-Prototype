@@ -12,8 +12,18 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Glass
+    second: {fileID: 2100000, guid: 9bc2160dca986a140ac7c4b2d1cb7973, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Railing
     second: {fileID: 2100000, guid: e12cd0c3348a48e40956623ea336a8f5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Trim
+    second: {fileID: 2100000, guid: f683e58e6b86a0345b7216754613434b, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
