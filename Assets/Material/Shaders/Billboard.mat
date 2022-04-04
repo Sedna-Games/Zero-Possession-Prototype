@@ -10,7 +10,7 @@ Material:
   m_Name: Billboard
   m_Shader: {fileID: -6465566751694194690, guid: 3150bb51d65df254ca48d732669ea444, type: 3}
   m_ShaderKeywords: _ENABLE_FOG_ON_TRANSPARENT _SURFACE_TYPE_TRANSPARENT
-  m_LightmapFlags: 2
+  m_LightmapFlags: 0
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 3000
