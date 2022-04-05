@@ -7,10 +7,26 @@ public class DamageDoer : MonoBehaviour
 {
     public float damage = 1.0f;
     public UnityEvent OnDidDamage;
+    public UnityEvent OnFailedDoDamage;
     public bool canDoDamage = true;
     public List<string> ignoreTags = new List<string>();
 
     private void OnTriggerEnter(Collider other)
+    {
+        if (!canDoDamage || ignoreTags.Contains(other.tag))
+        {
+            OnFailedDoDamage.Invoke();
+            return;
+        }
+        var hp = other.GetComponent<Health>();
+        if (hp == null)
+        {
+            OnFailedDoDamage.Invoke();
+            return;
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
     {
         DoDamage(other.gameObject);
     }
