@@ -18,7 +18,7 @@ public class OptionsMenuSettings : MonoBehaviour
     [Header("Controls Settings")]
     [Tooltip("Value boxes")]
     [SerializeField] GameObject[] _controlsSliderValues;
-    float _sens;
+    float _sensitivity;
     
     void Start()
     {
@@ -114,11 +114,11 @@ public class OptionsMenuSettings : MonoBehaviour
 
     }
 
-    public void SetLookSensValue(float _sens) {
-        this._sens = _sens;
+    public void SetLookSensitivityValue(float _sensivity) {
+        this._sensitivity = _sensivity;
     }
     void SetControlsValues() {
-        _controlsSliderValues[0].GetComponent<TMPro.TMP_Text>().text = _sens.ToString("0.##");
+        _controlsSliderValues[0].GetComponent<TMPro.TMP_Text>().text = _sensitivity.ToString("0.##");
     }
 
     void SetParameterValue(string paramName, float paramValue) {

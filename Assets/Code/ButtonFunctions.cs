@@ -46,7 +46,7 @@ public class ButtonFunctions : MonoBehaviour
     public void QuitToMenu()
     {
         UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("MainMenu");
-        Resume();
+        FMODUnity.RuntimeManager.StudioSystem.setParameterByName("is_paused", 0.0f);
     }
 
     public void QuitGame()
