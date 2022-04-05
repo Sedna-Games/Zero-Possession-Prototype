@@ -3,14 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using InputManagerScript;
 using Unity.VisualScripting;
+using UnityEditor.EditorTools;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
     [Header("Sounds")]
     [SerializeField] FMODUnity.StudioEventEmitter footSteps = null;
     [SerializeField] FMODUnity.StudioEventEmitter dashSound = null;
+    [SerializeField] FMODUnity.StudioEventEmitter dashResetSound = null;
+    [SerializeField] FMODUnity.StudioEventEmitter JumpSound = null;
+    [SerializeField] FMODUnity.StudioEventEmitter doubleJumpSound = null;
+    [SerializeField] FMODUnity.StudioEventEmitter moveFastSound = null;
     [SerializeField] FMODUnity.StudioEventEmitter slideSound = null;
     [SerializeField] FMODUnity.StudioEventEmitter landSound = null;
+    [SerializeField, Range(0f, 1f), Tooltip("Percentage of max speed that the player needs to be going at to play moveFastSound (loop)")]
+    float moveFastRate = 0.8f;
+    [SerializeField, Tooltip("Seconds between footstep noises, multiplied by inverse of percentage of max speed (faster = faster footsteps")]
+    float footStepRate = 2.5f;
+    [SerializeField, Tooltip("Amount of time spent in the air before landing can play its sound")]
+    float airTimeForLanding = 0.2f;
+    float percentOfMaxSpeed => _totalSpeed / maxSpeed;
+    float _footstepsTimer = 0f;
 
     [Header("Movement Settings"), Space(10)]
     [SerializeField] float gravity = -32f;
@@ -54,7 +67,7 @@ public class PlayerController : MonoBehaviour {
     [SerializeField, Tooltip("Number of FixedUpdate cycles to lose jump/dashMomentumDecay stacks of jump/dash momentum while not in the air (50 cycles/second")]
     int momentumStackDecay = 10;
     [SerializeField, Tooltip("Amount of stacks to remove once the above happens")]
-    float jumpMomentumDecay=1f, dashMomentumDecay = 1f;
+    float jumpMomentumDecay = 1f, dashMomentumDecay = 1f;
     [SerializeField, Tooltip("The difficulty of stacking momentum (each action gives you 1f / (actionMomentumStacks * momentumStackingDifficulty) stacks). To disable, set to 0f"), Range(0f, 1f)]
     float momentumStackingDifficulty = 1f;
     [SerializeField, Tooltip("The amount of time after going off an edge that you can still be considered grounded when jumping (doesn't eat air jump)")]
@@ -127,6 +140,7 @@ public class PlayerController : MonoBehaviour {
     bool LeftRight => _wallStatus == WallStatus.left || _wallStatus == WallStatus.right;
     bool InAir => !OnGround && !OnSlope && !Climbing;
     WallStatus _wallStatus;
+    bool speedingCoroutine = false;
     private void Awake() {
         OnValidate();
     }
@@ -142,9 +156,21 @@ public class PlayerController : MonoBehaviour {
         _minSlopeDotProduct = Mathf.Cos(maxSlopeAngle * Mathf.Deg2Rad);
         _currentSpeed = moveSpeed;
     }
+    IEnumerator PlaySpeedSounds() {
+        moveFastSound.Play();
+        while(percentOfMaxSpeed > moveFastRate) {
+            yield return new WaitForFixedUpdate();
+        }
+        moveFastSound.Stop();
+        speedingCoroutine = false;
+    }
     //NOTE: Calculates actual speed after applying all momentum stacks. Sliding uses a different setup and is based on the const Time.fixedDeltaTime instead
     float calculateMomentumStacks(float speed) {
         float newSpeed = speed + (speed * jumpMomentum * _jumpMomentumStacks) + (speed * dashMomentum * _dashMomentumStacks) + (_slideMomentumStacks * slideCarryOverMomentum);
+        if(newSpeed / maxSpeed > moveFastRate && !speedingCoroutine) {
+            speedingCoroutine = true;
+            StartCoroutine(PlaySpeedSounds());
+        }
         return newSpeed;
     }
     public void resetMomentumStacks() {
@@ -168,6 +194,8 @@ public class PlayerController : MonoBehaviour {
     }
     private void Update() {
         _desiredVel = new Vector3(input.move.x, 0f, input.move.y).normalized * _totalSpeed;
+        if(_dashCooldown - Time.deltaTime < 0f && !DashCooldown)
+            dashResetSound.Play();
         _dashCooldown -= Time.deltaTime;
         _dashDuration -= Time.deltaTime;
         _wallStickTimer -= Time.deltaTime;
@@ -191,6 +219,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void FixedUpdate() {
+        _footstepsTimer += Time.fixedDeltaTime;
         UpdateState();
         AdjustVelocity();
         if(_desireJump) {
@@ -220,23 +249,27 @@ public class PlayerController : MonoBehaviour {
             _velocity += gravity * _groundNormal * Time.fixedDeltaTime;
     }
     void ClearState() {
-        //??
-        //landSound.Play();
         _groundContactCount = _climbContactCount = _slopeContactCount = 0;
         _groundNormal = _climbNormal = _slopeNormal = Vector3.zero;
     }
     void UpdateState() {
+        var landing = _stepsSinceGrounded;
         _velocity = rb.velocity;
         _stepsSinceJump++;
         _stepsSinceDash++;
         _stepsSinceGrounded++;
         if(OnGround || (wallContact && _wallStatus != WallStatus.none) || OnSlope) {
+            if(_footstepsTimer % ((1f - percentOfMaxSpeed) * footStepRate) <= 0.02f && _velocity.magnitude >= 0.1f && !Sliding)
+                footSteps.Play();
             _dashPhase = 0;
             _coyoteTimer = 0f;
+            _stepsSinceGrounded = 0;
             if(_stepsSinceJump > 1) {
                 _jumpPhase = 0;
                 _coyoteTimer = 0f;
             }
+            if(landing > _stepsSinceGrounded && landing > airTimeForLanding / Time.fixedDeltaTime)
+                landSound.Play();
             //NOTE: Momentum decay. Doesn't decay for wall running but decays for ground, slope, and climbing
             if(_wallStatus != WallStatus.left && _wallStatus != WallStatus.right) {
                 if(_stepsSinceJump % momentumStackDecay == 0) {
@@ -246,7 +279,6 @@ public class PlayerController : MonoBehaviour {
                     _dashMomentumStacks = Mathf.Max(0f, _dashMomentumStacks - dashMomentumDecay);
                 }
             }
-            _stepsSinceGrounded = 0;
             if(_groundContactCount > 1) {
                 _groundNormal.Normalize();
             }
@@ -309,6 +341,7 @@ public class PlayerController : MonoBehaviour {
 
         Vector3 capSpeed = new Vector3(_velocity.x, 0f, _velocity.z);
         _velocity = capSpeed.normalized * Mathf.Min(capSpeed.magnitude, maxSpeed) + transform.up * Mathf.Min(_velocity.y, maxSpeed);
+        FMODUnity.RuntimeManager.StudioSystem.setParameterByName("player_speed", percentOfMaxSpeed);
     }
     void Jump() {
         Vector3 jumpDirection;
@@ -316,21 +349,25 @@ public class PlayerController : MonoBehaviour {
             _jumpPhase = 0;
             jumpDirection = _groundNormal;
             addJumpMomentumStacks();
+            JumpSound.Play();
         }
         else if(OnSlope) {
             _jumpPhase = 0;
             jumpDirection = _slopeNormal;
             addJumpMomentumStacks();
+            JumpSound.Play();
         }
         else if(Climbing) {
             _jumpPhase = 0;
             jumpDirection = _climbNormal;
             addJumpMomentumStacks();
+            JumpSound.Play();
         }
         else if(_coyoteTimer <= coyoteTime) {
             _jumpPhase = 0;
             jumpDirection = _groundNormal;
             addJumpMomentumStacks();
+            JumpSound.Play();
         }
         else if(maxAirJumps > 0 && _jumpPhase < maxAirJumps) {
             if(_jumpPhase == 0)
@@ -338,6 +375,7 @@ public class PlayerController : MonoBehaviour {
             else
                 _jumpPhase++;
             jumpDirection = _groundNormal;
+            doubleJumpSound.Play();
         }
         else {
             input.jump = false;
