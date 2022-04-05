@@ -435,7 +435,9 @@ MonoBehaviour:
   - Master
   Banks:
   - MENU
+  - MX_challengelevel
   - MX_level
+  - MX_masterlevel
   - SX_amb
   - SX_env_objs
   - SX_env_tram
