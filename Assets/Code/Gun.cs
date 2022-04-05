@@ -133,7 +133,7 @@ public class Gun : Weapon
 
     void SetBulletEndPoints()
     {
-        Handles.color = Color.red;
+        //Handles.color = Color.red;
         int j = 0;
         foreach (var bep in _bulletEmitterPoints)
         {
