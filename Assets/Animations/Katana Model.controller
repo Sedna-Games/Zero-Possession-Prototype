@@ -19,7 +19,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SwipeTwo
+  m_Name: NewSwipeTwo
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -34,7 +34,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 4183a1d0806728a4290acf137eec1424, type: 2}
+  m_Motion: {fileID: 7400000, guid: 6411adf67541b9c4db429383db568ed5, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -279,7 +279,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SwipeThree
+  m_Name: NewSwipeThree
   m_Speed: 1.25
   m_CycleOffset: 0
   m_Transitions:
@@ -294,7 +294,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 4183a1d0806728a4290acf137eec1424, type: 2}
+  m_Motion: {fileID: 7400000, guid: c363bb839d5ce174dbc0624187b9748c, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -358,7 +358,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SwipeOne
+  m_Name: NewSwipeOne
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
