@@ -288,7 +288,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7746338478994375416
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4579,6 +4579,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7746338479826727218}
     m_Modifications:
+    - target: {fileID: 1076339871805061768, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076339871805061768, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076339871805061768, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 130
+      objectReference: {fileID: 0}
     - target: {fileID: 1555019393951576606, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4689,6 +4701,10 @@ PrefabInstance:
       propertyPath: m_fontColor32.rgba
       value: 4287222513
       objectReference: {fileID: 0}
+    - target: {fileID: 7140662592289251290, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: f0ae16827559eab4bb403f3d19967404, type: 3}
     - target: {fileID: 8214750001155681530, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
       propertyPath: m_text
       value: Carter Menary
@@ -4727,6 +4743,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7746338479826727218}
     m_Modifications:
+    - target: {fileID: 1076339871805061768, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076339871805061768, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076339871805061768, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 130
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076339871805061768, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1555019393951576606, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4837,6 +4869,10 @@ PrefabInstance:
       propertyPath: m_fontColor32.rgba
       value: 4287222513
       objectReference: {fileID: 0}
+    - target: {fileID: 7140662592289251290, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e104843bbcbe19c45b6ba513bdc776e7, type: 3}
     - target: {fileID: 8214750001155681530, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
       propertyPath: m_fontColor.b
       value: 0.19607845
@@ -4871,6 +4907,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7746338479826727218}
     m_Modifications:
+    - target: {fileID: 1076339871805061768, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076339871805061768, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076339871805061768, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 130
+      objectReference: {fileID: 0}
     - target: {fileID: 1555019393951576606, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4981,6 +5029,10 @@ PrefabInstance:
       propertyPath: m_fontColor32.rgba
       value: 4287222513
       objectReference: {fileID: 0}
+    - target: {fileID: 7140662592289251290, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 846c92b86fd585446895c2e11e56be01, type: 3}
     - target: {fileID: 8214750001155681530, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
       propertyPath: m_text
       value: Jeremy Kan
@@ -5019,6 +5071,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7746338479826727218}
     m_Modifications:
+    - target: {fileID: 1076339871805061768, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076339871805061768, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076339871805061768, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 130
+      objectReference: {fileID: 0}
     - target: {fileID: 1555019393951576606, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -5127,6 +5191,10 @@ PrefabInstance:
       propertyPath: m_fontColor32.rgba
       value: 4287222513
       objectReference: {fileID: 0}
+    - target: {fileID: 7140662592289251290, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 212ed54dc1e913d4381d9ec12f394b8c, type: 3}
     - target: {fileID: 8214750001155681530, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
       propertyPath: m_text
       value: Daniel Hong
@@ -5165,6 +5233,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7746338479826727218}
     m_Modifications:
+    - target: {fileID: 1076339871805061768, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076339871805061768, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076339871805061768, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 130
+      objectReference: {fileID: 0}
     - target: {fileID: 1555019393951576606, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -5251,9 +5331,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3174302894981862440, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
       propertyPath: m_text
-      value: 'Character Artist
-
-        3D Artist'
+      value: 3D Generalist
       objectReference: {fileID: 0}
     - target: {fileID: 3174302894981862440, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
       propertyPath: m_fontColor.b
@@ -5275,6 +5353,10 @@ PrefabInstance:
       propertyPath: m_fontColor32.rgba
       value: 4287222513
       objectReference: {fileID: 0}
+    - target: {fileID: 7140662592289251290, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 16e3b1f864ff5a04399649a6b790c914, type: 3}
     - target: {fileID: 8214750001155681530, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
       propertyPath: m_text
       value: Dhruva Guruprsad
@@ -5313,6 +5395,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7746338479826727218}
     m_Modifications:
+    - target: {fileID: 1076339871805061768, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076339871805061768, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076339871805061768, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 130
+      objectReference: {fileID: 0}
     - target: {fileID: 1555019393951576606, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -5423,6 +5517,10 @@ PrefabInstance:
       propertyPath: m_fontColor32.rgba
       value: 4287222513
       objectReference: {fileID: 0}
+    - target: {fileID: 7140662592289251290, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 251ad59462d607841b8376da545b6929, type: 3}
     - target: {fileID: 8214750001155681530, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
       propertyPath: m_text
       value: Anthony Smiderle
@@ -5461,6 +5559,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7746338479826727218}
     m_Modifications:
+    - target: {fileID: 1076339871805061768, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076339871805061768, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076339871805061768, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 130
+      objectReference: {fileID: 0}
     - target: {fileID: 1555019393951576606, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -5571,6 +5681,10 @@ PrefabInstance:
       propertyPath: m_fontColor32.rgba
       value: 4287222513
       objectReference: {fileID: 0}
+    - target: {fileID: 7140662592289251290, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 795db7a5057068d45a9276373c014ea8, type: 3}
     - target: {fileID: 8214750001155681530, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
       propertyPath: m_text
       value: Marcus Vine
