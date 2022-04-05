@@ -114,7 +114,7 @@ GameObject:
   m_Component:
   - component: {fileID: 747099346}
   - component: {fileID: 747099347}
-  - component: {fileID: 8134706820301428375}
+  - component: {fileID: 1813086349100134742}
   m_Layer: 7
   m_Name: Patrol
   m_TagString: Untagged
@@ -153,10 +153,10 @@ MonoBehaviour:
   decisionName: 
   sensors: []
   acitons:
-  - {fileID: 8134706820301428375}
+  - {fileID: 1813086349100134742}
   sensingTimeRange: {x: 0, y: 0}
-  actionTimeRange: {x: 3, y: 15}
---- !u!114 &8134706820301428375
+  actionTimeRange: {x: 3, y: 7}
+--- !u!114 &1813086349100134742
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -165,7 +165,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 747099345}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e8bc8a4e296e8b409f0b5a1be4fcb1b, type: 3}
+  m_Script: {fileID: 11500000, guid: a96198f1aee30464599254f1e1c54df9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   actionName: 
@@ -175,9 +175,8 @@ MonoBehaviour:
   OnActionDeselected:
     m_PersistentCalls:
       m_Calls: []
-  strafeCooldown: {x: 0, y: 0}
-  movementRange: {x: 1, y: 15}
   agent: {fileID: 237317504165667861}
+  startRadius: {x: 5, y: 10}
 --- !u!1 &1855179527
 GameObject:
   m_ObjectHideFlags: 0
@@ -203,15 +202,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1855179527}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.026553089, y: -0, z: -0, w: 0.99964744}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 9002189181457524392}
+  - {fileID: 490062099911193115}
   m_Father: {fileID: 1978715465394007411}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -3.043, y: 0, z: 0}
 --- !u!114 &1855179530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -410,9 +409,9 @@ MonoBehaviour:
   TriggerOnce: 0
   Preload: 0
   Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
+  OverrideAttenuation: 1
+  OverrideMinDistance: 5
+  OverrideMaxDistance: 100
 --- !u!1 &1805466312372395220
 GameObject:
   m_ObjectHideFlags: 0
@@ -672,10 +671,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1978715465394007413}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 4035599018634835706}
+        m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
+        m_MethodName: Play
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -684,10 +683,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 4035599018634835706}
-        m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
-        m_MethodName: Play
+      - m_Target: {fileID: 9002189181457524399}
+        m_TargetAssemblyTypeName: Gun, Assembly-CSharp
+        m_MethodName: DisableAllBullets
         m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1978715465394007413}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -751,7 +762,7 @@ NavMeshAgent:
   m_Speed: 15
   m_Acceleration: 100
   avoidancePriority: 50
-  m_AngularSpeed: 360
+  m_AngularSpeed: 540
   m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -780,6 +791,38 @@ MonoBehaviour:
   - {fileID: 2055353245}
   - {fileID: 7297021333183405254}
   - {fileID: 4430420905824596353}
+--- !u!1 &4941578607734853173
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 490062099911193115}
+  m_Layer: 8
+  m_Name: Parent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &490062099911193115
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4941578607734853173}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 9002189181457524392}
+  m_Father: {fileID: 1855179528}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5224848073875451393
 GameObject:
   m_ObjectHideFlags: 0
@@ -825,7 +868,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sensorName: 
-  area: {x: 2, y: 8}
+  area: {x: 2, y: 20}
 --- !u!1 &5315322600921299140
 GameObject:
   m_ObjectHideFlags: 0
@@ -871,7 +914,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sensorName: 
-  sightConeAngle: 90
+  sightConeAngle: 360
   sightConeLength: 30
   enemyTransform: {fileID: 1978715465394007411}
 --- !u!1 &5596079414266955188
@@ -972,9 +1015,15 @@ MonoBehaviour:
   OnActionDeselected:
     m_PersistentCalls:
       m_Calls: []
+  timeBetweenShotBursts: 0.5
+  shotAmount: {x: 2, y: 5}
   aimLeading: {x: 0, y: 0}
-  turnSpeedWhileStandingStill: 2.5
+  turnSpeedWhileStandingStill: 5
+  distanceTolerance: 4
+  angleTolerance: 0.1
+  shitSelfDistance: 5
   weaponManager: {fileID: 1855179530}
+  gun: {fileID: 9002189181457524399}
 --- !u!114 &4430420905824596353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -999,23 +1048,31 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 1855179528}
+    m_TransformParent: {fileID: 490062099911193115}
     m_Modifications:
+    - target: {fileID: 2726909998408553052, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924464, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: m_Name
       value: Gun
-      objectReference: {fileID: 0}
-    - target: {fileID: 8205000318513924464, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924465, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924465, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5403799
+      objectReference: {fileID: 0}
+    - target: {fileID: 8205000318513924465, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5403799
+      objectReference: {fileID: 0}
+    - target: {fileID: 8205000318513924465, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.617
+      value: 0.6170008
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924465, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1023,44 +1080,48 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924465, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.0047730394
+      value: -0.0047737886
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924465, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.6869242
+      value: 0.6868009
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924465, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0.010679636
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924465, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.72672915
+      value: -0.7266793
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924465, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: -0.011301559
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924465, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: -0.101
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924465, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -93.226
+      value: -93.231
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924465, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: -1.779
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924470, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: cooldown
-      value: 0.5
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924470, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: bulletPrefab
       value: 
       objectReference: {fileID: 1930150569880198430, guid: 864c43e9a23cb1b4abdf06c62380e39b, type: 3}
+    - target: {fileID: 8205000318513924470, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
+      propertyPath: weaponManagerTransform
+      value: 
+      objectReference: {fileID: 1855179528}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
 --- !u!4 &9002189181457524392 stripped
