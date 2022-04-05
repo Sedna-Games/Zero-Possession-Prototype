@@ -31,6 +31,7 @@ public class ButtonFunctions : MonoBehaviour
     public void Restart() {
         //Restarts the current level
         if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level 1") {
+            FMODUnity.RuntimeManager.StudioSystem.setParameterByName("level_section", 0);
             ToLevelOne();
         }
         /**
