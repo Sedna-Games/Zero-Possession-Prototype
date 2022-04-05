@@ -84,7 +84,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   sign: -1
-  movementRange: {x: 5, y: 10}
+  movementRange: {x: 2, y: 5}
   agent: {fileID: 237317504165667861}
 --- !u!114 &673673445
 MonoBehaviour:
@@ -113,8 +113,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 747099346}
-  - component: {fileID: 747099348}
   - component: {fileID: 747099347}
+  - component: {fileID: 8134706820301428375}
   m_Layer: 7
   m_Name: Patrol
   m_TagString: Untagged
@@ -137,28 +137,6 @@ Transform:
   m_Father: {fileID: 1978715465394007411}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &747099348
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 747099345}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3fa2a24b6d0832449c7cee33de9a668, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  actionName: 
-  OnActionSelected:
-    m_PersistentCalls:
-      m_Calls: []
-  OnActionDeselected:
-    m_PersistentCalls:
-      m_Calls: []
-  sign: 1
-  movementRange: {x: 5, y: 10}
-  agent: {fileID: 237317504165667861}
 --- !u!114 &747099347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,9 +153,31 @@ MonoBehaviour:
   decisionName: 
   sensors: []
   acitons:
-  - {fileID: 747099348}
+  - {fileID: 8134706820301428375}
   sensingTimeRange: {x: 0, y: 0}
-  actionTimeRange: {x: 0.5, y: 2}
+  actionTimeRange: {x: 3, y: 15}
+--- !u!114 &8134706820301428375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747099345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e8bc8a4e296e8b409f0b5a1be4fcb1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actionName: 
+  OnActionSelected:
+    m_PersistentCalls:
+      m_Calls: []
+  OnActionDeselected:
+    m_PersistentCalls:
+      m_Calls: []
+  strafeCooldown: {x: 0, y: 0}
+  movementRange: {x: 1, y: 15}
+  agent: {fileID: 237317504165667861}
 --- !u!1 &1855179527
 GameObject:
   m_ObjectHideFlags: 0
@@ -347,8 +347,8 @@ MonoBehaviour:
   OnActionDeselected:
     m_PersistentCalls:
       m_Calls: []
-  aimLeading: {x: 0.15, y: 0.15}
-  turnSpeedWhileStandingStill: 2.5
+  aimLeading: {x: 0, y: 0}
+  turnSpeedWhileStandingStill: 2.8
   agent: {fileID: 237317504165667861}
   enemyTransform: {fileID: 1978715465394007411}
 --- !u!1 &162660259093437876
@@ -469,6 +469,80 @@ MonoBehaviour:
       m_Calls: []
   visionCone: {fileID: 5660220127724873722}
   sixthSenseSphere: {fileID: 3208994351275408604}
+--- !u!1 &1844672209203572445
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 248600479090938322}
+  - component: {fileID: 7297021333183405254}
+  - component: {fileID: 8692898454403674975}
+  m_Layer: 7
+  m_Name: Strafe
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &248600479090938322
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844672209203572445}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8218475142291736643}
+  m_Father: {fileID: 1978715465394007411}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7297021333183405254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844672209203572445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b9dcbf0ef2fa9345811716895df6f1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overrideAllActions: 0
+  decisionName: 
+  sensors:
+  - {fileID: 6947246429265769275}
+  acitons:
+  - {fileID: 8692898454403674975}
+--- !u!114 &8692898454403674975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844672209203572445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e8bc8a4e296e8b409f0b5a1be4fcb1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actionName: 
+  OnActionSelected:
+    m_PersistentCalls:
+      m_Calls: []
+  OnActionDeselected:
+    m_PersistentCalls:
+      m_Calls: []
+  strafeCooldown: {x: 2, y: 4}
+  movementRange: {x: 5, y: 7}
+  agent: {fileID: 237317504165667861}
 --- !u!1 &1978715465394007413
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,6 +587,7 @@ Transform:
   - {fileID: 2055353242}
   - {fileID: 673673444}
   - {fileID: 747099346}
+  - {fileID: 248600479090938322}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -698,12 +773,59 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeBetweenDecisions: {x: 0, y: 0}
+  chanceToSkipAction: 25
   alertSensor: {fileID: 2646279787093545869}
   patrol: {fileID: 747099347}
   deciders:
   - {fileID: 2055353245}
-  - {fileID: 673673445}
+  - {fileID: 7297021333183405254}
   - {fileID: 4430420905824596353}
+--- !u!1 &5224848073875451393
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8218475142291736643}
+  - component: {fileID: 6947246429265769275}
+  m_Layer: 7
+  m_Name: Strafe Zone
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8218475142291736643
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5224848073875451393}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 248600479090938322}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6947246429265769275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5224848073875451393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24abd08798769b44ca980c2af29bc155, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sensorName: 
+  area: {x: 2, y: 8}
 --- !u!1 &5315322600921299140
 GameObject:
   m_ObjectHideFlags: 0
@@ -797,7 +919,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sensorName: 
-  area: {x: 0, y: 5}
+  area: {x: 0, y: 3}
 --- !u!1 &5912929274801405333
 GameObject:
   m_ObjectHideFlags: 0
@@ -850,7 +972,7 @@ MonoBehaviour:
   OnActionDeselected:
     m_PersistentCalls:
       m_Calls: []
-  aimLeading: {x: 0.1, y: 0.1}
+  aimLeading: {x: 0, y: 0}
   turnSpeedWhileStandingStill: 2.5
   weaponManager: {fileID: 1855179530}
 --- !u!114 &4430420905824596353
@@ -870,6 +992,7 @@ MonoBehaviour:
   sensors:
   - {fileID: 5660220127724873722}
   acitons:
+  - {fileID: 2055353244}
   - {fileID: 7202297895572720952}
 --- !u!1001 &950320047117479897
 PrefabInstance:
@@ -904,7 +1027,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924465, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.6892142
+      value: 0.6869242
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924465, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: m_LocalRotation.x
@@ -912,7 +1035,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924465, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.72455764
+      value: -0.72672915
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924465, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: m_LocalRotation.z
@@ -924,7 +1047,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924465, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -92.864
+      value: -93.226
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924465, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -932,7 +1055,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924470, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: cooldown
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924470, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: bulletPrefab

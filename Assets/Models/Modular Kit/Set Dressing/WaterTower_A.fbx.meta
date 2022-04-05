@@ -3,7 +3,22 @@ guid: fdc30602b0d30674f9f82db3b97dcc6c
 ModelImporter:
   serializedVersion: 21202
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tiling Trim
+    second: {fileID: 2100000, guid: e034f80b982f45d4ca16bb3d5a759a1b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Trim
+    second: {fileID: 2100000, guid: f683e58e6b86a0345b7216754613434b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TrimContinuous
+    second: {fileID: 2100000, guid: 7caf4c4bf157def459c9b1619e31f960, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

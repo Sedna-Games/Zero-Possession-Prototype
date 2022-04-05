@@ -64,6 +64,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnFinishAttack:
+    m_PersistentCalls:
+      m_Calls: []
   OnEnableWeapon:
     m_PersistentCalls:
       m_Calls: []
@@ -422,7 +425,7 @@ MonoBehaviour:
       Data2: 1081235523
       Data3: -1200734048
       Data4: 550606661
-    Path: event:/SX/wpn/wpn_shotgun_shoot
+    Path: event:/SX/wpn/guns/wpn_shotgun_shoot
   Event: 
   PlayEvent: 0
   StopEvent: 0
@@ -431,5 +434,5 @@ MonoBehaviour:
   Preload: 0
   Params: []
   OverrideAttenuation: 1
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 1055.1
+  OverrideMinDistance: 5
+  OverrideMaxDistance: 250

@@ -21,7 +21,8 @@ public class AIAction_Attack : AIAction
     public override void SelectAction()
     {
         var dir = AISensor.DirectionToPlayer(transform);
-        dir = Vector3.Lerp(dir, dir + player.GetComponent<Rigidbody>().velocity, AIBlackboard.RandomFloatHelper(aimLeading));
+        //dir.x = dir.z = 0.0f;
+        //dir = Vector3.Lerp(dir, dir + player.GetComponent<Rigidbody>().velocity, AIBlackboard.RandomFloatHelper(aimLeading));
 
         var newRotation = Quaternion.LookRotation(dir.normalized);
 
