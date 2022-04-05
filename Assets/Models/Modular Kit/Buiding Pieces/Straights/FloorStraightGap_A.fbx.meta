@@ -13,7 +13,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Interactable
-    second: {fileID: 2100000, guid: 8cfc3c12873e41d49bc919103d3e392c, type: 2}
+    second: {fileID: 2100000, guid: cf8bdb445b322c242929fcef17ec9853, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
