@@ -23,7 +23,7 @@ public class AIAction_RotateTowardsPlayer : AIAction
         agent.updateRotation = false;
         var dir = AISensor.DirectionToPlayer(enemyTransform);
         dir = Vector3.Lerp(dir, dir + player.GetComponent<Rigidbody>().velocity, AIBlackboard.RandomFloatHelper(aimLeading));
-
+        dir.y = 0.0f;
         var newRotation = Quaternion.LookRotation(dir.normalized);
 
         AIBlackboard.RotationHelper(enemyTransform.rotation, newRotation, enemyTransform, turnSpeedWhileStandingStill);
