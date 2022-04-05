@@ -11,11 +11,35 @@ public class ButtonFunctions : MonoBehaviour
         pauseMenu.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        FMODUnity.RuntimeManager.StudioSystem.setParameterByName("is_paused", 0.0f);
+    }
+
+    public void Restart() {
+        //Restarts the current level
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level 1") {
+            ToLevelOne();
+        }
+        /**
+        else if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level 2") {
+            ToLevelTwo();
+        }
+        else if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level 3") {
+            ToLevelThree();
+        }
+        **/
     }
 
     public void ToLevelOne()
     {
         UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Level 1");
+    }
+    public void ToLevelTwo()
+    {
+        //UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Level 1");
+    }
+    public void ToLevelThree()
+    {
+        //UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Level 1");
     }
 
     public void QuitToMenu()
@@ -37,6 +61,7 @@ public class ButtonFunctions : MonoBehaviour
             Time.timeScale = 0.0f;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+            FMODUnity.RuntimeManager.StudioSystem.setParameterByName("is_paused", 1.0f);
         }
         else
             Resume();
