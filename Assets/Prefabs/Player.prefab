@@ -890,7 +890,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1900, y: 1080}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -1097,6 +1097,68 @@ MonoBehaviour:
   movementScalar: 10
   rigidbody: {fileID: 4686300567443377658}
   pCamera: {fileID: 339140033076866591}
+--- !u!1 &1868361846771931578
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2121013925902663024}
+  - component: {fileID: 7351583477297471819}
+  m_Layer: 0
+  m_Name: DashResetSound
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2121013925902663024
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1868361846771931578}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4686300567443377662}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7351583477297471819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1868361846771931578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -980026160
+      Data2: 1245498893
+      Data3: -546518906
+      Data4: 760628422
+    Path: event:/SX/ui/ui_dashreset
+  Event: 
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &2263204648739560537
 GameObject:
   m_ObjectHideFlags: 0
@@ -1898,7 +1960,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7332666708618891580}
         m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
-        m_MethodName: Play
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2179,8 +2241,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4696871231515782170}
-  m_LocalRotation: {x: -0, y: 0.7067633, z: -0, w: 0.7074501}
-  m_LocalPosition: {x: 86.000244, y: 102.67258, z: 442.68997}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -46.75, y: 9.375, z: 43.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2212,7 +2274,7 @@ Camera:
     height: 1
   near clip plane: 0.2
   far clip plane: 500
-  field of view: 90
+  field of view: 70
   orthographic: 0
   orthographic size: 10
   m_Depth: -1
@@ -2708,6 +2770,7 @@ Transform:
   - {fileID: 1487183220571314008}
   - {fileID: 6937259932757255544}
   - {fileID: 8297090204529277019}
+  - {fileID: 2121013925902663024}
   m_Father: {fileID: 4455848962192512928}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2725,8 +2788,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   footSteps: {fileID: 2415557938677647832}
   dashSound: {fileID: 1336560015}
+  dashResetSound: {fileID: 7351583477297471819}
+  JumpSound: {fileID: 2189747825117246044}
+  doubleJumpSound: {fileID: 6884811781258450364}
+  moveFastSound: {fileID: 7968934082349754163}
   slideSound: {fileID: 783087651}
   landSound: {fileID: 6209419655578814023}
+  moveFastRate: 0.8
+  footStepRate: 2.5
+  airTimeForLanding: 0.2
   gravity: -32
   moveSpeed: 11
   dashSpeed: 25
