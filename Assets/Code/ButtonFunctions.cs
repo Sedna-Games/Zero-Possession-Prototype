@@ -5,13 +5,27 @@ using UnityEngine;
 public class ButtonFunctions : MonoBehaviour
 {
     [SerializeField] GameObject pauseMenu = null;
+    
+    [Tooltip("First overlay MUST be the Pause Menu Options")]
+    [SerializeField] GameObject[] pauseOverlays = null;
+
     public void Resume()
     {
         Time.timeScale = 1.0f;
+        ResetPause();
         pauseMenu.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         FMODUnity.RuntimeManager.StudioSystem.setParameterByName("is_paused", 0.0f);
+    }
+
+    //Fixes bug with Esc and reopening leaving sub-menus open
+    void ResetPause() {
+        pauseOverlays[0].SetActive(true);
+        for (int i = 1; i < pauseOverlays.Length; i++) {
+            if (pauseOverlays[i].activeSelf) 
+                pauseOverlays[i].SetActive(false);
+        }
     }
 
     public void Restart() {
