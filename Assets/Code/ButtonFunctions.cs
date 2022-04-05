@@ -27,6 +27,7 @@ public class ButtonFunctions : MonoBehaviour
             ToLevelThree();
         }
         **/
+        Resume();
     }
 
     public void ToLevelOne()
@@ -45,6 +46,7 @@ public class ButtonFunctions : MonoBehaviour
     public void QuitToMenu()
     {
         UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("MainMenu");
+        Resume();
     }
 
     public void QuitGame()
