@@ -11,21 +11,6 @@ public class DamageDoer : MonoBehaviour
     public bool canDoDamage = true;
     public List<string> ignoreTags = new List<string>();
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (!canDoDamage || ignoreTags.Contains(other.tag))
-        {
-            OnFailedDoDamage.Invoke();
-            return;
-        }
-        var hp = other.GetComponent<Health>();
-        if (hp == null)
-        {
-            OnFailedDoDamage.Invoke();
-            return;
-        }
-    }
-
     private void OnTriggerStay(Collider other)
     {
         DoDamage(other.gameObject);
@@ -33,6 +18,17 @@ public class DamageDoer : MonoBehaviour
 
     public void DoDamage(GameObject other)
     {
+        if (!other.GetComponent<Collider>().isTrigger 
+        && 
+        OnFailedDoDamage.GetPersistentEventCount() > 0 
+        && 
+        canDoDamage && 
+        !other.CompareTag("Player") && !other.CompareTag("Enemy"))
+        {
+            OnFailedDoDamage.Invoke();
+            canDoDamage = false;
+            return;
+        }
         if (!canDoDamage || ignoreTags.Contains(other.tag))
             return;
         var hp = other.GetComponent<Health>();

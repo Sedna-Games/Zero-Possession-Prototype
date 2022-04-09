@@ -25,33 +25,7 @@ public class Katana : Weapon
             index = (index + 1) % numPossibleSwings;
         _lastIndex = index;
         animator.SetInteger("SwipeIndex",index);
-        // IEnumerator Lerp()
-        // {
-        //     _attacking = true;
-        //     damageDoer.canDoDamage = true;
-        //     var lerpPos = lerpPositions[Random.Range(0,lerpPositions.Count)];
-        //     float x = 0.0f;
-        //     while (x < 1.0f)
-        //     {
-        //         yield return new WaitForEndOfFrame();
-        //         x += Time.deltaTime * lerpSpeed;
-        //         transform.localPosition = Vector3.Slerp(orignalPos, lerpPos.localPosition, movementCurve.Evaluate(x));
-        //         transform.localRotation = Quaternion.Slerp(orignalRotation, lerpPos.localRotation, rotationCurve.Evaluate(x));
-        //     }
-
-        //     x = 1.0f;
-        //     while (x > 0.0f)
-        //     {
-        //         yield return new WaitForEndOfFrame();
-        //         x -= Time.deltaTime * lerpSpeed;
-        //         transform.localPosition = Vector3.Slerp(orignalPos, lerpPos.localPosition, movementCurve.Evaluate(x));
-        //         transform.localRotation = Quaternion.Slerp(orignalRotation, lerpPos.localRotation, rotationCurve.Evaluate(x));
-        //     }
-        //     x = 0.0f;
-        //     damageDoer.canDoDamage = false;
-        //     _attacking = false;
-        // }
-        // StartCoroutine(Lerp());
+        
     }
 
     public void SetAttacking(bool yn){
