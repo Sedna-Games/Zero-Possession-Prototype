@@ -7,6 +7,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Tank
+    second: {fileID: 2100000, guid: b5b738c1bd098d24aba904afb0554466, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Tiling Trim
     second: {fileID: 2100000, guid: e034f80b982f45d4ca16bb3d5a759a1b, type: 2}
   - first:
