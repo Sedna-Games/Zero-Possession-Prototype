@@ -24,6 +24,11 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: TrimContinuous
     second: {fileID: 2100000, guid: 7caf4c4bf157def459c9b1619e31f960, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WaterTowerUnique
+    second: {fileID: 2100000, guid: 9ff358ff44bdcc54480051a9c196fa0b, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
