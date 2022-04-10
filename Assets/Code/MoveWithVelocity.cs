@@ -25,7 +25,6 @@ public class MoveWithVelocity : MonoBehaviour
     Vector3 _moveVec = Vector3.zero;
     Vector3 _mouseVec = Vector3.zero;
     Vector3 _originalPos = Vector3.zero;
-    // Start is called before the first frame update
     void Start()
     {
         _originalPos = transform.localPosition;
@@ -55,21 +54,15 @@ public class MoveWithVelocity : MonoBehaviour
         dir.x = -dir.x;
         dir.y = -dir.y;
         _moveVec += dir;
+
         var vel = _moveVec * movementScalar + _mouseVec * mouseScalar;
         vel = _originalPos + vel * dt;
-        Debug.Log(vel);
-        if (!float.IsNaN(vel.magnitude))
-        {
-            transform.localPosition = vel;
-            transform.localPosition -= new Vector3(0.0f, 0.0f, transform.localPosition.z);
-        }
-        else
-        {
-            Debug.LogWarning("NAN");
-            //_mouseVec = _moveVec = Vector3.zero;
-        }
+
+        transform.localPosition = vel;
+        transform.localPosition -= new Vector3(0.0f, 0.0f, transform.localPosition.z);
+
         _moveVec -= _moveVec * Time.fixedDeltaTime * smoothing;
-        _mouseVec -= _mouseVec * Time.deltaTime* smoothing;
+        _mouseVec -= _mouseVec * Time.deltaTime * smoothing;
     }
 
     public void OnLook(InputValue value)
