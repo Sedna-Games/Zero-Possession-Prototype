@@ -1077,7 +1077,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4670935039879673385
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1096,7 +1096,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 841.4, y: -551.4}
+  m_AnchoredPosition: {x: 918, y: -1055}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3996057028800078710
@@ -1164,10 +1164,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cab985e02b6f41348a52f9dd2e7f02e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  updateTime: 0
+  updateTime: 2
   smoothing: 10
-  movementScalar: 1
-  mouseScalar: 1
+  movementScalar: 2
+  mouseScalar: 0.1
   rigidbody: {fileID: 4686300567443377658}
   pCamera: {fileID: 339140033076866591}
 --- !u!1 &1851802107238538076
@@ -1991,8 +1991,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   updateTime: 1
   smoothing: 10
-  movementScalar: 0.1
-  mouseScalar: 1
+  movementScalar: 0.01
+  mouseScalar: 0.001
   rigidbody: {fileID: 4686300567443377658}
   pCamera: {fileID: 339140033076866591}
 --- !u!1 &3456738289779988161
@@ -3563,6 +3563,7 @@ GameObject:
   - component: {fileID: 1644376888941797560}
   - component: {fileID: 7490717455969697252}
   - component: {fileID: 3832687532615171647}
+  - component: {fileID: 8152699095927816306}
   m_Layer: 0
   m_Name: Particle System
   m_TagString: Untagged
@@ -3775,7 +3776,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.3962264, g: 0.3962264, b: 0.3962264, a: 1}
+      maxColor: {r: 0.3018868, g: 0.3018868, b: 0.3018868, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -4300,7 +4301,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 163.63
+      value: 164.8
       mode: 0
       spread: 0
       speed:
@@ -8364,6 +8365,64 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &8152699095927816306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5646353130973268726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84fed2cc866541a40a0270f0b6e14623, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  alphaMax: 1
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.018535517
+      outSlope: 0.018535517
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.22858725
+      value: 0.004236983
+      inSlope: 0.03138204
+      outSlope: 0.03138204
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.41727704
+    - serializedVersion: 3
+      time: 0.6254546
+      value: 0.46017492
+      inSlope: 1.3429321
+      outSlope: 1.3429321
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.12484998
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1.4412808
+      outSlope: 1.4412808
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  maxSpeed: 50
+  speedLines: {fileID: 7490717455969697252}
+  rigidbody: {fileID: 4686300567443377658}
 --- !u!1 &6556598782651548308
 GameObject:
   m_ObjectHideFlags: 0
