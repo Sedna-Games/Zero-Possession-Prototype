@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using InputManagerScript;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor.EditorTools;
 using UnityEngine;
@@ -98,7 +99,7 @@ public class PlayerController : MonoBehaviour {
     [SerializeField, Tooltip("How long before the player can stick to the wall after getting off it")]
     float wallStickDelay = 0.1f;
     float _wallStickTimer = 0f;
-    float _wallstickDistance, _wallstickY;
+    float _wallstickDistance, _wallstickY = float.MaxValue - 0.1f;
     bool _firstCling = true, _climbable = false;
 
     [Header("Cinemachine")]
@@ -140,6 +141,7 @@ public class PlayerController : MonoBehaviour {
     bool LeftRight => _wallStatus == WallStatus.left || _wallStatus == WallStatus.right;
     bool InAir => !OnGround && !OnSlope && !Climbing;
     WallStatus _wallStatus;
+    contactState _lastContact;
     bool speedingCoroutine = false;
     private void Awake() {
         OnValidate();
@@ -155,6 +157,7 @@ public class PlayerController : MonoBehaviour {
         _minClimbDotProduct = Mathf.Cos(maxClimbAngle * Mathf.Deg2Rad);
         _minSlopeDotProduct = Mathf.Cos(maxSlopeAngle * Mathf.Deg2Rad);
         _currentSpeed = moveSpeed;
+        _currentClimbSpeed = climbSpeed;
     }
     IEnumerator PlaySpeedSounds() {
         moveFastSound.Play();
@@ -249,6 +252,12 @@ public class PlayerController : MonoBehaviour {
             _velocity += gravity * _groundNormal * Time.fixedDeltaTime;
     }
     void ClearState() {
+        if(_climbContactCount > 0)
+            _lastContact = contactState.wall;
+        else if(_slopeContactCount > 0)
+            _lastContact = contactState.slope;
+        else if(_groundContactCount > 0)
+            _lastContact = contactState.ground;
         _groundContactCount = _climbContactCount = _slopeContactCount = 0;
         _groundNormal = _climbNormal = _slopeNormal = Vector3.zero;
     }
@@ -279,15 +288,14 @@ public class PlayerController : MonoBehaviour {
                     _dashMomentumStacks = Mathf.Max(0f, _dashMomentumStacks - dashMomentumDecay);
                 }
             }
-            if(_groundContactCount > 1) {
+            if(_groundContactCount > 1)
                 _groundNormal.Normalize();
-            }
-            if(_climbContactCount > 1) {
+            else //NOTE: Need this for gravity to prevent clinging on walls
+                _groundNormal = Vector3.up;
+            if(_climbContactCount > 1)
                 _climbNormal.Normalize();
-            }
-            if(_slopeContactCount > 1) {
+            if(_slopeContactCount > 1)
                 _slopeNormal.Normalize();
-            }
         }
         else {
             _coyoteTimer += Time.fixedDeltaTime;
@@ -325,20 +333,25 @@ public class PlayerController : MonoBehaviour {
         currentX = Vector3.Dot(_velocity, xAxis);
         currentZ = Vector3.Dot(_velocity, zAxis);
         float acceleration = _totalSpeed * GroundManeuverabilityRate * (ManeuverabilityRate / Time.fixedDeltaTime);
+
         if(InAir)
             acceleration = _totalSpeed * AirManeuverabilityRate * (ManeuverabilityRate / Time.fixedDeltaTime);
         if(reverseSlide)
             _desiredVel = new Vector3(_desiredVel.x, 0f, _desiredVel.z * -1f);
+
         float newX = Mathf.MoveTowards(currentX, _desiredVel.x, acceleration * Time.fixedDeltaTime);
         float newZ = Mathf.MoveTowards(currentZ, _desiredVel.z, acceleration * Time.fixedDeltaTime);
         _velocity += transform.right * (newX - currentX) + transform.forward * (newZ - currentZ);
-        if(Climbing && LeftRight) {
-            _velocity += (wallForce * -_climbNormal);
-            _velocity = new Vector3(_velocity.x, 0f, _velocity.z);
+        if(Climbing && LeftRight && input.move.y > 0f) {
+            float rotateDir = _wallStatus == WallStatus.right ? 90f : -90f;
+            Vector3 wallrunDir = Quaternion.Euler(0f, rotateDir, 0f) * _climbNormal;
+            _velocity = wallrunDir * _totalSpeed + (wallForce * -_climbNormal);
+            //_velocity = new Vector3(_velocity.x, 0f, _velocity.z);
         }
-        else if(Climbing && (_wallStatus == WallStatus.front) && input.move.y > 0f && _climbable)
+        else if(wallContact && (_wallStatus == WallStatus.front) && input.move.y > 0f && _climbable)
             _velocity = new Vector3(_velocity.x, _desiredVel.z, 0f);
 
+        Debug.Log(!OnGround);
         Vector3 capSpeed = new Vector3(_velocity.x, 0f, _velocity.z);
         _velocity = capSpeed.normalized * Mathf.Min(capSpeed.magnitude, maxSpeed) + transform.up * Mathf.Min(_velocity.y, maxSpeed);
         FMODUnity.RuntimeManager.StudioSystem.setParameterByName("player_speed", percentOfMaxSpeed);
@@ -365,7 +378,11 @@ public class PlayerController : MonoBehaviour {
         }
         else if(_coyoteTimer <= coyoteTime) {
             _jumpPhase = 0;
-            jumpDirection = _groundNormal;
+            if(_lastContact == contactState.wall) {
+                jumpDirection = _climbNormal;
+            }
+            else
+                jumpDirection = _groundNormal;
             addJumpMomentumStacks();
             JumpSound.Play();
         }
@@ -385,7 +402,7 @@ public class PlayerController : MonoBehaviour {
         _coyoteTimer = coyoteTime + 1f;
         _stepsSinceJump = 0;
         float jumpSpeed = Mathf.Sqrt(-2f * Physics.gravity.y * jumpHeight);
-        if(LeftRight) {
+        if(LeftRight || _lastContact == contactState.wall) {
             jumpDirection = (jumpDirection + tiltRotater.up).normalized;
             jumpDirection = new Vector3(jumpDirection.x * wallJumpMultiplier, jumpDirection.y * wallJumpMultiplier / 2f, jumpDirection.z * wallJumpMultiplier);
             StartCoroutine(DisableMovement());
@@ -536,14 +553,11 @@ public class PlayerController : MonoBehaviour {
 
         //NOTE: Resets wall run states if the player is on the ground
         if(OnGround) {
-            _wallStatus = WallStatus.none;
             _firstCling = true;
             _wallstickDistance = 0f;
             _climbable = true;
-            TiltPlayer(_wallStatus);
             if(!Sliding)
                 _currentSpeed = moveSpeed;
-            return;
         }
 
         //NOTE: Raycasts to check for left/right/front walls
@@ -569,7 +583,7 @@ public class PlayerController : MonoBehaviour {
         TiltPlayer(_wallStatus);
     }
     void TiltPlayer(WallStatus status) {
-        if(status == WallStatus.front) {
+        if(status == WallStatus.front && !OnGround) {
             if(_firstCling) {
                 _firstCling = false;
                 _wallstickY = transform.position.y;
@@ -577,6 +591,12 @@ public class PlayerController : MonoBehaviour {
             wallRunDistanceCheck(transform.position.y);
         }
         switch(status) {
+            case (WallStatus.none):
+                if(_sliding)
+                    targetRotation = Quaternion.Euler(slideTiltAngle, 0f, 0f);
+                else
+                    targetRotation = Quaternion.identity;
+                break;
             case (WallStatus.left):
                 targetRotation = Quaternion.Euler(0f, 0f, -wallRunTiltAngle);
                 break;
@@ -585,12 +605,6 @@ public class PlayerController : MonoBehaviour {
                 break;
             case (WallStatus.front):
                 targetRotation = Quaternion.Euler(lateralWallRunTiltAngle, 0f, 0f);
-                break;
-            case (WallStatus.none):
-                if(_sliding)
-                    targetRotation = Quaternion.Euler(slideTiltAngle, 0f, 0f);
-                else
-                    targetRotation = Quaternion.identity;
                 break;
         }
     }
@@ -626,5 +640,10 @@ public class PlayerController : MonoBehaviour {
         left = 1,
         right = 2,
         front = 3,
+    }
+    enum contactState {
+        ground = 0,
+        slope = 1,
+        wall = 2,
     }
 }
