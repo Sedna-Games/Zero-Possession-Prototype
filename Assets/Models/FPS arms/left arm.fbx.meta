@@ -4,9 +4,6 @@ ModelImporter:
   serializedVersion: 21202
   internalIDToNameTable:
   - first:
-      74: 4643303232588013147
-    second: A pose.L
-  - first:
       74: -8463677544425421406
     second: gun pick up.L
   - first:
@@ -45,9 +42,6 @@ ModelImporter:
   - first:
       74: -4463710585136058778
     second: left arm|idle no gun.L
-  - first:
-      74: 1441469122613360249
-    second: left arm|pistol no pose
   - first:
       74: -5028087885713860008
     second: left arm|shooting and throw away gun.L
