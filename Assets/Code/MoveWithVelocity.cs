@@ -1,29 +1,74 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using static UnityEngine.InputSystem.InputAction;
 
 public class MoveWithVelocity : MonoBehaviour
 {
-    [SerializeField] float movementScalar = 0.5f;
+    [System.Serializable]
+    public enum UpdateTime
+    {
+        Update = 0,
+        FixedUpdate,
+        LateUpdate,
+    }
+    [SerializeField] UpdateTime updateTime = UpdateTime.Update;
+    [SerializeField] float smoothing = 10.0f;
+    [SerializeField] float movementScalar = 1.0f;
+    [SerializeField] float mouseScalar = 1.0f;
 
     [Header("References")]
     [SerializeField] new Rigidbody rigidbody = null;
     [SerializeField] GameObject pCamera = null;
 
+    Vector3 _moveVec = Vector3.zero;
+    Vector3 _mouseVec = Vector3.zero;
     Vector3 _originalPos = Vector3.zero;
-    // Start is called before the first frame update
     void Start()
     {
         _originalPos = transform.localPosition;
     }
 
-    // Update is called once per frame
+    void Update()
+    {
+        if (updateTime == UpdateTime.Update)
+            Move(Time.deltaTime);
+    }
+
     void FixedUpdate()
     {
-        var dir = pCamera.transform.InverseTransformDirection(rigidbody.velocity) * movementScalar;
-        var vel = new Vector3(dir.x, dir.y);
+        if (updateTime == UpdateTime.FixedUpdate)
+            Move(Time.fixedDeltaTime);
+    }
 
-        transform.localPosition = _originalPos + vel*Time.fixedDeltaTime;
+    private void LateUpdate()
+    {
+        if (updateTime == UpdateTime.LateUpdate)
+            Move(Time.smoothDeltaTime);
+    }
+
+    void Move(float dt)
+    {
+        var dir = pCamera.transform.InverseTransformDirection(rigidbody.velocity);
+        dir.x = -dir.x;
+        dir.y = -dir.y;
+        _moveVec += dir;
+
+        var vel = _moveVec * movementScalar + _mouseVec * mouseScalar;
+        vel = _originalPos + vel * dt;
+
+        transform.localPosition = vel;
         transform.localPosition -= new Vector3(0.0f, 0.0f, transform.localPosition.z);
+
+        _moveVec -= _moveVec * Time.fixedDeltaTime * smoothing;
+        _mouseVec -= _mouseVec * Time.deltaTime * smoothing;
+    }
+
+    public void OnLook(InputValue value)
+    {
+        var temp = (Vector3)value.Get<Vector2>();
+        temp.x = -temp.x;
+        _mouseVec += temp;
     }
 }
