@@ -57,7 +57,25 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 286e68f72c452264b91efba7edb3fe13, type: 3}
       propertyPath: m_Name
-      value: 40x60_Building
+      value: 40x60_Building Variant
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 286e68f72c452264b91efba7edb3fe13, type: 3}
+--- !u!1 &4671716319601019104 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 286e68f72c452264b91efba7edb3fe13, type: 3}
+  m_PrefabInstance: {fileID: 5482056039836415409}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &5390765796038161083
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4671716319601019104}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.9999999, y: 1.9999999, z: 1.9999999}
+  m_Center: {x: 1, y: 0.99999994, z: 1}

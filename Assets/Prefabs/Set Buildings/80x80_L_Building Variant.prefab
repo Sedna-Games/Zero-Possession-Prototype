@@ -61,7 +61,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 6085424e342ef2f4bb228bf91ce9341b, type: 3}
       propertyPath: m_Name
-      value: 80x80_L_Building
+      value: 80x80_L_Building Variant
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6085424e342ef2f4bb228bf91ce9341b, type: 3}
+--- !u!1 &3982394833636979141 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 6085424e342ef2f4bb228bf91ce9341b, type: 3}
+  m_PrefabInstance: {fileID: 4288876901415865492}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &401186937897656350
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3982394833636979141}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5495902117074765545, guid: 6085424e342ef2f4bb228bf91ce9341b, type: 3}
