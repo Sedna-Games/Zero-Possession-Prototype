@@ -6,6 +6,7 @@ using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor.EditorTools;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour {
     [Header("Sounds")]
@@ -19,12 +20,14 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] FMODUnity.StudioEventEmitter landSound = null;
     [SerializeField, Range(0f, 1f), Tooltip("Percentage of max speed that the player needs to be going at to play moveFastSound (loop)")]
     float moveFastRate = 0.8f;
-    [SerializeField, Tooltip("Seconds between footstep noises, multiplied by inverse of percentage of max speed (faster = faster footsteps")]
+    [SerializeField, Min(0.01f), Tooltip("Seconds between footstep noises, multiplied by inverse of percentage of max speed (faster = faster footsteps)")]
     float footStepRate = 2.5f;
+    [SerializeField, Range(0.01f, 1f), Tooltip("Determines how strong the bias of the player's speed compared to the max speed is")]
+    float speedEffectOnFootsteps = 0.5f;
     [SerializeField, Tooltip("Amount of time spent in the air before landing can play its sound")]
     float airTimeForLanding = 0.2f;
     float percentOfMaxSpeed => _totalSpeed / maxSpeed;
-    float _footstepsTimer = 0f;
+    int _stepsToFootsteps = 0;
 
     [Header("Movement Settings"), Space(10)]
     [SerializeField] float gravity = -32f;
@@ -73,6 +76,16 @@ public class PlayerController : MonoBehaviour {
     float momentumStackingDifficulty = 1f;
     [SerializeField, Tooltip("The amount of time after going off an edge that you can still be considered grounded when jumping (doesn't eat air jump)")]
     float coyoteTime = 0.3f;
+    [Header("Lunge"), SerializeField, Tooltip("Lunge duration, adjust with lungeForce")]
+    float animationLock = 0.2f;
+    [SerializeField, Tooltip("Distance to the enemy to lunge towards")]
+    float distToEnemy = 8.0f;
+    [SerializeField, Tooltip("Lunge force towards the enemy")]
+    float lungeForce = 50f;
+    [SerializeField, Tooltip("Layers to check for lunge targets")]
+    LayerMask lungeMask = 7;
+    [SerializeField, Tooltip("Invokes a UnityEvent if the lunge is successful (i.e. flag to stop taking damage from Health script)")]
+    UnityEvent LungeEvent;
     float _currentSpeed, _currentClimbSpeed;
     float _totalSpeed => calculateMomentumStacks(_currentSpeed);
 
@@ -212,7 +225,6 @@ public class PlayerController : MonoBehaviour {
             input.dash = false;
         }
 
-        CameraRotation();
         ChangeFMODParameter();
     }
 
@@ -222,7 +234,6 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        _footstepsTimer += Time.fixedDeltaTime;
         UpdateState();
         AdjustVelocity();
         if(_desireJump) {
@@ -242,6 +253,7 @@ public class PlayerController : MonoBehaviour {
         ClearState();
     }
     private void LateUpdate() {
+        CameraRotation();
     }
 
     //NOTE: More control over gravity and removes sliding downwards on slopes
@@ -268,7 +280,8 @@ public class PlayerController : MonoBehaviour {
         _stepsSinceDash++;
         _stepsSinceGrounded++;
         if(OnGround || (wallContact && _wallStatus != WallStatus.none) || OnSlope) {
-            if(_footstepsTimer % ((1f - percentOfMaxSpeed) * footStepRate) <= 0.02f && _velocity.magnitude >= 0.1f && !Sliding)
+            _stepsToFootsteps++;
+            if(_stepsToFootsteps % (int)(Mathf.Max(0.1f, 1f - percentOfMaxSpeed) / speedEffectOnFootsteps * footStepRate / Time.fixedDeltaTime) == 0 && _velocity.magnitude >= 0.1f && !Sliding)
                 footSteps.Play();
             _dashPhase = 0;
             _coyoteTimer = 0f;
@@ -299,6 +312,7 @@ public class PlayerController : MonoBehaviour {
         }
         else {
             _coyoteTimer += Time.fixedDeltaTime;
+            _stepsToFootsteps = 0;
             _groundNormal = Vector3.up;
         }
         checkWallRun();
@@ -351,7 +365,6 @@ public class PlayerController : MonoBehaviour {
         else if(wallContact && (_wallStatus == WallStatus.front) && input.move.y > 0f && _climbable)
             _velocity = new Vector3(_velocity.x, _desiredVel.z, 0f);
 
-        Debug.Log(!OnGround);
         Vector3 capSpeed = new Vector3(_velocity.x, 0f, _velocity.z);
         _velocity = capSpeed.normalized * Mathf.Min(capSpeed.magnitude, maxSpeed) + transform.up * Mathf.Min(_velocity.y, maxSpeed);
         FMODUnity.RuntimeManager.StudioSystem.setParameterByName("player_speed", percentOfMaxSpeed);
@@ -461,6 +474,14 @@ public class PlayerController : MonoBehaviour {
         input.dash = false;
         StartCoroutine(DashDecelerate());
     }
+    public void Lunge() {
+        Debug.DrawRay(transform.position, CinemachineCameraTarget.transform.forward * distToEnemy, Color.red, animationLock);
+        if(Physics.Raycast(transform.position, CinemachineCameraTarget.transform.forward, distToEnemy, lungeMask)) {
+            rb.AddForce(CinemachineCameraTarget.transform.forward * lungeForce, ForceMode.Impulse);
+            _dashDuration = animationLock;
+            LungeEvent.Invoke();
+        }
+    }
     void Slide() {
         if(!_sliding && Sliding && _stepsSinceGrounded < 2) {
             slideSound.Play();
@@ -514,8 +535,8 @@ public class PlayerController : MonoBehaviour {
     private void CameraRotation() {
         // if there is an input
         if(input.look.sqrMagnitude >= _threshold) {
-            _cinemachineTargetPitch += input.look.y * RotationSpeed * Time.deltaTime;
-            _rotationVelocity = input.look.x * RotationSpeed * Time.deltaTime;
+            _cinemachineTargetPitch += input.look.y * RotationSpeed * Time.smoothDeltaTime;
+            _rotationVelocity = input.look.x * RotationSpeed * Time.smoothDeltaTime;
 
             // clamp our pitch rotation
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
@@ -528,10 +549,10 @@ public class PlayerController : MonoBehaviour {
 
         }
 
-        // Rotates player on x/z axis based on targetRotation, which tilts the camera when wall running or sliding
+        // Rotates a tilt transform on x/z axis based on targetRotation, which tilts the camera when wall running or sliding
         Quaternion newTarget = Quaternion.identity;
         newTarget.eulerAngles = new Vector3(targetRotation.eulerAngles.x, tiltRotater.rotation.eulerAngles.y, targetRotation.eulerAngles.z);
-        tiltRotater.rotation = Quaternion.Lerp(tiltRotater.rotation, newTarget, Time.deltaTime * tiltSpeed);
+        tiltRotater.rotation = Quaternion.Lerp(tiltRotater.rotation, newTarget, Time.smoothDeltaTime * tiltSpeed);
     }
     private static float ClampAngle(float lfAngle, float lfMin, float lfMax) {
         if(lfAngle < -360f) lfAngle += 360f;
