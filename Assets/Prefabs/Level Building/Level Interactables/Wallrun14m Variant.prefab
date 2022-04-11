@@ -55,10 +55,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8255936795694808935, guid: f47b49185b9447844ad5ced862eadc90, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -8006923710459302309, guid: f47b49185b9447844ad5ced862eadc90, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: f47b49185b9447844ad5ced862eadc90, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 9e3d11a452710464bad03b278d4a9362, type: 2}
+    - target: {fileID: -6014232382242948077, guid: f47b49185b9447844ad5ced862eadc90, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5656053503958588725, guid: f47b49185b9447844ad5ced862eadc90, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3351fad1efdd151489557463f6a0d90b, type: 2}
     - target: {fileID: -2193619051249935244, guid: f47b49185b9447844ad5ced862eadc90, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -70,6 +86,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: f47b49185b9447844ad5ced862eadc90, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6853111484454420283, guid: f47b49185b9447844ad5ced862eadc90, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8218352541718835037, guid: f47b49185b9447844ad5ced862eadc90, type: 3}
+      propertyPath: m_RootOrder
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f47b49185b9447844ad5ced862eadc90, type: 3}
@@ -94,8 +118,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 14.4071455, y: 7.6664634, z: 1.53262}
-  m_Center: {x: -6.9545865, y: 3.5487928, z: 0.5458009}
+  m_Size: {x: 14.4071455, y: 7.666464, z: 1.1677601}
+  m_Center: {x: -6.9545865, y: 3.5487928, z: 0.40026915}
 --- !u!1001 &7014981830323391876
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -113,7 +137,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6518031171350913729, guid: 7722a8e0e6687c742b98f510a7f173b1, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6518031171350913729, guid: 7722a8e0e6687c742b98f510a7f173b1, type: 3}
       propertyPath: m_LocalScale.x
