@@ -50,7 +50,7 @@ GameObject:
   - component: {fileID: 9081295424991655898}
   - component: {fileID: 9081295424991655893}
   m_Layer: 0
-  m_Name: Decal Projector
+  m_Name: Puddle Decal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
