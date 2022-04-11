@@ -7,6 +7,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Cloth
+    second: {fileID: 2100000, guid: d5e100661e5ae2440a2ec5381e05538f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Tiling Trim
     second: {fileID: 2100000, guid: e034f80b982f45d4ca16bb3d5a759a1b, type: 2}
   - first:
