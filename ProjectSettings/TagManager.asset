@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CinemachineTarget
   - Enemy
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -17,8 +18,8 @@ TagManager:
   - Enemy
   - WallRun
   - WallClimb
-  - 
-  - 
+  - BulletBlock
+  - Bullet
   - 
   - 
   - 

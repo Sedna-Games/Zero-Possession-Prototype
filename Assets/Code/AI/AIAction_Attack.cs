@@ -7,12 +7,14 @@ public class AIAction_Attack : AIAction
 {
     [SerializeField] float timeBetweenShotBursts = 0.5f;
     [SerializeField] Vector2 shotAmount = new Vector2(1.0f, 3.0f);
-    [SerializeField] Vector2 aimLeading = Vector2.zero;//0.15
-    [SerializeField] float turnSpeedWhileStandingStill = 2.5f;
+    [Range(0.0f,1.0f)]
+    [SerializeField] float aimLeading = 0.1f;
+    [Range(0.1f,1.0f)]
+    [SerializeField] float turnSpeed = 0.8f;
     [SerializeField] float distanceTolerance = 5.0f;
     [SerializeField] float angleTolerance = 0.1f;
     [Tooltip("The distance at which the AI will shit itself.")]
-    [SerializeField] float shitSelfDistance = 5.0f;
+    [SerializeField] float closeAimingDistance = 5.0f;
 
     [Header("References")]
     [SerializeField] WeaponManager weaponManager = null;
@@ -27,15 +29,27 @@ public class AIAction_Attack : AIAction
     {
         player = GameObject.Find("PlayerCapsule");
     }
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, closeAimingDistance);
+    }
+#endif
 
     public override void SelectAction()
     {
         if (!InsideIntersectionPoint(0, AISensor.PlayerPosition))
         {
-            var gunDir = AISensor.DirectionToPlayer(gun.transform.parent);
+            var gunDir = Vector3.zero;
+            if (AISensor.DistanceToPlayer(transform) <= closeAimingDistance)
+                gunDir = AISensor.DirectionToPlayerNextPosition(gun.transform,aimLeading);
+            else
+                gunDir = AISensor.DirectionToPlayerNextPosition(gun.transform.parent,aimLeading);
+            
             var newGunRotation = Quaternion.LookRotation(gunDir.normalized);
-            AIBlackboard.RotationHelper(gun.transform.parent.rotation, newGunRotation, gun.transform.parent, turnSpeedWhileStandingStill);
-            if (AISensor.DistanceToPlayer(transform) <= shitSelfDistance || Vector3.Angle(transform.forward, gun.transform.parent.forward) < angleTolerance)
+            AIBlackboard.RotationHelper(gun.transform.parent.rotation, newGunRotation, gun.transform.parent, turnSpeed);
+            
+            if (Vector3.Angle(transform.forward, gun.transform.parent.forward) < angleTolerance)
                 Fire();
         }
         else

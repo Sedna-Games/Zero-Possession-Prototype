@@ -828,7 +828,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1286624629323259725}
   - component: {fileID: 7332666708618891580}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Impact Environment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -848,7 +848,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3456738288683267027}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7332666708618891580
 MonoBehaviour:
@@ -1828,7 +1828,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3456738288169264933}
   - component: {fileID: 3456738288169264932}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Sound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1889,7 +1889,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3456738288683267027}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Katana
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1910,9 +1910,9 @@ Transform:
   m_Children:
   - {fileID: 3456738289779988160}
   - {fileID: 3456738288169264933}
-  - {fileID: 1293436826572281368}
   - {fileID: 2131835863772642666}
   - {fileID: 1286624629323259725}
+  - {fileID: 1293436826572281368}
   m_Father: {fileID: 3456738289072278876}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1927,7 +1927,7 @@ GameObject:
   - component: {fileID: 3456738289072278876}
   - component: {fileID: 3456738289072278874}
   - component: {fileID: 8529000085536501010}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Weapon Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1989,7 +1989,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cab985e02b6f41348a52f9dd2e7f02e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  updateTime: 1
+  updateTime: 2
   smoothing: 10
   movementScalar: 0.01
   mouseScalar: 0.001
@@ -2005,7 +2005,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3456738289779988160}
   - component: {fileID: 3456738289779988191}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Katana Parent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2083,9 +2083,9 @@ GameObject:
   - component: {fileID: 6438891075337788276}
   - component: {fileID: 8715953198751406760}
   - component: {fileID: 6432642453203674723}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: DamageDoer
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2098,12 +2098,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3472865037068640876}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.001, y: 1.021, z: 1.279}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 1.2804, z: 1.5934}
+  m_LocalScale: {x: 3.0683072, y: 2.0357633, z: 2.2059422}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3456738288683267027}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8894589431257721397
 MeshFilter:
@@ -2166,8 +2166,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.99, y: 1, z: 2.2240117}
-  m_Center: {x: -0.00006103517, y: 0, z: 0.47140247}
+  m_Size: {x: 1.0000005, y: 1.0000008, z: 1.000001}
+  m_Center: {x: 0.00012207031, y: 0, z: -0.00012207031}
 --- !u!114 &6432642453203674723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2180,6 +2180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57c3167b0f0381c4488da0b6370861e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  overrideAllEdgeCases: 0
   damage: 1
   OnDidDamage:
     m_PersistentCalls:
@@ -2212,6 +2213,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   canDoDamage: 1
+  continuousDamageDoer: 1
   ignoreTags:
   - Player
 --- !u!1 &3822802123335864951
@@ -2566,7 +2568,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1015
+    m_Bits: 2147483647
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -3177,6 +3179,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  canTakeDamage: 1
 --- !u!54 &4686300567443377658
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3192,7 +3195,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 3
+  m_CollisionDetection: 2
 --- !u!114 &5351056073792739144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9003,7 +9006,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2131835863772642666}
   - component: {fileID: 136228031006127486}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Impact Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9023,7 +9026,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3456738288683267027}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &136228031006127486
 MonoBehaviour:

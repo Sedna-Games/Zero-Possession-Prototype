@@ -57,9 +57,9 @@ public class AIBlackboard : MonoBehaviour
     public static void RotationHelper(Quaternion currentRotation, Quaternion newRotation, Transform t, float turnSpeed)
     {
         var quatAngle = Quaternion.Angle(currentRotation, newRotation);
-        if (quatAngle > 0.001f)
+        if (quatAngle > Mathf.Epsilon)
         {
-            var rot = Quaternion.Slerp(t.rotation, newRotation, 0.5f);
+            var rot = Quaternion.Slerp(t.rotation, newRotation, turnSpeed);
             t.rotation = rot;
         }
         else
