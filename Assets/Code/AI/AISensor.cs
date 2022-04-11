@@ -6,7 +6,9 @@ public class AISensor : MonoBehaviour
 {
     [SerializeField] string sensorName = "";
     static protected GameObject player = null;
-    static public Vector3 DirectionToPlayer(Transform transform) => player.transform.position - transform.position;
+    static public Vector3 DirectionToPlayer(Transform transform) => PlayerPosition - transform.position;
+    static public Vector3 DirectionToPlayerNextPosition(Transform transform,float velScalar)
+        => (PlayerPosition + player.GetComponent<Rigidbody>().velocity*velScalar) - transform.position;
     static public Vector3 PlayerPosition => player.transform.position;
     static public float DistanceToPlayer(Transform transform) => DirectionToPlayer(transform).magnitude;
 

@@ -10,6 +10,7 @@ public class Health : MonoBehaviour
     [SerializeField] protected float health;
 
     public UnityEvent OnTakeDamage, OnDie;
+    public bool canTakeDamage = true;
     private bool deathDone = false;
 
     protected float _maxHP = 0.0f;
@@ -32,6 +33,8 @@ public class Health : MonoBehaviour
     }
     public virtual void TakeDamage(float damage)
     {
+        if(!canTakeDamage)
+            return;
         OnTakeDamage.Invoke();
         health -= damage;
         if (health <= 0.5f)
