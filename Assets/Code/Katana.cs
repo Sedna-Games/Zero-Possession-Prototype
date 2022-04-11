@@ -20,7 +20,7 @@ public class Katana : Weapon
     {
         base.Attack();
         animator.SetTrigger("Attack");
-        var index = Random.Range(0, numPossibleSwings);
+        var index = Random.Range(0, numPossibleSwings + 1);
         if (index == _lastIndex)
             index = (index + 1) % numPossibleSwings;
         _lastIndex = index;

@@ -6,12 +6,13 @@ using UnityEngine.Events;
 public class KatanaStateBehaviour : StateMachineBehaviour
 {
 
-    static float _setAttackingThreshold = 1.0f;
+    static float _setAttackingThreshold = 0.75f;
     Katana _katana = null;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        //this is cursed and i hate it
         if (_katana == null)
-            _katana = animator.transform.parent.GetComponent<Katana>();
+            _katana = animator.transform.parent.parent.GetComponent<WeaponManager>().GetPrimaryWeapon() as Katana;
 
         _katana.SetAttacking(true);
     }

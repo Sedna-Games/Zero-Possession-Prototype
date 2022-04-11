@@ -70,4 +70,13 @@ public class WeaponManager : MonoBehaviour
         return secondaryWeapon.CanAttack();
     }
 
+    public Weapon GetPrimaryWeapon()
+    {
+        return primaryWeapon;
+    }
+    public Weapon GetSecondaryWeapon()
+    {
+        return secondaryWeapon;
+    }
+
 }
