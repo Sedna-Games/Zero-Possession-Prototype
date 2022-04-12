@@ -3483,6 +3483,9 @@ MonoBehaviour:
   dashMomentumDecay: 0.35
   momentumStackingDifficulty: 0.8
   coyoteTime: 0.2
+  reloadEvent:
+    m_PersistentCalls:
+      m_Calls: []
   animationLock: 0.2
   distToEnemy: 10
   lungeForce: 50
@@ -3527,6 +3530,7 @@ MonoBehaviour:
   TopClamp: 90
   BottomClamp: -90
   RotationSpeed: 1
+  stopDuration: 5
   rb: {fileID: 4686300567443377658}
   input: {fileID: 4686300567443377659}
   tiltRotater: {fileID: 2832586417400488506}
@@ -3696,6 +3700,7 @@ MonoBehaviour:
   jump: 0
   dash: 0
   slide: 0
+  reload: 0
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
@@ -10515,20 +10520,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3456738289072278876}
     - target: {fileID: 8205000318513924470, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
-      propertyPath: OnAttack.m_PersistentCalls.m_Calls.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8205000318513924470, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
-      propertyPath: OnFinishAttack.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8205000318513924470, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: OnAttack.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924470, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: OnAttack.m_PersistentCalls.m_Calls.Array.data[3].m_Mode
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8205000318513924470, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
+      propertyPath: OnAttack.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924470, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: OnAttack.m_PersistentCalls.m_Calls.Array.data[2].m_Target
@@ -10555,20 +10556,8 @@ PrefabInstance:
       value: SetActive
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924470, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
-      propertyPath: OnFinishAttack.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 8205000318513924470, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
-      propertyPath: OnFinishAttack.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 863918482071252649}
-    - target: {fileID: 8205000318513924470, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: OnFinishAttack.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8205000318513924470, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
-      propertyPath: OnFinishAttack.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetActive
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924470, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: OnAttack.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
@@ -10579,19 +10568,11 @@ PrefabInstance:
       value: UnityEngine.GameObject, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924470, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
-      propertyPath: OnFinishAttack.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UnityEngine.GameObject, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 8205000318513924470, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: OnAttack.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 8205000318513924470, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
       propertyPath: OnAttack.m_PersistentCalls.m_Calls.Array.data[3].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 8205000318513924470, guid: 6b673b559ea695c4bb6e0451624697a2, type: 3}
-      propertyPath: OnFinishAttack.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
