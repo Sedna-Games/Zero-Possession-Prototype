@@ -19,7 +19,6 @@ public class MoveWithVelocity : MonoBehaviour
     [SerializeField] float mouseScalar = 1.0f;
 
     [Header("References")]
-    [SerializeField] PlayerController playerController = null;
     [SerializeField] new Rigidbody rigidbody = null;
     [SerializeField] GameObject pCamera = null;
 
@@ -68,7 +67,7 @@ public class MoveWithVelocity : MonoBehaviour
 
     public void OnLook(InputValue value)
     {
-        var temp = (Vector3)value.Get<Vector2>()*playerController.RotationSpeed;
+        var temp = (Vector3)value.Get<Vector2>();
         temp.x = -temp.x;
         _mouseVec += temp;
     }

@@ -127,7 +127,7 @@ public class PlayerController : MonoBehaviour {
     [Tooltip("How far in degrees can you move the camera down")]
     [SerializeField] float BottomClamp = -90.0f;
     [Tooltip("Rotation speed of the character")]
-    [SerializeField] public float RotationSpeed = 1.0f;
+    [SerializeField] float RotationSpeed = 1.0f;
     [SerializeField, Tooltip("Number of seconds to wait at the start before updating the camera to prevent looking in a random direction at start")]
     float stopDuration = 5f;
     bool stopUpdateCamera = false;
@@ -158,9 +158,6 @@ public class PlayerController : MonoBehaviour {
     bool Climbing => wallContact && _wallStatus != WallStatus.none && !OnGround;
     bool LeftRight => _wallStatus == WallStatus.left || _wallStatus == WallStatus.right;
     bool InAir => !OnGround && !OnSlope && !Climbing;
-    public bool StandingStill => rb.velocity.magnitude <= Mathf.Epsilon;
-    public bool isRunning = false;
-
     WallStatus _wallStatus;
     contactState _lastContact;
     bool speedingCoroutine = false;
@@ -305,9 +302,6 @@ public class PlayerController : MonoBehaviour {
         _stepsSinceJump++;
         _stepsSinceDash++;
         _stepsSinceGrounded++;
-
-        isRunning = (OnGround || landing < (airTimeForLanding * 0.4f) / Time.fixedDeltaTime) && !Sliding && !Dashing && !StandingStill;
-
         if(OnGround || (wallContact && _wallStatus != WallStatus.none) || OnSlope) {
             _stepsToFootsteps++;
             if(_stepsToFootsteps % (int)(Mathf.Max(0.1f, 1f - percentOfMaxSpeed) / speedEffectOnFootsteps * footStepRate / Time.fixedDeltaTime) == 0 && _velocity.magnitude >= 0.1f && !Sliding)
@@ -693,7 +687,6 @@ public class PlayerController : MonoBehaviour {
             }
         }
     }
-
     enum WallStatus {
         none = 0,
         left = 1,

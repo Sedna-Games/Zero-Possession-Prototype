@@ -10,34 +10,24 @@ public class Weapon : MonoBehaviour
 
     [Tooltip("-1 for infinite")]
     [SerializeField] protected float cooldown = 0.0f;
-    [SerializeField] protected float finishedAttackCooldown = 0.5f;
 
     public UnityEvent OnAttack;
     public UnityEvent OnFinishAttack;
     public UnityEvent OnEnableWeapon;
     public UnityEvent OnDisableWeapon;
 
-    bool _bFinishAttack = true;
-    float _finishAttack = 0.0f;
     float _cooldown = 0.0f;
     protected bool _attacking = false;
 
     private void OnEnable()
     {
         _cooldown = cooldown;
-        _finishAttack = 0.0f;
         OnEnableWeapon.Invoke();
         IEnumerator Cooldown()
         {
             while (true)
             {
                 yield return new WaitForEndOfFrame();
-                _finishAttack += Time.deltaTime;
-                if (_finishAttack >= finishedAttackCooldown && !_bFinishAttack)
-                {
-                    _bFinishAttack = true;
-                    OnFinishAttack.Invoke();
-                }
                 _cooldown -= Time.deltaTime;
             }
         }
@@ -67,13 +57,13 @@ public class Weapon : MonoBehaviour
     public void SetAttacking(bool b)
     {
         _attacking = b;
+        if (!_attacking)
+            OnFinishAttack.Invoke();
     }
 
     protected void ResetCooldown()
     {
         _cooldown = cooldown;
-        _finishAttack = 0.0f;
-        _bFinishAttack = false;
     }
 
     public virtual void Attack()
