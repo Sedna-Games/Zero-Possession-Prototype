@@ -82,7 +82,9 @@ public class PlayerController : MonoBehaviour {
     [Header("Lunge"), SerializeField, Tooltip("Lunge duration, adjust with lungeForce")]
     float animationLock = 0.2f;
     [SerializeField, Tooltip("Distance to the enemy to lunge towards")]
-    float distToEnemy = 8.0f;
+    float lungeDist = 10.0f;
+    [SerializeField, Tooltip("Size of the lunge spherecast")]
+    float lungeRadius = 1.0f;
     [SerializeField, Tooltip("Lunge force towards the enemy")]
     float lungeForce = 50f;
     [SerializeField, Tooltip("Layers to check for lunge targets")]
@@ -166,8 +168,8 @@ public class PlayerController : MonoBehaviour {
     bool speedingCoroutine = false;
 
     //UI Stuff
-    public float dashFill => (1f - Mathf.Max(0f, _dashCooldown / dashCooldown));
-    public bool inLungeRange => Physics.Raycast(transform.position, CinemachineCameraTarget.transform.forward, distToEnemy, lungeMask);
+    public float dashFill => (1f - Mathf.Max(0f, _dashCooldown) / dashCooldown);
+    public bool inLungeRange => Physics.CapsuleCast(transform.position, transform.position, lungeRadius, CinemachineCameraTarget.transform.forward, lungeDist, lungeMask);
 
     private void Awake() {
         OnValidate();
@@ -208,13 +210,15 @@ public class PlayerController : MonoBehaviour {
         }
         return newSpeed;
     }
-    public void resetMomentumStacks() {
+    public void resetMomentumStacks(bool deathReset = false) {
         _jumpMomentumStacks = 0f;
         _dashMomentumStacks = 0f;
         _slideMomentumStacks = 0f;
-        _dashDuration = 0f;
-        _dashCooldown = dashCooldown;
-        _jumpPhase = 0;
+        if(deathReset) {
+            _dashDuration = 0f;
+            _dashCooldown = dashCooldown;
+            _jumpPhase = 0;
+        }
     }
     void addJumpMomentumStacks() {
         if(momentumStackingDifficulty == 0f || _jumpMomentumStacks == 0f)
@@ -246,7 +250,7 @@ public class PlayerController : MonoBehaviour {
             _desireDash = true;
             input.dash = false;
         }
-        if (input.reload) {
+        if(input.reload) {
             input.reload = false;
             reloadEvent.Invoke();
         }
@@ -504,7 +508,7 @@ public class PlayerController : MonoBehaviour {
         StartCoroutine(DashDecelerate());
     }
     public void Lunge() {
-        if(Physics.Raycast(transform.position, CinemachineCameraTarget.transform.forward, distToEnemy, lungeMask)) {
+        if(inLungeRange) {
             lungeCameraLock = true;
             rb.AddForce(CinemachineCameraTarget.transform.forward * lungeForce, ForceMode.Impulse);
             _dashDuration = animationLock;
@@ -568,12 +572,12 @@ public class PlayerController : MonoBehaviour {
         _slideMomentumStacks = 0f;
     }
     private void CameraRotation() {
-        if (stopUpdateCamera)
+        if(stopUpdateCamera)
             return;
         // if there is an input
         if(input.look.sqrMagnitude >= _threshold && !lungeCameraLock) {
-            _cinemachineTargetPitch += input.look.y * RotationSpeed * Time.smoothDeltaTime;
-            _rotationVelocity = input.look.x * RotationSpeed * Time.smoothDeltaTime;
+            _cinemachineTargetPitch += input.look.y * RotationSpeed * 0.1f;
+            _rotationVelocity = input.look.x * RotationSpeed * 0.1f;
 
             // clamp our pitch rotation
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
