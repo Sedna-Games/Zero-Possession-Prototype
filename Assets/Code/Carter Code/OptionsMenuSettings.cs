@@ -15,7 +15,7 @@ public class OptionsMenuSettings : MonoBehaviour
     [Tooltip("Value boxes")]
     [SerializeField] GameObject[] _graphicsSliderValues;
     [SerializeField] GameObject[] _graphicsSlider;
-    public static bool _speedToggle = false;
+    public static bool _speedToggle = true;
     public static bool _timerToggle = true;
     public static float _vSyncSetting = 0f;
     public static float _framerateCap = 0f;
@@ -63,6 +63,9 @@ public class OptionsMenuSettings : MonoBehaviour
         SetGraphicsValues();
         _graphicsSlider[0].GetComponent<Slider>().value = (_speedToggle ? 1.0f : 0.0f);
         _graphicsSlider[1].GetComponent<Slider>().value = (_timerToggle ? 1.0f : 0.0f);
+        _graphicsSlider[2].GetComponent<Slider>().value = (_vSyncSetting);
+        _graphicsSlider[3].GetComponent<Slider>().value = (_framerateCap);
+
     }
     void InitControls() {
         SetLookSensitivityValue(_lookSensitivity / 2);

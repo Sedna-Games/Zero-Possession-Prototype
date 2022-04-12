@@ -1222,6 +1222,8 @@ MonoBehaviour:
   _graphicsSliderValues:
   - {fileID: 7873039348875644329}
   - {fileID: 7873039349548355632}
+  - {fileID: 1492455489984177410}
+  - {fileID: 1382151683728088281}
   _graphicsSlider:
   - {fileID: 7873039348970835052}
   - {fileID: 7873039348606996818}

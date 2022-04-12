@@ -11,7 +11,7 @@ public class ButtonFunctions : MonoBehaviour
     [SerializeField] GameObject[] graphicsOverlays = null; //Speed and timer
     [SerializeField] GameObject player = null;
 
-    void Start() {
+    void Awake() {
         //This ensures whatever settings you had carry over between levels
         if (!(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "MainMenu")) {
             graphicsOverlays[0].SetActive(OptionsMenuSettings._speedToggle);
