@@ -20,24 +20,27 @@ public class Katana : Weapon
     {
         base.Attack();
         animator.SetTrigger("Attack");
-        var index = Random.Range(0,numPossibleSwings);
-        if(index == _lastIndex)
+        var index = Random.Range(0, numPossibleSwings + 1);
+        if (index == _lastIndex)
             index = (index + 1) % numPossibleSwings;
         _lastIndex = index;
-        animator.SetInteger("SwipeIndex",index);
-        
+        animator.SetInteger("SwipeIndex", index);
+
     }
 
-    public void SetAttacking(bool yn){
-            _attacking = yn;
-            damageDoer.canDoDamage = yn;
-        switch(yn){
+    public void SetAttacking(bool yn)
+    {
+        _attacking = yn;
+        damageDoer.gameObject.SetActive(yn);
+        damageDoer.canDoDamage = true;
+        switch (yn)
+        {
             case true:
-            particleSystems.ForEach((x) => x.Play());
-            break;
+                particleSystems.ForEach((x) => x.Play());
+                break;
             case false:
-            particleSystems.ForEach((x) => x.Stop());
-            break;
+                particleSystems.ForEach((x) => x.Stop());
+                break;
         }
     }
 }

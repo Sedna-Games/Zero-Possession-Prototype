@@ -6,7 +6,8 @@ using UnityEngine.AI;
 public class AIAction_RotateTowardsPlayer : AIAction
 {
     [SerializeField] Vector2 aimLeading = Vector2.zero;//0.15
-    [SerializeField] float turnSpeedWhileStandingStill = 2.5f;
+    [Range(0.1f,1.0f)]
+    [SerializeField] float turnSpeedWhileStandingStill = 0.8f;
 
     [Header("References")]
     [SerializeField] NavMeshAgent agent = null;

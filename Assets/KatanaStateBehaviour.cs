@@ -6,28 +6,25 @@ using UnityEngine.Events;
 public class KatanaStateBehaviour : StateMachineBehaviour
 {
 
-    static float _setAttackingThreshold = 0.4f;
-    float _attackingThreshold = 0.0f;
+    static float _setAttackingThreshold = 0.75f;
     Katana _katana = null;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        //this is cursed and i hate it
         if (_katana == null)
-            _katana = animator.transform.parent.GetComponent<Katana>();
+            _katana = animator.transform.parent.parent.GetComponent<WeaponManager>().GetPrimaryWeapon() as Katana;
 
         _katana.SetAttacking(true);
-        _attackingThreshold = 0.0f;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (_attackingThreshold >= _setAttackingThreshold)
+        if (stateInfo.normalizedTime >= _setAttackingThreshold)
         {
             _katana.SetAttacking(false);
             return;
         }
-
-        _attackingThreshold += stateInfo.normalizedTime;
     }
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {

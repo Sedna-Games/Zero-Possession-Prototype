@@ -63,6 +63,7 @@ public class Gun : Weapon
             bullet.transform.rotation = bep.transform.rotation;
             bullet.transform.position = bep.transform.position;
             bullet.GetComponentInChildren<TrailRenderer>().Clear();
+            bullet.GetComponentInChildren<DamageDoer>().canDoDamage = true;
             //bullet.transform.position = bullet.transform.position + bep.transform.TransformVector(Vector3.forward);
 
             var dir = bep.transform.position - tipOfGun.position;

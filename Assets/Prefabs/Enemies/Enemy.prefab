@@ -915,7 +915,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sensorName: 
   sightConeAngle: 360
-  sightConeLength: 30
+  sightConeLength: 90
   enemyTransform: {fileID: 1978715465394007411}
 --- !u!1 &5596079414266955188
 GameObject:
@@ -1017,11 +1017,11 @@ MonoBehaviour:
       m_Calls: []
   timeBetweenShotBursts: 0.5
   shotAmount: {x: 2, y: 5}
-  aimLeading: {x: 0, y: 0}
-  turnSpeedWhileStandingStill: 5
+  aimLeading: {x: 0.2, y: 0.5}
+  turnSpeed: 0.8
   distanceTolerance: 4
-  angleTolerance: 0.1
-  shitSelfDistance: 5
+  angleTolerance: 3
+  closeAimingDistance: 10
   weaponManager: {fileID: 1855179530}
   gun: {fileID: 9002189181457524399}
 --- !u!114 &4430420905824596353
