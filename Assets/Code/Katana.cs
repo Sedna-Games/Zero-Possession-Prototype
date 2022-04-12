@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class Katana : Weapon
 {
-    [SerializeField] int numPossibleSwings = 3;
     [Header("References")]
-    [SerializeField] Animator animator = null;
+    [SerializeField] ArmsAnimationManager armsAnimationManager = null;
     [SerializeField] DamageDoer damageDoer = null;
     [SerializeField] List<ParticleSystem> particleSystems = new List<ParticleSystem>();
     // Start is called before the first frame update
@@ -19,13 +18,7 @@ public class Katana : Weapon
     public override void Attack()
     {
         base.Attack();
-        animator.SetTrigger("Attack");
-        var index = Random.Range(0, numPossibleSwings + 1);
-        if (index == _lastIndex)
-            index = (index + 1) % numPossibleSwings;
-        _lastIndex = index;
-        animator.SetInteger("SwipeIndex", index);
-
+        armsAnimationManager.Attack();
     }
 
     public void SetAttacking(bool yn)
