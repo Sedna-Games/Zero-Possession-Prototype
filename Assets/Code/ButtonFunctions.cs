@@ -34,10 +34,11 @@ public class ButtonFunctions : MonoBehaviour
             FMODUnity.RuntimeManager.StudioSystem.setParameterByName("level_section", 0);
             ToLevelOne();
         }
-        /**
-        else if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level 2") {
+        
+        else if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Challenge 1") {
             ToLevelTwo();
         }
+        /**
         else if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level 3") {
             ToLevelThree();
         }
@@ -51,7 +52,7 @@ public class ButtonFunctions : MonoBehaviour
     }
     public void ToLevelTwo()
     {
-        //UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Level 1");
+        UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Challenge 1");
     }
     public void ToLevelThree()
     {
