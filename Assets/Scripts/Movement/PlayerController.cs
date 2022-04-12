@@ -124,7 +124,7 @@ public class PlayerController : MonoBehaviour {
     [Tooltip("How far in degrees can you move the camera down")]
     [SerializeField] float BottomClamp = -90.0f;
     [Tooltip("Rotation speed of the character")]
-    [SerializeField] float RotationSpeed = 1.0f;
+    [SerializeField] public float RotationSpeed = 1.0f;
     [SerializeField, Tooltip("Number of seconds to wait at the start before updating the camera to prevent looking in a random direction at start")]
     float stopDuration = 5f;
     bool stopUpdateCamera = false;
