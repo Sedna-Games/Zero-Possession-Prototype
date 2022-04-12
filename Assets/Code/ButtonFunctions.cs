@@ -8,6 +8,18 @@ public class ButtonFunctions : MonoBehaviour
     
     [Tooltip("First overlay MUST be the Pause Menu Options")]
     [SerializeField] GameObject[] pauseOverlays = null;
+    [SerializeField] GameObject[] graphicsOverlays = null; //Speed and timer
+    [SerializeField] GameObject player = null;
+
+    void Start() {
+        //This ensures whatever settings you had carry over between levels
+        if (!(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "MainMenu")) {
+            graphicsOverlays[0].SetActive(OptionsMenuSettings._speedToggle);
+            graphicsOverlays[1].SetActive(OptionsMenuSettings._timerToggle);
+
+            player.GetComponent<PlayerController>().RotationSpeed = OptionsMenuSettings._lookSensitivity;
+        }
+    }
 
     public void Resume()
     {
@@ -17,6 +29,8 @@ public class ButtonFunctions : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         FMODUnity.RuntimeManager.StudioSystem.setParameterByName("is_paused", 0.0f);
+        GraphicsOverlaysUpdate();
+        ControlsUpdate();
     }
 
     //Fixes bug with Esc and reopening leaving sub-menus open
@@ -39,7 +53,7 @@ public class ButtonFunctions : MonoBehaviour
             ToLevelTwo();
         }
         /**
-        else if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level 3") {
+        else if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Master 1") {
             ToLevelThree();
         }
         **/
@@ -49,14 +63,20 @@ public class ButtonFunctions : MonoBehaviour
     public void ToLevelOne()
     {
         UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Level 1");
+        GraphicsOverlaysUpdate();
+        ControlsUpdate();
     }
     public void ToLevelTwo()
     {
         UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Challenge 1");
+        GraphicsOverlaysUpdate();
+        ControlsUpdate();
     }
     public void ToLevelThree()
     {
-        //UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Level 1");
+        //UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Master 1");
+        GraphicsOverlaysUpdate();
+        ControlsUpdate();
     }
 
     public void QuitToMenu()
@@ -84,5 +104,13 @@ public class ButtonFunctions : MonoBehaviour
         }
         else
             Resume();
+    }
+
+    void GraphicsOverlaysUpdate() {
+        graphicsOverlays[0].SetActive(OptionsMenuSettings._speedToggle);
+        graphicsOverlays[1].SetActive(OptionsMenuSettings._timerToggle);
+    }
+    void ControlsUpdate() {
+        player.GetComponent<PlayerController>().RotationSpeed = OptionsMenuSettings._lookSensitivity;
     }
 }
