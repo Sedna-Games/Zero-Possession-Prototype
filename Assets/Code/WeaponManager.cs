@@ -10,6 +10,7 @@ public class WeaponManager : MonoBehaviour
     public UnityEvent OnChangeWeapon;
     public UnityEvent OnBeginAttack;
     public UnityEvent OnFinishAttack;
+    public UnityEvent OnActivateSecondary;
 
     [Header("References")]
     [SerializeField] Weapon primaryWeapon = null;
@@ -59,6 +60,7 @@ public class WeaponManager : MonoBehaviour
     public void ActivateSecondaryWeapon()
     {
         secondaryWeapon.gameObject.SetActive(true);
+        OnActivateSecondary.Invoke();
     }
 
     public bool CanPrimaryAttack()
