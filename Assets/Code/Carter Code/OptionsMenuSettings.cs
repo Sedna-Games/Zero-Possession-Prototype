@@ -17,13 +17,15 @@ public class OptionsMenuSettings : MonoBehaviour
     [SerializeField] GameObject[] _graphicsSlider;
     public static bool _speedToggle = false;
     public static bool _timerToggle = true;
+    public static float _vSyncSetting = 0f;
+    public static float _framerateCap = 0f;
 
     [Header("Controls Settings")]
     [Tooltip("Value boxes")]
     [SerializeField] GameObject[] _controlsSliderValues;
     [SerializeField] GameObject[] _controlsSlider;
     public static float _lookSensitivity = 1.0f;
-    
+
     void Start()
     {
         //Sets the initial values of the settings
@@ -56,6 +58,8 @@ public class OptionsMenuSettings : MonoBehaviour
     void InitGraphics() {
         SetSpeedCounter(_speedToggle ? 1.0f : 0.0f);
         SetTimerToggle(_timerToggle ? 1.0f : 0.0f);
+        SetVSync(_vSyncSetting);
+        SetFPSLimit(_framerateCap);
         SetGraphicsValues();
         _graphicsSlider[0].GetComponent<Slider>().value = (_speedToggle ? 1.0f : 0.0f);
         _graphicsSlider[1].GetComponent<Slider>().value = (_timerToggle ? 1.0f : 0.0f);
@@ -109,14 +113,14 @@ public class OptionsMenuSettings : MonoBehaviour
     }
     void SetAudioValues() {
         //set the values of the text fields as the values of the parameters
-        
+
         float _speakerOption = GetParameterValue("speaker_options");
         string _speakerVal = "";
         switch (_speakerOption) {
-            case 0: 
+            case 0:
                 _speakerVal = "Mono";
                 break;
-            case 1: 
+            case 1:
                 _speakerVal = "Stereo";
                 break;
             case 2:
@@ -145,12 +149,46 @@ public class OptionsMenuSettings : MonoBehaviour
         else if (_timerTogg == 1.0f)
             _timerToggle = true;
     }
+    public void SetVSync (float vsync) {
+        _vSyncSetting = vsync == 0f ? 0 : 1;
+        QualitySettings.vSyncCount = vsync == 0f ? 0 : 1;
+        _graphicsSliderValues[2].GetComponent<TMPro.TMP_Text>().text = vsync == 0 ? "OFF" : "ON";
+    }
+    public void SetFPSLimit(float _fpsLimit) {
+        switch (_fpsLimit) {
+            case 0f:
+                Application.targetFrameRate = -1;
+                _framerateCap = 0;
+                _graphicsSliderValues[3].GetComponent<TMPro.TMP_Text>().text = "Unlimited";
+                break;
+            case 1f:
+                Application.targetFrameRate = 60;
+                _framerateCap = 1;
+                _graphicsSliderValues[3].GetComponent<TMPro.TMP_Text>().text = "60 FPS";
+                break;
+            case 2f:
+                Application.targetFrameRate = 120;
+                _framerateCap = 2;
+                _graphicsSliderValues[3].GetComponent<TMPro.TMP_Text>().text = "120 FPS";
+                break;
+            case 3f:
+                Application.targetFrameRate = 144;
+                _framerateCap = 3;
+                _graphicsSliderValues[3].GetComponent<TMPro.TMP_Text>().text = "144 FPS";
+                break;
+            case 4f:
+                Application.targetFrameRate = 240;
+                _framerateCap = 4;
+                _graphicsSliderValues[3].GetComponent<TMPro.TMP_Text>().text = "240 FPS";
+                break;
+        }
+    }
     void SetGraphicsValues() {
         //Speed counter toggle
         string _speedToggleVal = "";
         _speedToggleVal = (_speedToggle ? "ON" : "OFF");
         _graphicsSliderValues[0].GetComponent<TMPro.TMP_Text>().text = _speedToggleVal;
-        
+
         //Timer toggle
         string _timerToggleVal = "";
         _timerToggleVal = (_timerToggle ? "ON" : "OFF");
