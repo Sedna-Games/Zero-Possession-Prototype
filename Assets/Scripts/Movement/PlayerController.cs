@@ -176,6 +176,12 @@ public class PlayerController : MonoBehaviour {
     private void OnEnable() {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        IEnumerator stopCameraFromUpdatingAtStart() {
+            stopUpdateCamera = true;
+            yield return new WaitForSecondsRealtime(stopDuration);
+            stopUpdateCamera = false;
+        }
+        StartCoroutine(stopCameraFromUpdatingAtStart());
     }
 
     void OnValidate() {
@@ -184,12 +190,6 @@ public class PlayerController : MonoBehaviour {
         _minSlopeDotProduct = Mathf.Cos(maxSlopeAngle * Mathf.Deg2Rad);
         _currentSpeed = moveSpeed;
         _currentClimbSpeed = climbSpeed;
-        IEnumerator stopCameraFromUpdatingAtStart() {
-            stopUpdateCamera = true;
-            yield return new WaitForSecondsRealtime(stopDuration);
-            stopUpdateCamera = false;
-        }
-        StartCoroutine(stopCameraFromUpdatingAtStart());
     }
     IEnumerator PlaySpeedSounds() {
         moveFastSound.Play();
@@ -213,7 +213,7 @@ public class PlayerController : MonoBehaviour {
         _dashMomentumStacks = 0f;
         _slideMomentumStacks = 0f;
         _dashDuration = 0f;
-        _dashCooldown = 0f;
+        _dashCooldown = dashCooldown;
         _jumpPhase = 0;
     }
     void addJumpMomentumStacks() {
