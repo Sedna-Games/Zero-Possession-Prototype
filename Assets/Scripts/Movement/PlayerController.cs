@@ -86,6 +86,7 @@ public class PlayerController : MonoBehaviour {
     LayerMask lungeMask = 7;
     [SerializeField, Tooltip("Invokes a UnityEvent if the lunge is successful (i.e. flag to stop taking damage from Health script)")]
     UnityEvent LungeEvent;
+    bool lungeCameraLock = false;
     float _currentSpeed, _currentClimbSpeed;
     float _totalSpeed => calculateMomentumStacks(_currentSpeed);
 
@@ -123,10 +124,11 @@ public class PlayerController : MonoBehaviour {
     [Tooltip("How far in degrees can you move the camera down")]
     [SerializeField] float BottomClamp = -90.0f;
     [Tooltip("Rotation speed of the character")]
-    [SerializeField] float RotationSpeed = 1.0f;
+    [SerializeField] public float RotationSpeed = 1.0f;
+    [SerializeField, Tooltip("Number of seconds to wait at the start before updating the camera to prevent looking in a random direction at start")]
+    float stopDuration = 5f;
+    bool stopUpdateCamera = false;
     private float _rotationVelocity;
-
-    // cinemachine
     private float _cinemachineTargetPitch;
     private const float _threshold = 0.01f;
 
@@ -156,6 +158,11 @@ public class PlayerController : MonoBehaviour {
     WallStatus _wallStatus;
     contactState _lastContact;
     bool speedingCoroutine = false;
+
+    //UI Stuff
+    public float dashFill => (1f - Mathf.Max(0f, _dashCooldown / dashCooldown));
+    public bool inLungeRange => Physics.Raycast(transform.position, CinemachineCameraTarget.transform.forward, distToEnemy, lungeMask);
+
     private void Awake() {
         OnValidate();
     }
@@ -171,6 +178,12 @@ public class PlayerController : MonoBehaviour {
         _minSlopeDotProduct = Mathf.Cos(maxSlopeAngle * Mathf.Deg2Rad);
         _currentSpeed = moveSpeed;
         _currentClimbSpeed = climbSpeed;
+        IEnumerator stopCameraFromUpdatingAtStart() {
+            stopUpdateCamera = true;
+            yield return new WaitForSecondsRealtime(stopDuration);
+            stopUpdateCamera = false;
+        }
+        StartCoroutine(stopCameraFromUpdatingAtStart());
     }
     IEnumerator PlaySpeedSounds() {
         moveFastSound.Play();
@@ -412,10 +425,9 @@ public class PlayerController : MonoBehaviour {
             return;
         }
         _wallStickTimer = wallStickDelay;
-        _coyoteTimer = coyoteTime + 1f;
         _stepsSinceJump = 0;
         float jumpSpeed = Mathf.Sqrt(-2f * Physics.gravity.y * jumpHeight);
-        if(LeftRight || _lastContact == contactState.wall) {
+        if(LeftRight || (_lastContact == contactState.wall && _coyoteTimer <= coyoteTime)) {
             jumpDirection = (jumpDirection + tiltRotater.up).normalized;
             jumpDirection = new Vector3(jumpDirection.x * wallJumpMultiplier, jumpDirection.y * wallJumpMultiplier / 2f, jumpDirection.z * wallJumpMultiplier);
             StartCoroutine(DisableMovement());
@@ -425,6 +437,7 @@ public class PlayerController : MonoBehaviour {
             jumpDirection = new Vector3(jumpDirection.x * wallJumpMultiplier / 2f, jumpDirection.y * wallJumpMultiplier / 2f, jumpDirection.z * wallJumpMultiplier / 2f);
             StartCoroutine(DisableMovement());
         }
+        _coyoteTimer = coyoteTime + 1f;
         Vector3 momentumBoost = _velocity;
         momentumBoost.y = 0f;
         _velocity = momentumBoost;
@@ -475,11 +488,17 @@ public class PlayerController : MonoBehaviour {
         StartCoroutine(DashDecelerate());
     }
     public void Lunge() {
-        Debug.DrawRay(transform.position, CinemachineCameraTarget.transform.forward * distToEnemy, Color.red, animationLock);
         if(Physics.Raycast(transform.position, CinemachineCameraTarget.transform.forward, distToEnemy, lungeMask)) {
+            lungeCameraLock = true;
             rb.AddForce(CinemachineCameraTarget.transform.forward * lungeForce, ForceMode.Impulse);
             _dashDuration = animationLock;
             LungeEvent.Invoke();
+
+            IEnumerator WaitForLunge() {
+                yield return new WaitForSeconds(animationLock);
+                lungeCameraLock = false;
+            }
+            StartCoroutine(WaitForLunge());
         }
     }
     void Slide() {
@@ -533,8 +552,10 @@ public class PlayerController : MonoBehaviour {
         _slideMomentumStacks = 0f;
     }
     private void CameraRotation() {
+        if (stopUpdateCamera)
+            return;
         // if there is an input
-        if(input.look.sqrMagnitude >= _threshold) {
+        if(input.look.sqrMagnitude >= _threshold && !lungeCameraLock) {
             _cinemachineTargetPitch += input.look.y * RotationSpeed * Time.smoothDeltaTime;
             _rotationVelocity = input.look.x * RotationSpeed * Time.smoothDeltaTime;
 
