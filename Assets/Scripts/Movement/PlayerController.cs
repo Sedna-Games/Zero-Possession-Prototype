@@ -575,9 +575,9 @@ public class PlayerController : MonoBehaviour {
         if(stopUpdateCamera)
             return;
         // if there is an input
-        if(input.look.sqrMagnitude >= _threshold && !lungeCameraLock) {
-            _cinemachineTargetPitch += input.look.y * RotationSpeed * 0.1f;
-            _rotationVelocity = input.look.x * RotationSpeed * 0.1f;
+        if(input.look.sqrMagnitude >= _threshold && !lungeCameraLock && Time.timeScale != 0) {
+            _cinemachineTargetPitch += input.look.y * RotationSpeed * 0.01f;
+            _rotationVelocity = input.look.x * RotationSpeed * 0.01f;
 
             // clamp our pitch rotation
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
