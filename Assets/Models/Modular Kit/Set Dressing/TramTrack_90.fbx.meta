@@ -18,7 +18,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: DysonFrame
-    second: {fileID: 2100000, guid: f3062a5da25310f4897554f2f300c44d, type: 2}
+    second: {fileID: 2100000, guid: 733c843da26b1cd429f11a33acf56cc5, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
