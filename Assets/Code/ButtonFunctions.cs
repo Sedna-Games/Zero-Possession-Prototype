@@ -63,20 +63,14 @@ public class ButtonFunctions : MonoBehaviour
     public void ToLevelOne()
     {
         UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Level 1");
-        GraphicsOverlaysUpdate();
-        ControlsUpdate();
     }
     public void ToLevelTwo()
     {
         UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Challenge 1");
-        GraphicsOverlaysUpdate();
-        ControlsUpdate();
     }
     public void ToLevelThree()
     {
         //UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Master 1");
-        GraphicsOverlaysUpdate();
-        ControlsUpdate();
     }
 
     public void QuitToMenu()
