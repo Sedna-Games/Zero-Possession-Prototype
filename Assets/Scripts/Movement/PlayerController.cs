@@ -76,6 +76,9 @@ public class PlayerController : MonoBehaviour {
     float momentumStackingDifficulty = 1f;
     [SerializeField, Tooltip("The amount of time after going off an edge that you can still be considered grounded when jumping (doesn't eat air jump)")]
     float coyoteTime = 0.3f;
+
+    [SerializeField, Tooltip("Invokes a UnityEvent that resets the player")]
+    UnityEvent reloadEvent;
     [Header("Lunge"), SerializeField, Tooltip("Lunge duration, adjust with lungeForce")]
     float animationLock = 0.2f;
     [SerializeField, Tooltip("Distance to the enemy to lunge towards")]
@@ -206,6 +209,9 @@ public class PlayerController : MonoBehaviour {
         _jumpMomentumStacks = 0f;
         _dashMomentumStacks = 0f;
         _slideMomentumStacks = 0f;
+        _dashDuration = 0f;
+        _dashCooldown = 0f;
+        _jumpPhase = 0;
     }
     void addJumpMomentumStacks() {
         if(momentumStackingDifficulty == 0f || _jumpMomentumStacks == 0f)
@@ -236,6 +242,10 @@ public class PlayerController : MonoBehaviour {
         if(input.dash) {
             _desireDash = true;
             input.dash = false;
+        }
+        if (input.reload) {
+            input.reload = false;
+            reloadEvent.Invoke();
         }
 
         ChangeFMODParameter();
