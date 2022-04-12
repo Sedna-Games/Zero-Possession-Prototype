@@ -76,6 +76,9 @@ public class PlayerController : MonoBehaviour {
     float momentumStackingDifficulty = 1f;
     [SerializeField, Tooltip("The amount of time after going off an edge that you can still be considered grounded when jumping (doesn't eat air jump)")]
     float coyoteTime = 0.3f;
+
+    [SerializeField, Tooltip("Invokes a UnityEvent that resets the player")]
+    UnityEvent reloadEvent;
     [Header("Lunge"), SerializeField, Tooltip("Lunge duration, adjust with lungeForce")]
     float animationLock = 0.2f;
     [SerializeField, Tooltip("Distance to the enemy to lunge towards")]
@@ -155,6 +158,9 @@ public class PlayerController : MonoBehaviour {
     bool Climbing => wallContact && _wallStatus != WallStatus.none && !OnGround;
     bool LeftRight => _wallStatus == WallStatus.left || _wallStatus == WallStatus.right;
     bool InAir => !OnGround && !OnSlope && !Climbing;
+    public bool StandingStill => rb.velocity.magnitude <= Mathf.Epsilon;
+    public bool isRunning = false;
+
     WallStatus _wallStatus;
     contactState _lastContact;
     bool speedingCoroutine = false;
@@ -170,6 +176,12 @@ public class PlayerController : MonoBehaviour {
     private void OnEnable() {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        IEnumerator stopCameraFromUpdatingAtStart() {
+            stopUpdateCamera = true;
+            yield return new WaitForSecondsRealtime(stopDuration);
+            stopUpdateCamera = false;
+        }
+        StartCoroutine(stopCameraFromUpdatingAtStart());
     }
 
     void OnValidate() {
@@ -178,12 +190,6 @@ public class PlayerController : MonoBehaviour {
         _minSlopeDotProduct = Mathf.Cos(maxSlopeAngle * Mathf.Deg2Rad);
         _currentSpeed = moveSpeed;
         _currentClimbSpeed = climbSpeed;
-        IEnumerator stopCameraFromUpdatingAtStart() {
-            stopUpdateCamera = true;
-            yield return new WaitForSecondsRealtime(stopDuration);
-            stopUpdateCamera = false;
-        }
-        StartCoroutine(stopCameraFromUpdatingAtStart());
     }
     IEnumerator PlaySpeedSounds() {
         moveFastSound.Play();
@@ -206,6 +212,9 @@ public class PlayerController : MonoBehaviour {
         _jumpMomentumStacks = 0f;
         _dashMomentumStacks = 0f;
         _slideMomentumStacks = 0f;
+        _dashDuration = 0f;
+        _dashCooldown = dashCooldown;
+        _jumpPhase = 0;
     }
     void addJumpMomentumStacks() {
         if(momentumStackingDifficulty == 0f || _jumpMomentumStacks == 0f)
@@ -236,6 +245,10 @@ public class PlayerController : MonoBehaviour {
         if(input.dash) {
             _desireDash = true;
             input.dash = false;
+        }
+        if (input.reload) {
+            input.reload = false;
+            reloadEvent.Invoke();
         }
 
         ChangeFMODParameter();
@@ -292,6 +305,9 @@ public class PlayerController : MonoBehaviour {
         _stepsSinceJump++;
         _stepsSinceDash++;
         _stepsSinceGrounded++;
+
+        isRunning = (OnGround || landing < (airTimeForLanding * 0.4f) / Time.fixedDeltaTime) && !Sliding && !Dashing && !StandingStill;
+
         if(OnGround || (wallContact && _wallStatus != WallStatus.none) || OnSlope) {
             _stepsToFootsteps++;
             if(_stepsToFootsteps % (int)(Mathf.Max(0.1f, 1f - percentOfMaxSpeed) / speedEffectOnFootsteps * footStepRate / Time.fixedDeltaTime) == 0 && _velocity.magnitude >= 0.1f && !Sliding)
@@ -677,6 +693,7 @@ public class PlayerController : MonoBehaviour {
             }
         }
     }
+
     enum WallStatus {
         none = 0,
         left = 1,

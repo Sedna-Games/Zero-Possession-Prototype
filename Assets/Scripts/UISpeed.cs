@@ -17,6 +17,6 @@ public class UISpeed : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        tmpUI.text = "Speed: " + rigidBody.velocity.magnitude.ToString("#") + " m/s";
+        tmpUI.text = rigidBody.velocity.magnitude.ToString("#") + " m/s";
     }
 }
