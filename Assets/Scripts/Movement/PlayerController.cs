@@ -107,6 +107,8 @@ public class PlayerController : MonoBehaviour {
 
     [SerializeField, Tooltip("Distance for ground/wall raycasts"), Min(0f)]
     float probeDistance = 1f;
+    [SerializeField, Tooltip("Maximum speed that snapping will work")]
+    float maxSnapSpeed = 25f;
     [SerializeField, Range(0f, 90f)]
     float maxGroundAngle = 10.0f, maxSlopeAngle = 80.0f;
     [SerializeField, Range(90f, 180f)]
@@ -224,6 +226,51 @@ public class PlayerController : MonoBehaviour {
     public void lockMovement(bool yn) {
         _inCutscene = yn;
     }
+
+    bool SnapToGround() {
+        RaycastHit hit;
+        if(_stepsSinceGrounded > 1 || _stepsSinceJump <= 2)
+            return false;
+        float speed = _velocity.magnitude;
+        if(speed > maxSnapSpeed)
+            return false;
+        LayerMask masks = groundMask | climbMask | slopeMask;
+        if(!Physics.Raycast(transform.position, Vector3.down, out hit, probeDistance, masks))
+            return false;
+        float contactDotProduct = 0f;
+        switch(_lastContact) {
+            case contactState.ground:
+                contactDotProduct = _minGroundDotProduct;
+                break;
+            case contactState.slope:
+                contactDotProduct = _minSlopeDotProduct;
+                break;
+            case contactState.wall:
+                contactDotProduct = _minClimbDotProduct;
+                break;
+        }
+        if(hit.normal.y < contactDotProduct)
+            return false;
+
+        switch(_lastContact) {
+            case contactState.ground:
+                _groundContactCount = 1;
+                _groundNormal = hit.normal;
+                break;
+            case contactState.slope:
+                _slopeContactCount = 1;
+                _slopeNormal = hit.normal;
+                break;
+            case contactState.wall:
+                _climbContactCount = 1;
+                _climbNormal = hit.normal;
+                break;
+        }
+        float dot = Vector3.Dot(_velocity, hit.normal);
+        if(dot > 0f)
+            _velocity = (_velocity - hit.normal * dot).normalized * speed;
+        return true;
+    }
     void addJumpMomentumStacks() {
         if(momentumStackingDifficulty == 0f || _jumpMomentumStacks == 0f)
             _jumpMomentumStacks += 1f;
@@ -311,7 +358,7 @@ public class PlayerController : MonoBehaviour {
 
         isRunning = (OnGround || landing < (airTimeForLanding * 0.4f) / Time.fixedDeltaTime) && !Sliding && !Dashing && !StandingStill;
 
-        if(OnGround || (wallContact && _wallStatus != WallStatus.none) || OnSlope) {
+        if(OnGround || SnapToGround() || (wallContact && _wallStatus != WallStatus.none) || OnSlope) {
             _stepsToFootsteps++;
             if(_stepsToFootsteps % (int)(Mathf.Max(0.1f, 1f - percentOfMaxSpeed) / speedEffectOnFootsteps * footStepRate / Time.fixedDeltaTime) == 0 && _velocity.magnitude >= 0.1f && !Sliding)
                 footSteps.Play();
