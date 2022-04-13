@@ -2450,7 +2450,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   canDoDamage: 1
-  continuousDamageDoer: 1
+  continuousDamageDoer: 0
   ignoreTags:
   - Player
   playerRigidbody: {fileID: 4686300567443377658}
@@ -3809,7 +3809,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.7776382, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
     Aperture: 16
