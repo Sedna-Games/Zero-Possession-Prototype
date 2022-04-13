@@ -5400,7 +5400,7 @@ PrefabInstance:
     - target: {fileID: 7140662592289251290, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 16e3b1f864ff5a04399649a6b790c914, type: 3}
+      objectReference: {fileID: 21300000, guid: ccf2b89f1b597104bb027c2c900c2b3e, type: 3}
     - target: {fileID: 8214750001155681530, guid: 7075ffa581075ae4d98ab08e10533d83, type: 3}
       propertyPath: m_text
       value: Dhruva Guruprsad
