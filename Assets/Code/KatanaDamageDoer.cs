@@ -29,6 +29,7 @@ public class KatanaDamageDoer : DamageDoer
             ddRb.velocity = playerRigidbody.transform.forward * mag;
 
             dd.OverrideIgnoreTags();
+            dd.canDoDamage = true;
         }
 
     }

@@ -7,9 +7,9 @@ public class AIAction_Attack : AIAction
 {
     [SerializeField] float timeBetweenShotBursts = 0.5f;
     [SerializeField] Vector2 shotAmount = new Vector2(1.0f, 3.0f);
-    [Range(0.0f,1.0f)]
+    [Range(0.0f, 1.0f)]
     [SerializeField] float aimLeading = 0.1f;
-    [Range(0.1f,1.0f)]
+    [Range(0.1f, 1.0f)]
     [SerializeField] float turnSpeed = 0.8f;
     [SerializeField] float distanceTolerance = 5.0f;
     [SerializeField] float angleTolerance = 0.1f;
@@ -42,13 +42,13 @@ public class AIAction_Attack : AIAction
         {
             var gunDir = Vector3.zero;
             if (AISensor.DistanceToPlayer(transform) <= closeAimingDistance)
-                gunDir = AISensor.DirectionToPlayerNextPosition(gun.transform,aimLeading);
+                gunDir = AISensor.DirectionToPlayerNextPosition(gun.transform, aimLeading);
             else
-                gunDir = AISensor.DirectionToPlayerNextPosition(gun.transform.parent,aimLeading);
-            
+                gunDir = AISensor.DirectionToPlayerNextPosition(gun.transform.parent, aimLeading);
+
             var newGunRotation = Quaternion.LookRotation(gunDir.normalized);
             AIBlackboard.RotationHelper(gun.transform.parent.rotation, newGunRotation, gun.transform.parent, turnSpeed);
-            
+
             if (Vector3.Angle(transform.forward, gun.transform.parent.forward) < angleTolerance)
                 Fire();
         }
