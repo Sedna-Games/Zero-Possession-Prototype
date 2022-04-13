@@ -52,7 +52,7 @@ public class ArmsAnimationManager : MonoBehaviour
 
     public void Shoot()
     {
-        leftArm.SetBool("Shoot",true);
+        leftArm.SetBool("Shoot", true);
     }
 
 
@@ -66,5 +66,10 @@ public class ArmsAnimationManager : MonoBehaviour
     {
         rightArm.SetBool("Run", yn);
         leftArm.SetBool("Run", yn);
+    }
+
+    public void DiedWithGun()
+    {
+        leftArm.SetTrigger("DiedWithGun");
     }
 }
