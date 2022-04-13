@@ -51,6 +51,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: e65d43eed3225ba44be1cf9780e72e59, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 49d7ec29b0df9b24ba94472352c7cb2b, type: 2}
     - target: {fileID: 919132149155446097, guid: e65d43eed3225ba44be1cf9780e72e59, type: 3}
       propertyPath: m_Name
       value: 40x40_Building Variant
@@ -73,5 +77,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.9999999, y: 1.9999999, z: 1.9999999}
-  m_Center: {x: 1, y: 0.99999994, z: 1}
+  m_Size: {x: 40, y: 150, z: 40}
+  m_Center: {x: 20, y: 75, z: 20}

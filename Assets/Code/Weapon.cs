@@ -12,6 +12,9 @@ public class Weapon : MonoBehaviour
     [SerializeField] protected float cooldown = 0.0f;
     [SerializeField] protected float finishedAttackCooldown = 0.5f;
 
+    [Tooltip("Adds another check for CanAttack() to pass or fail")]
+    [SerializeField] protected bool _canAttackOverride = true;
+
     public UnityEvent OnAttack;
     public UnityEvent OnFinishAttack;
     public UnityEvent OnEnableWeapon;
@@ -61,7 +64,12 @@ public class Weapon : MonoBehaviour
 
     public bool CanAttack()
     {
-        return (!_attacking && _cooldown < 0.0f);
+        return (!_attacking && _cooldown < 0.0f && _canAttackOverride);
+    }
+
+    public void SetCanAttackOverride(bool yn)
+    {
+        _canAttackOverride = yn;
     }
 
     public void SetAttacking(bool b)

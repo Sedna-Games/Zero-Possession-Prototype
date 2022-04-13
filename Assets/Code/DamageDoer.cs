@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 public class DamageDoer : MonoBehaviour
 {
+    public string ddName = "";
     public bool overrideAllEdgeCases = false;
     public float damage = 1.0f;
     public UnityEvent OnDidDamage;
@@ -13,7 +14,7 @@ public class DamageDoer : MonoBehaviour
     [SerializeField] bool continuousDamageDoer = true;
     public List<string> ignoreTags = new List<string>();
 
-    bool _overrideIgnoreTags = false;
+    protected bool _overrideIgnoreTags = false;
 
     private void OnEnable()
     {
@@ -34,7 +35,7 @@ public class DamageDoer : MonoBehaviour
         BeginDoDamage(other);
     }
 
-    void BeginDoDamage(Collider other)
+    protected virtual void BeginDoDamage(Collider other)
     {
         if (overrideAllEdgeCases)
         {
@@ -64,7 +65,7 @@ public class DamageDoer : MonoBehaviour
         OnDidDamage.Invoke();
     }
 
-    bool CheckEdgeCases(Collider other)
+    protected bool CheckEdgeCases(Collider other)
     {
         bool failed =
         !other.isTrigger
