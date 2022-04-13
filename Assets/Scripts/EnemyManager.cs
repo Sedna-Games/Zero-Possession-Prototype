@@ -22,7 +22,7 @@ public class EnemyManager : MonoBehaviour
         _instance = null;
     }
 
-    List<IsEnemy> _enemies;
+    List<IsEnemy> _enemies = new List<IsEnemy>();
     public void resetEnemies()
     {
         foreach (var item in _enemies)
