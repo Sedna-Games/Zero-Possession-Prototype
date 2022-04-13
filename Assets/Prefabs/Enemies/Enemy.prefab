@@ -1222,6 +1222,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2120052930032232529}
+  - component: {fileID: 7094878976205282580}
   m_Layer: 0
   m_Name: enemy T-Pose
   m_TagString: Untagged
@@ -1247,6 +1248,26 @@ Transform:
   m_Father: {fileID: 1978715465394007411}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &7094878976205282580
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1594309748229452523}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2f73dcd63f406a5438d01017346efe0b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1716354213489627126
 GameObject:
   m_ObjectHideFlags: 0
@@ -1409,6 +1430,7 @@ MonoBehaviour:
   strafeCooldown: {x: 2, y: 4}
   movementRange: {x: 5, y: 7}
   agent: {fileID: 237317504165667861}
+  animator: {fileID: 7094878976205282580}
 --- !u!1 &1978715465394007413
 GameObject:
   m_ObjectHideFlags: 0
