@@ -22,7 +22,7 @@ public class AIAction_Strafe : AIAction
         var dist = AIBlackboard.RandomFloatHelper(movementRange);
         var direction = Random.Range(0, 101) >= 50 ? transform.right : -transform.right;
 
-        Debug.Log("Strafe");
+
         animator.SetBool("StrafingRight", false);
         animator.SetBool("StrafingLeft", false);
 
