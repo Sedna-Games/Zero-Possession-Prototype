@@ -48,15 +48,12 @@ public class ButtonFunctions : MonoBehaviour
             FMODUnity.RuntimeManager.StudioSystem.setParameterByName("level_section", 0);
             ToLevelOne();
         }
-        
         else if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Challenge 1") {
             ToLevelTwo();
         }
-        /**
         else if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Master 1") {
             ToLevelThree();
         }
-        **/
         Resume();
     }
 
@@ -70,7 +67,7 @@ public class ButtonFunctions : MonoBehaviour
     }
     public void ToLevelThree()
     {
-        //UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Master 1");
+        UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Master 1");
     }
 
     public void QuitToMenu()
