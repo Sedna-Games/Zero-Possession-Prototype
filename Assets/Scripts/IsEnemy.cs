@@ -15,6 +15,7 @@ public class IsEnemy : MonoBehaviour
     public void ResetEnemy()
     {
         transform.position = _originalPos;
+        gameObject.SetActive(true);
     }
 
 }
