@@ -136,6 +136,7 @@ public class PlayerController : MonoBehaviour {
     private float _rotationVelocity;
     private float _cinemachineTargetPitch;
     private const float _threshold = 0.01f;
+    bool _inCutscene = false;
 
     [Header("Assets"), Space(10)]
     [SerializeField] Rigidbody rb;
@@ -220,6 +221,9 @@ public class PlayerController : MonoBehaviour {
             _jumpPhase = 0;
         }
     }
+    public void lockMovement(bool yn) {
+        _inCutscene = yn;
+    }
     void addJumpMomentumStacks() {
         if(momentumStackingDifficulty == 0f || _jumpMomentumStacks == 0f)
             _jumpMomentumStacks += 1f;
@@ -235,32 +239,27 @@ public class PlayerController : MonoBehaviour {
             _dashMomentumStacks += 1.0f / Mathf.Ceil(_dashMomentumStacks * momentumStackingDifficulty);
     }
     private void Update() {
-        _desiredVel = new Vector3(input.move.x, 0f, input.move.y).normalized * _totalSpeed;
         if(_dashCooldown - Time.deltaTime < 0f && !DashCooldown)
             dashResetSound.Play();
         _dashCooldown -= Time.deltaTime;
         _dashDuration -= Time.deltaTime;
         _wallStickTimer -= Time.deltaTime;
         //NOTE: The input manager updates in Update() instead of FixedUpdate() so this helps keep consistency for button presses
-        if(input.jump) {
-            _desireJump = true;
-            input.jump = false;
+        if(!_inCutscene) {
+            _desiredVel = new Vector3(input.move.x, 0f, input.move.y).normalized * _totalSpeed;
+            if(input.jump) {
+                _desireJump = true;
+                input.jump = false;
+            }
+            if(input.dash) {
+                _desireDash = true;
+                input.dash = false;
+            }
+            if(input.reload) {
+                input.reload = false;
+                reloadEvent.Invoke();
+            }
         }
-        if(input.dash) {
-            _desireDash = true;
-            input.dash = false;
-        }
-        if(input.reload) {
-            input.reload = false;
-            reloadEvent.Invoke();
-        }
-
-        ChangeFMODParameter();
-    }
-
-    void ChangeFMODParameter() {
-        //var spd = velocity.magnitude / maxSpeed;
-        //footSteps.SetParameter("player_speed",spd);
     }
 
     private void FixedUpdate() {
