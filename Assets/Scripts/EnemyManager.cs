@@ -4,10 +4,32 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
-    [SerializeField] List<GameObject> enemies;
 
-    public void resetEnemies() {
-        foreach (GameObject obj in enemies)
-            obj.SetActive(true);
+    public static EnemyManager _instance = null;
+
+    private void Awake()
+    {
+        if (_instance != null)
+        {
+            Debug.LogError("Enemy Manager has duplicate instance! Disabling " + gameObject.name);
+            gameObject.SetActive(false);
+        }
+        _instance = this;
+    }
+
+    private void OnDestroy()
+    {
+        _instance = null;
+    }
+
+    List<IsEnemy> _enemies;
+    public void resetEnemies()
+    {
+        foreach (var item in _enemies)
+            item.ResetEnemy();
+    }
+    public void AddEnemyToList(IsEnemy enemy)
+    {
+        _enemies.Add(enemy);
     }
 }
