@@ -4088,6 +4088,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 3658199282966910230}
+        m_TargetAssemblyTypeName: ArmsAnimationManager, Assembly-CSharp
+        m_MethodName: DiedWithGun
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   resetPoint: {fileID: 0}
 --- !u!1 &5521770450224493114
 GameObject:
