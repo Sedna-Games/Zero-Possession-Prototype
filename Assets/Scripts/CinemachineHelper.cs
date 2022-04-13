@@ -7,8 +7,10 @@ using UnityEngine.Events;
 public class CinemachineHelper : MonoBehaviour {
     [SerializeField] CinemachineStoryboard storyboard;
     [SerializeField] float timeToFade = 5f;
+    [SerializeField] float additionalWaitTime = 2f;
     [SerializeField] UnityEvent fadeInStartEvents;
     [SerializeField] UnityEvent fadeInEndEvents;
+    [SerializeField] UnityEvent fadeInAfterEvents;
     [SerializeField] UnityEvent fadeOutStartEvents;
     [SerializeField] UnityEvent fadeOutEndEvents;
 
@@ -37,6 +39,8 @@ public class CinemachineHelper : MonoBehaviour {
             yield return new WaitForFixedUpdate();
         }
         fadeInEndEvents.Invoke();
+        yield return new WaitForSeconds(additionalWaitTime);
+        fadeInAfterEvents.Invoke();
     }
     IEnumerator FadeOut() {
         fadeOutStartEvents.Invoke();
