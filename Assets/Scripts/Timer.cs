@@ -17,7 +17,8 @@ public class Timer : MonoBehaviour {
     }
 
     public void StopTimer() {
-        time = TimeSpan.FromSeconds(timer);
+        float finalTime = timer;
+        time = TimeSpan.FromSeconds(finalTime);
         textMesh.text = String.Format("{0:00}:{1:00.00}", Math.Floor(time.TotalMinutes), time.TotalSeconds%60);
     }
 }
