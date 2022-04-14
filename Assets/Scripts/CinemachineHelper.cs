@@ -48,6 +48,7 @@ public class CinemachineHelper : MonoBehaviour {
             storyboard.m_Alpha = Mathf.MoveTowards(storyboard.m_Alpha, 1f, Time.fixedDeltaTime / timeToFade);
             yield return new WaitForFixedUpdate();
         }
+        yield return new WaitForSeconds(5.0f);
         fadeOutEndEvents.Invoke();
     }
     IEnumerator MoveCamera(Transform target) {
