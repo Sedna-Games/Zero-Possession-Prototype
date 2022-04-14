@@ -8,7 +8,10 @@ public class ButtonFunctions : MonoBehaviour
     
     [Tooltip("First overlay MUST be the Pause Menu Options")]
     [SerializeField] GameObject[] pauseOverlays = null;
-    [SerializeField] GameObject[] graphicsOverlays = null; //Speed and timer
+    [SerializeField] GameObject[] graphicsOverlays = null;
+    /**
+    * graphicsOverlays = { Speed, Timer, Death counter, Tutorial popups }
+    **/
     [SerializeField] GameObject player = null;
 
     void Awake() {
@@ -16,6 +19,8 @@ public class ButtonFunctions : MonoBehaviour
         if (!(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "MainMenu")) {
             graphicsOverlays[0].SetActive(OptionsMenuSettings._speedToggle);
             graphicsOverlays[1].SetActive(OptionsMenuSettings._timerToggle);
+            graphicsOverlays[2].SetActive(OptionsMenuSettings._deathToggle);
+            graphicsOverlays[3].SetActive(OptionsMenuSettings._tutorialToggle);
 
             player.GetComponent<PlayerController>().RotationSpeed = OptionsMenuSettings._lookSensitivity;
         }
@@ -49,9 +54,11 @@ public class ButtonFunctions : MonoBehaviour
             ToLevelOne();
         }
         else if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Challenge 1") {
+            FMODUnity.RuntimeManager.StudioSystem.setParameterByName("clevel_section", 0);
             ToLevelTwo();
         }
         else if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Master 1") {
+            FMODUnity.RuntimeManager.StudioSystem.setParameterByName("mlevel_section", 0);
             ToLevelThree();
         }
         Resume();
