@@ -17,7 +17,7 @@ public class OptionsMenuSettings : MonoBehaviour
     [SerializeField] GameObject[] _graphicsSlider;
     public static bool _speedToggle = true;
     public static bool _timerToggle = true;
-    public static float _vSyncSetting = 0f;
+    public static float _vSyncSetting = 1f;
     public static float _framerateCap = 0f;
 
     [Header("Controls Settings")]
