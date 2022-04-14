@@ -2535,7 +2535,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sensorName: 
   sightConeAngle: 360
-  sightConeLength: 90
+  sightConeLength: 75
   enemyTransform: {fileID: 1978715465394007411}
 --- !u!1 &5383701518873814904
 GameObject:
@@ -2948,7 +2948,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   timeBetweenShotBursts: 0.5
-  shotAmount: {x: 2, y: 5}
+  shotAmount: {x: 3, y: 3}
   aimLeading: 0.1
   turnSpeed: 0.8
   distanceTolerance: 4
