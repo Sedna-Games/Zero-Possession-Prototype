@@ -93,7 +93,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7873039348418232118}
         m_TargetAssemblyTypeName: OptionsMenuSettings, Assembly-CSharp
-        m_MethodName: SetTimerToggle
+        m_MethodName: SetTutorialToggle
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1100,7 +1100,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7873039348418232118}
         m_TargetAssemblyTypeName: OptionsMenuSettings, Assembly-CSharp
-        m_MethodName: SetTimerToggle
+        m_MethodName: SetDeathToggle
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

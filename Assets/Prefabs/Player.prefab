@@ -2286,7 +2286,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6877308710431443420}
-  - component: {fileID: 3762176956666406533}
+  - component: {fileID: 4377984523685603852}
   m_Layer: 0
   m_Name: Death Counter
   m_TagString: Untagged
@@ -2315,7 +2315,7 @@ RectTransform:
   m_AnchoredPosition: {x: 804, y: 478}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0, y: 1}
---- !u!114 &3762176956666406533
+--- !u!114 &4377984523685603852
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2324,10 +2324,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3150018196995014414}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0d8c324a284e1c4abeac3394a8a594c, type: 3}
+  m_Script: {fileID: 11500000, guid: bdd35d6ca18c0834f82c8af636d39368, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textMesh: {fileID: 8331318976844433943}
+  textmesh: {fileID: 8331318976844433943}
 --- !u!1 &3356626458954644384
 GameObject:
   m_ObjectHideFlags: 0
@@ -3402,7 +3402,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4696871231515782170}
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 87.91, y: 103.525, z: 397.91}
+  m_LocalPosition: {x: 79.77788, y: 102.29755, z: 398.16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3432,9 +3432,9 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.01
-  far clip plane: 500
-  field of view: 90
+  near clip plane: 0.1
+  far clip plane: 5000
+  field of view: 40
   orthographic: 0
   orthographic size: 10
   m_Depth: -1
@@ -4223,7 +4223,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.9725363, y: 1}
+    m_SensorSize: {x: 1.7777778, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
     Aperture: 16
@@ -4376,6 +4376,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 4377984523685603852}
+        m_TargetAssemblyTypeName: DeathCounter, Assembly-CSharp
+        m_MethodName: IncrementDeathCount
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   animationLock: 0.2
   lungeDist: 8
   lungeRadius: 1
@@ -4463,6 +4475,18 @@ MonoBehaviour:
       - m_Target: {fileID: 3663324737756891895}
         m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
         m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 4377984523685603852}
+        m_TargetAssemblyTypeName: DeathCounter, Assembly-CSharp
+        m_MethodName: IncrementDeathCount
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

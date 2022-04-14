@@ -107,6 +107,9 @@ public class ButtonFunctions : MonoBehaviour
     void GraphicsOverlaysUpdate() {
         graphicsOverlays[0].SetActive(OptionsMenuSettings._speedToggle);
         graphicsOverlays[1].SetActive(OptionsMenuSettings._timerToggle);
+        graphicsOverlays[2].SetActive(OptionsMenuSettings._deathToggle == 0.0f ? false : true);
+        graphicsOverlays[3].SetActive(OptionsMenuSettings._tutorialToggle == 0.0f ? false : true);
+        
     }
     void ControlsUpdate() {
         player.GetComponent<PlayerController>().RotationSpeed = OptionsMenuSettings._lookSensitivity;
