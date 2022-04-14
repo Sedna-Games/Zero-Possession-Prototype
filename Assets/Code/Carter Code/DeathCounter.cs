@@ -22,4 +22,8 @@ public class DeathCounter : MonoBehaviour
         string _deathsText = "Deaths: ";
         textmesh.text = _deathsText + _deathCount.ToString();
     }
+
+    public void ResetDeathCount() {
+        _deathCount = 0;
+    }
 }
