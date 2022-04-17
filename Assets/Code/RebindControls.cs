@@ -52,60 +52,40 @@ public class RebindControls : MonoBehaviour
             var rebinds = actionAsset.SaveBindingOverridesAsJson();
             PlayerPrefs.SetString("rebinds", rebinds);
         });
+
         OnWaitRebind.AddListener(delegate ()
         {
             text[currentRebindActionName].text = GetControlString();
             OnDoneRebind.Invoke();
         });
+
         OnStartRebind.AddListener(() => actionText.text = currentRebindActionName);
     }
-    List<InputActionRebindingExtensions.RebindingOperation> rebinds = new List<InputActionRebindingExtensions.RebindingOperation>();
+
     public void Rebind(string actionName)
     {
-        if (actions[actionName].action.bindings[0].isComposite)
-        {
-            currentRebindActionName = actionName;
-            controls.SwitchCurrentActionMap("Empty");
-            //hard coded for now...
-            var wasd = actions[actionName].action.ChangeCompositeBinding("WASD");
-            List<string> l = new List<string>();
-            l.Add("Up");
-            l.Add("Down");
-            l.Add("Left");
-            l.Add("Right");
-            rebinds.Clear();
-            l.ForEach(x =>
-            {
-                var part = wasd.NextPartBinding(x);
-
-                var rp = actions[actionName].action.PerformInteractiveRebinding()
-                    .WithTargetBinding(part.bindingIndex)
-                    .OnMatchWaitForAnother(0.1f)
-                    .OnComplete(operation =>
-                    {
-                        Debug.Log(x);
-                        rebinds[l.IndexOf(x)].Dispose();
-                        if (l.IndexOf(x) == l.Count - 1)
-                            controls.SwitchCurrentActionMap("Player");
-                    })
-                    .Start();
-                rebinds.Add(rp);
-            });
-
-            return;
-        }
         if (rebindingOperation != null)
             return;
+
         currentRebindActionName = actionName;
         OnStartRebind.Invoke();
         controls.SwitchCurrentActionMap("Empty");
-
-
 
         rebindingOperation = actions[actionName].action.PerformInteractiveRebinding()
         .OnMatchWaitForAnother(0.1f)
         .OnComplete(operation => OnWaitRebind.Invoke())
         .Start();
+    }
+
+    public void ResetKeybinds()
+    {
+        actionAsset.RemoveAllBindingOverrides();
+        PlayerPrefs.DeleteKey("rebinds");
+        foreach (var item in text)
+            {
+                currentRebindActionName = item.Key;
+                item.Value.text = GetControlString();
+            }
     }
 
     public string GetControlString()
