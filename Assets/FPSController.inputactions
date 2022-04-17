@@ -177,50 +177,6 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "up",
-                    "id": "dcf00ab7-883b-4e22-adb3-33b4346dacfc",
-                    "path": "<Keyboard>/upArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse;KBM",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "3b5fc14d-9e00-4f03-becf-94cc372adec7",
-                    "path": "<Keyboard>/downArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse;KBM",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "left",
-                    "id": "30f799b3-a7bf-43d7-a680-fe43feae9d1b",
-                    "path": "<Keyboard>/leftArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse;KBM",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "b1f674b3-ef5b-4502-b3a5-0ebb41b20e95",
-                    "path": "<Keyboard>/rightArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse;KBM",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
                     "name": "",
                     "id": "02fd1e1a-b8e1-481a-a7dd-ead1f5659aba",
                     "path": "<Gamepad>/leftStick",
@@ -360,6 +316,34 @@
                     "processors": "",
                     "groups": "KBM",
                     "action": "Reload",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Empty",
+            "id": "980b3825-8d9e-432e-8adf-f1bf5c3d8097",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "25cc3084-df9e-4c8a-bd20-96737709fe39",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "0fe36d60-c953-4ec3-ad0b-7d962c7db383",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
