@@ -170,6 +170,8 @@ public class PlayerController : MonoBehaviour {
     contactState _lastContact;
     bool speedingCoroutine = false;
 
+    bool footstepsCoroutine = false;
+
     //UI Stuff
     public float dashFill => (1f - Mathf.Max(0f, _dashCooldown) / dashCooldown);
     public bool inLungeRange => Physics.CapsuleCast(transform.position, transform.position, lungeRadius, CinemachineCameraTarget.transform.forward, lungeDist, lungeMask);
@@ -360,8 +362,15 @@ public class PlayerController : MonoBehaviour {
 
         if(OnGround || SnapToGround() || (wallContact && _wallStatus != WallStatus.none) || OnSlope) {
             _stepsToFootsteps++;
+
+            /**
             if(_stepsToFootsteps % (int)(Mathf.Max(0.1f, 1f - percentOfMaxSpeed) / speedEffectOnFootsteps * footStepRate / Time.fixedDeltaTime) == 0 && _velocity.magnitude >= 0.1f && !Sliding)
                 footSteps.Play();
+            //*/
+
+            if (_velocity.magnitude > 1.0f && !footstepsCoroutine && !Sliding)
+                StartCoroutine(Footsteps());
+
             _dashPhase = 0;
             _coyoteTimer = 0f;
             _stepsSinceGrounded = 0;
@@ -396,6 +405,28 @@ public class PlayerController : MonoBehaviour {
         }
         checkWallRun();
     }
+
+    //New
+    IEnumerator Footsteps()
+    {
+        footstepsCoroutine = true;
+
+        if (rb.velocity.magnitude > 0)
+        {
+            footSteps.Play();
+
+            if (rb.velocity.magnitude < 13.75)
+                yield return new WaitForSeconds(1.0f / 5.0f);
+            else if (rb.velocity.magnitude >= 13.75 && rb.velocity.magnitude < 18)
+                yield return new WaitForSeconds(1.0f / 6.0f);
+            else
+                yield return new WaitForSeconds(1.0f / 8.0f);
+        }
+
+        footstepsCoroutine = false;
+    }
+    //End of New
+
     Vector3 ProjectDirectionOnPlane(Vector3 direction, Vector3 normal) {
         return (direction - normal * Vector3.Dot(direction, normal)).normalized;
     }
@@ -446,7 +477,7 @@ public class PlayerController : MonoBehaviour {
 
         Vector3 capSpeed = new Vector3(_velocity.x, 0f, _velocity.z);
         _velocity = capSpeed.normalized * Mathf.Min(capSpeed.magnitude, maxSpeed) + transform.up * Mathf.Min(_velocity.y, maxSpeed);
-        FMODUnity.RuntimeManager.StudioSystem.setParameterByName("player_speed", percentOfMaxSpeed);
+        FMODUnity.RuntimeManager.StudioSystem.setParameterByName("player_speed", rb.velocity.magnitude / maxSpeed);
     }
     void Jump() {
         Vector3 jumpDirection;
